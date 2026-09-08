@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">VidLink Pro 4K</string>
+    <string name="title_activity_main">VidLink Pro 4K</string>
+    <string name="package_name">com.vidlink.pro4k</string>
+    <string name="custom_url_scheme">com.vidlink.pro4k</string>
+</resources>

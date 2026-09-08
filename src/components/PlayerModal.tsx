@@ -208,6 +208,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
   return (
     <div
+      data-tv-modal="true"
       className={`fixed inset-0 z-50 overflow-y-auto backdrop-blur-2xl flex flex-col items-center justify-start transition-all duration-500 ${
         isLightsOff ? 'bg-black' : 'bg-black/95'
       }`}
@@ -240,6 +241,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         <div className="flex items-center gap-2">
           {/* Share Stream Button */}
           <button
+            data-tv-focus="true"
             onClick={handleCopyShareLink}
             className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-all"
             title="Share Direct Stream Link"
@@ -250,6 +252,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
           {/* Ambilight Toggle Button */}
           <button
+            data-tv-focus="true"
             onClick={() => setIsAmbilightOn(prev => !prev)}
             className={`p-2.5 rounded-xl border transition-all ${
               isAmbilightOn
@@ -263,6 +266,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
           {/* Lights Off Cinema Toggle */}
           <button
+            data-tv-focus="true"
             onClick={() => setIsLightsOff(prev => !prev)}
             className={`p-2.5 rounded-xl border transition-all ${
               isLightsOff
@@ -276,6 +280,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
           {/* Reload stream button */}
           <button
+            data-tv-focus="true"
             onClick={() => setPlayerKey(k => k + 1)}
             title="Reload Video Stream"
             className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-all"
@@ -285,6 +290,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
           {/* Close modal */}
           <button
+            data-tv-focus="true"
             onClick={onClose}
             className="p-2.5 rounded-xl bg-white/10 hover:bg-red-500/20 hover:text-red-400 text-gray-300 border border-white/10 hover:border-red-500/30 transition-all"
             title="Close Cinema Mode (Esc)"
@@ -348,6 +354,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                 return (
                   <button
                     key={srv.id}
+                    data-tv-focus="true"
                     onClick={() => {
                       setCurrentServer(srv);
                       setPlayerKey(k => k + 1);
@@ -392,6 +399,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                     return (
                       <button
                         key={sNum}
+                        data-tv-focus="true"
                         onClick={() => {
                           setSeason(sNum);
                           setEpisode(1);
@@ -413,6 +421,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               {/* Prev / Next Episode Buttons */}
               <div className="flex items-center gap-2">
                 <button
+                  data-tv-focus="true"
                   onClick={handlePrevEpisode}
                   disabled={season === 1 && episode === 1}
                   className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:pointer-events-none text-white text-xs font-semibold flex items-center gap-1 transition-all"
@@ -421,6 +430,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                   <span>Prev Episode</span>
                 </button>
                 <button
+                  data-tv-focus="true"
                   onClick={handleNextEpisode}
                   className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold flex items-center gap-1 shadow-md shadow-indigo-500/20 transition-all"
                 >
@@ -451,6 +461,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                   return (
                     <button
                       key={epNum}
+                      data-tv-focus="true"
                       onClick={() => {
                         setEpisode(epNum);
                         setPlayerKey(k => k + 1);

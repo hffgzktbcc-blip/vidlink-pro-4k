@@ -19,6 +19,7 @@ import {
 } from './services/tmdb';
 import { MOODS } from './data/universes';
 import { useWatchlist } from './hooks/useWatchlist';
+import { useSpatialNav } from './hooks/useSpatialNav';
 import { Navbar } from './components/Navbar';
 import { HeroBanner } from './components/HeroBanner';
 import { MediaRow } from './components/MediaRow';
@@ -92,6 +93,28 @@ export const App: React.FC = () => {
     removeFromHistory,
     clearWatchHistory,
   } = useWatchlist();
+
+  // TV Remote Back navigation handler
+  const handleBackNavigation = useCallback(() => {
+    if (playingMedia) {
+      setPlayingMedia(null);
+    } else if (trailerMedia) {
+      setTrailerMedia(null);
+    } else if (selectedMedia) {
+      setSelectedMedia(null);
+    } else if (isSettingsOpen) {
+      setIsSettingsOpen(false);
+    } else if (searchQuery) {
+      setSearchQuery('');
+    } else if (activeTab !== 'home') {
+      setActiveTab('home');
+    }
+  }, [playingMedia, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
+
+  const { isTvMode, toggleTvMode } = useSpatialNav({
+    activeModalOpen: Boolean(playingMedia || trailerMedia || selectedMedia || isSettingsOpen),
+    onBack: handleBackNavigation,
+  });
 
   // Load Catalogs on Mount
   useEffect(() => {
@@ -555,6 +578,28 @@ export const App: React.FC = () => {
         tmdbApiKey={tmdbApiKey}
         onSaveTmdbApiKey={handleSaveTmdbKey}
       />
+
+      {/* Android TV Mode Floating Quick Toggle & Status */}
+      <div className="fixed bottom-4 right-4 z-40">
+        <button
+          data-tv-focus="true"
+          onClick={toggleTvMode}
+          title={isTvMode ? 'TV Remote Mode Active (D-Pad enabled)' : 'Click to enable Android TV Remote Mode'}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl backdrop-blur-xl border text-xs font-bold transition-all shadow-xl ${
+            isTvMode
+              ? 'bg-indigo-600/90 text-white border-indigo-400 shadow-indigo-600/40 ring-2 ring-indigo-400'
+              : 'bg-black/60 hover:bg-black/80 text-gray-400 hover:text-gray-200 border-white/10'
+          }`}
+        >
+          <Tv className={`w-4 h-4 ${isTvMode ? 'text-white' : 'text-indigo-400'}`} />
+          <span>{isTvMode ? 'Android TV Mode: ON' : 'TV Remote Mode'}</span>
+          <span
+            className={`w-2 h-2 rounded-full ${
+              isTvMode ? 'bg-emerald-400 animate-pulse' : 'bg-gray-600'
+            }`}
+          />
+        </button>
+      </div>
 
       {/* Global Toast Notifications */}
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />

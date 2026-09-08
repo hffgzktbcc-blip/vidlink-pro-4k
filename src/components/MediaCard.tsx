@@ -33,12 +33,30 @@ export const MediaCard: React.FC<MediaCardProps> = ({
     large: 'w-48 sm:w-60 md:w-72 shrink-0',
   }[size];
 
+  const handleCardKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onSelect(item);
+    } else if (e.key.toLowerCase() === 'p') {
+      e.preventDefault();
+      onPlay(item);
+    } else if (e.key.toLowerCase() === 'w' && onToggleWatchlist) {
+      e.preventDefault();
+      onToggleWatchlist(item);
+    }
+  };
+
   return (
-    <div className={`group relative rounded-2xl overflow-hidden cursor-pointer select-none card-hover-effect ${sizeClasses}`}>
+    <div
+      tabIndex={0}
+      data-tv-focus="true"
+      onKeyDown={handleCardKeyDown}
+      className={`group relative rounded-2xl overflow-hidden cursor-pointer select-none card-hover-effect tv-card-container focus:outline-none ${sizeClasses}`}
+    >
       {/* Poster Image Container */}
       <div
         onClick={() => onSelect(item)}
-        className="relative aspect-[2/3] w-full bg-[#10121d] rounded-2xl overflow-hidden border border-white/10 group-hover:border-indigo-500/60 shadow-xl transition-all duration-300"
+        className="relative aspect-[2/3] w-full bg-[#10121d] rounded-2xl overflow-hidden border border-white/10 group-hover:border-indigo-500/60 group-focus:border-indigo-500/80 shadow-xl transition-all duration-300"
       >
         {/* Loading shimmer */}
         {!imageLoaded && (
@@ -77,7 +95,7 @@ export const MediaCard: React.FC<MediaCardProps> = ({
         </div>
 
         {/* Hover Action Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#07080d] via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4 z-20">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#07080d] via-black/60 to-transparent opacity-0 group-hover:opacity-100 group-focus:opacity-100 tv-card-overlay transition-all duration-300 flex flex-col justify-end p-4 z-20">
           {/* Action Buttons */}
           <div className="flex items-center justify-center gap-2.5 mb-3">
             {/* Direct Play Stream Button */}

@@ -84,11 +84,15 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-xl flex items-center justify-center p-2 sm:p-4 md:p-6 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-5xl bg-[#0e101a] border border-white/15 rounded-3xl overflow-hidden shadow-2xl my-8">
+      <div
+        data-tv-modal="true"
+        className="relative w-full max-w-5xl bg-[#0e101a] border border-white/15 rounded-3xl overflow-hidden shadow-2xl my-8"
+      >
         {/* Close Button */}
         <button
+          data-tv-focus="true"
           onClick={onClose}
-          className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-black/70 hover:bg-white/20 text-white backdrop-blur-md border border-white/15 transition-all"
+          className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-black/70 hover:bg-white/20 text-white backdrop-blur-md border border-white/15 transition-all focus:outline-none"
           title="Close (Esc)"
         >
           <X className="w-5 h-5" />
@@ -149,6 +153,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
           <div className="flex flex-wrap items-center gap-3.5 pb-6 border-b border-white/10">
             {/* Play Button */}
             <button
+              data-tv-focus="true"
               onClick={() => {
                 onPlay(current, 1, 1);
                 onClose();
@@ -161,6 +166,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
 
             {/* Watch Trailer Button */}
             <button
+              data-tv-focus="true"
               onClick={() => onOpenTrailer(current)}
               className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm flex items-center gap-2 border border-white/15 transition-all"
             >
@@ -170,6 +176,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
 
             {/* Watchlist Toggle */}
             <button
+              data-tv-focus="true"
               onClick={() => onToggleWatchlist(current)}
               className={`px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 border transition-all ${
                 saved
@@ -210,6 +217,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
           <div className="border-b border-white/10 flex items-center gap-4 text-sm font-semibold">
             {isTV && (
               <button
+                data-tv-focus="true"
                 onClick={() => setActiveTab('episodes')}
                 className={`pb-3 flex items-center gap-2 transition-colors relative ${
                   activeTab === 'episodes' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'
@@ -224,6 +232,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
             )}
 
             <button
+              data-tv-focus="true"
               onClick={() => setActiveTab('cast')}
               className={`pb-3 flex items-center gap-2 transition-colors relative ${
                 activeTab === 'cast' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'
@@ -238,6 +247,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
 
             {similarList.length > 0 && (
               <button
+                data-tv-focus="true"
                 onClick={() => setActiveTab('similar')}
                 className={`pb-3 flex items-center gap-2 transition-colors relative ${
                   activeTab === 'similar' ? 'text-indigo-400' : 'text-gray-400 hover:text-white'
@@ -261,6 +271,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
                   Select Season:
                 </span>
                 <select
+                  data-tv-focus="true"
                   value={selectedSeason}
                   onChange={e => setSelectedSeason(Number(e.target.value))}
                   className="bg-[#181a28] border border-white/20 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
@@ -278,11 +289,19 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
                 {(seasonData?.episodes || []).map(ep => (
                   <div
                     key={ep.id}
+                    tabIndex={0}
+                    data-tv-focus="true"
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        onPlay(current, selectedSeason, ep.episode_number);
+                        onClose();
+                      }
+                    }}
                     onClick={() => {
                       onPlay(current, selectedSeason, ep.episode_number);
                       onClose();
                     }}
-                    className="p-3.5 rounded-2xl hover:bg-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-4 cursor-pointer transition-all group"
+                    className="p-3.5 rounded-2xl hover:bg-white/5 focus:bg-white/10 flex flex-col sm:flex-row items-start sm:items-center gap-4 cursor-pointer transition-all group focus:outline-none"
                   >
                     {/* Thumbnail Still */}
                     <div className="relative w-full sm:w-44 aspect-video bg-black/50 rounded-xl overflow-hidden shrink-0 border border-white/10">
@@ -360,10 +379,17 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
               {similarList.map(sim => (
                 <div
                   key={sim.id}
+                  tabIndex={0}
+                  data-tv-focus="true"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      setDetailedItem(sim);
+                    }
+                  }}
                   onClick={() => {
                     setDetailedItem(sim);
                   }}
-                  className="rounded-xl overflow-hidden cursor-pointer group bg-white/5 border border-white/5 hover:border-indigo-500/50 transition-all"
+                  className="rounded-xl overflow-hidden cursor-pointer group bg-white/5 border border-white/5 hover:border-indigo-500/50 focus:border-indigo-500/80 transition-all focus:outline-none"
                 >
                   <img
                     src={getImageUrl(sim.poster_path, 'w500')}

@@ -98,11 +98,19 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         {/* Brand Logo */}
         <div
+          tabIndex={0}
+          data-tv-focus="true"
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              setActiveTab('home');
+              setSearchQuery('');
+            }
+          }}
           onClick={() => {
             setActiveTab('home');
             setSearchQuery('');
           }}
-          className="flex items-center gap-3 cursor-pointer group shrink-0"
+          className="flex items-center gap-3 cursor-pointer group shrink-0 rounded-xl focus:outline-none"
         >
           <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-600 shadow-lg shadow-indigo-600/30 group-hover:scale-105 transition-transform duration-300">
             <Film className="w-5 h-5 text-white" />
@@ -131,6 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             return (
               <button
                 key={item.id}
+                data-tv-focus="true"
                 onClick={() => {
                   setActiveTab(item.id as ActiveTab);
                   setSearchQuery('');
@@ -170,6 +179,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <input
               type="text"
+              data-tv-focus="true"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search 4K movies, series..."
@@ -177,6 +187,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             />
             {searchQuery && (
               <button
+                data-tv-focus="true"
                 onClick={() => setSearchQuery('')}
                 className="absolute right-2.5 text-gray-400 hover:text-white p-0.5 rounded-full hover:bg-white/10"
               >
@@ -187,6 +198,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Settings Trigger */}
           <button
+            data-tv-focus="true"
             onClick={onOpenSettings}
             className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 transition-all"
             title="Settings (Subtitles, Themes, API)"
@@ -210,11 +222,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                   return (
                     <div
                       key={`${item.media_type}-${item.id}`}
+                      tabIndex={0}
+                      data-tv-focus="true"
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          onSelectMedia(item);
+                          setSuggestions([]);
+                        }
+                      }}
                       onClick={() => {
                         onSelectMedia(item);
                         setSuggestions([]);
                       }}
-                      className="p-3 hover:bg-white/10 flex items-center gap-3 cursor-pointer transition-colors group"
+                      className="p-3 hover:bg-white/10 focus:bg-indigo-600/30 flex items-center gap-3 cursor-pointer transition-colors group focus:outline-none"
                     >
                       <img
                         src={getImageUrl(item.poster_path, 'w300')}

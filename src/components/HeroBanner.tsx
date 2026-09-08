@@ -149,6 +149,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           <div className="flex flex-wrap items-center gap-3.5 mt-6">
             {/* Main Play Now Button */}
             <button
+              data-tv-focus="true"
               onClick={() => onPlayMedia(current)}
               className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-xl shadow-indigo-600/40 transform hover:scale-105 active:scale-95 transition-all"
             >
@@ -158,6 +159,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
             {/* Info / Episodes Button */}
             <button
+              data-tv-focus="true"
               onClick={() => onSelectMedia(current)}
               className="px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 text-white font-semibold text-sm sm:text-base flex items-center gap-2 hover:border-white/40 transition-all"
             >
@@ -168,6 +170,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {/* Trailer button */}
             {onOpenTrailer && (
               <button
+                data-tv-focus="true"
                 onClick={() => onOpenTrailer(current)}
                 className="px-4 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 text-white font-semibold text-sm flex items-center gap-2 transition-all"
                 title="Watch 4K Trailer"
@@ -179,6 +182,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
             {/* Watchlist Toggle Button */}
             <button
+              data-tv-focus="true"
               onClick={() => onToggleWatchlist(current)}
               title={saved ? 'Remove from My List' : 'Add to My List'}
               className={`p-3.5 rounded-xl backdrop-blur-xl border transition-all ${
@@ -205,6 +209,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 return (
                   <button
                     key={item.id}
+                    data-tv-focus="true"
                     onClick={() => setCurrentIndex(idx)}
                     className={`group/thumb relative rounded-xl overflow-hidden transition-all duration-300 ${
                       isActive
