@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'VidLink Pro 4K',
   webDir: 'dist',
   server: {
-    androidScheme: 'https',
+    url: 'https://vidlink-pro-4k.vercel.app',
     cleartext: true,
   },
   android: {
