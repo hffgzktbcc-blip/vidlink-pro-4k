@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   X,
   Tv,
@@ -14,10 +14,14 @@ import {
   CheckCircle2,
   Sparkles,
   Activity,
+  Maximize2,
+  Minimize2,
+  MousePointer2,
 } from 'lucide-react';
 import type { MediaItem, MediaType, Season } from '../types';
 import { STREAM_SERVERS, measureServerLatency } from '../services/streaming';
 import { fetchSeasonDetails } from '../services/tmdb';
+import { VirtualCursor } from './VirtualCursor';
 
 interface PlayerModalProps {
   media: MediaItem | null;
@@ -47,8 +51,37 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   const [isLoadingSeason, setIsLoadingSeason] = useState(false);
   const [playerKey, setPlayerKey] = useState(0);
 
-  // New Features: Ambilight, Lights Off, Share Link, Live Ping
-  const [isAmbilightOn, setIsAmbilightOn] = useState(true);
+  const isTvModeInitial = typeof window !== 'undefined' && (
+    document.body.classList.contains('tv-mode') || localStorage.getItem('vidlink_tv_mode') === 'true'
+  );
+  // Default to True Fullscreen and Virtual Cursor on TV
+  const [isTrueFullscreen, setIsTrueFullscreen] = useState(isTvModeInitial);
+  const [isCursorActive, setIsCursorActive] = useState(isTvModeInitial);
+  const [showControls, setShowControls] = useState(true);
+  const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const triggerControlsActivity = useCallback(() => {
+    setShowControls(true);
+    if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
+    hideControlsTimer.current = setTimeout(() => {
+      setShowControls(false);
+    }, 4500);
+  }, []);
+
+  useEffect(() => {
+    triggerControlsActivity();
+    const onActivity = () => triggerControlsActivity();
+    window.addEventListener('keydown', onActivity);
+    window.addEventListener('mousemove', onActivity);
+    return () => {
+      window.removeEventListener('keydown', onActivity);
+      window.removeEventListener('mousemove', onActivity);
+      if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
+    };
+  }, [triggerControlsActivity]);
+
+  // Turn off GPU-heavy Ambilight by default on TV to eliminate sluggishness
+  const [isAmbilightOn, setIsAmbilightOn] = useState(!isTvModeInitial);
   const [isLightsOff, setIsLightsOff] = useState(false);
   const [isCopiedLink, setIsCopiedLink] = useState(false);
   const [serverLatencies, setServerLatencies] = useState<Record<string, number>>({});
@@ -140,7 +173,15 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
       if (e.key === 'Escape') {
-        onClose();
+        if (isTrueFullscreen) {
+          setIsTrueFullscreen(false);
+        } else {
+          onClose();
+        }
+      } else if (e.key.toLowerCase() === 'f') {
+        setIsTrueFullscreen(prev => !prev);
+      } else if (e.key.toLowerCase() === 'c') {
+        setIsCursorActive(prev => !prev);
       } else if (e.key.toLowerCase() === 'l') {
         setIsAmbilightOn(prev => !prev);
       } else if (e.key.toLowerCase() === 's') {
@@ -206,6 +247,152 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     subLang
   );
 
+  // True Fullscreen Cinema Mode Rendering
+  if (isTrueFullscreen) {
+    return (
+      <div
+        data-tv-modal="true"
+        className="fixed inset-0 z-50 w-screen h-screen bg-black overflow-hidden select-none"
+      >
+        {/* Fullscreen Video Iframe */}
+        <iframe
+          key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
+          src={streamUrl}
+          title={title}
+          className="absolute inset-0 w-full h-full border-0 z-0 bg-black"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share"
+          allowFullScreen
+        />
+
+        {/* Virtual Remote Cursor Layer */}
+        <VirtualCursor
+          isEnabled={isCursorActive}
+          onToggle={() => setIsCursorActive(prev => !prev)}
+        />
+
+        {/* Auto-Hiding Top Control Bar */}
+        <div
+          className={`absolute top-0 left-0 right-0 z-40 p-4 sm:p-6 bg-gradient-to-b from-black/95 via-black/60 to-transparent flex flex-wrap items-center justify-between gap-3 transition-opacity duration-300 ${
+            showControls ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+        >
+          {/* Back & Title */}
+          <div className="flex items-center gap-3">
+            <button
+              data-tv-focus="true"
+              onClick={() => setIsTrueFullscreen(false)}
+              className="p-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-all flex items-center gap-2 text-xs font-bold"
+              title="Exit Fullscreen to Windowed Mode (F or Esc)"
+            >
+              <Minimize2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Windowed</span>
+            </button>
+
+            <div className="flex flex-col">
+              <h2 className="text-sm sm:text-base font-black text-white truncate max-w-xs sm:max-w-md">
+                {title}
+              </h2>
+              {isTV && (
+                <span className="text-[11px] text-indigo-300 font-semibold">
+                  S{season} E{episode} {seasonData?.episodes?.[episode - 1]?.name ? `• ${seasonData.episodes[episode - 1].name}` : ''}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Quick TV Actions */}
+          <div className="flex items-center gap-2">
+            {/* TV Cursor Toggle */}
+            <button
+              data-tv-focus="true"
+              onClick={() => setIsCursorActive(prev => !prev)}
+              className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all border ${
+                isCursorActive
+                  ? 'bg-indigo-600 text-white border-indigo-400 shadow-lg shadow-indigo-600/40'
+                  : 'bg-white/10 hover:bg-white/20 text-gray-300 border-white/15'
+              }`}
+              title="Toggle Remote Cursor Mode (C)"
+            >
+              <MousePointer2 className="w-4 h-4 text-amber-400" />
+              <span>Cursor: {isCursorActive ? 'ON' : 'OFF'}</span>
+            </button>
+
+            {/* Server Quick Switcher (Cycle S) */}
+            <button
+              data-tv-focus="true"
+              onClick={() => {
+                const idx = STREAM_SERVERS.findIndex(s => s.id === currentServer.id);
+                const nextIdx = (idx + 1) % STREAM_SERVERS.length;
+                setCurrentServer(STREAM_SERVERS[nextIdx]);
+                setPlayerKey(k => k + 1);
+              }}
+              className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/15 flex items-center gap-1.5 transition-all"
+              title="Switch Stream Mirror (S)"
+            >
+              <Server className="w-3.5 h-3.5 text-indigo-400" />
+              <span className="hidden sm:inline">{currentServer.name}</span>
+              <span className="sm:hidden">Server</span>
+            </button>
+
+            {/* TV Prev / Next Episode Buttons */}
+            {isTV && (
+              <div className="flex items-center gap-1">
+                <button
+                  data-tv-focus="true"
+                  onClick={handlePrevEpisode}
+                  disabled={season === 1 && episode === 1}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white border border-white/15 transition-all"
+                  title="Previous Episode"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  data-tv-focus="true"
+                  onClick={handleNextEpisode}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all"
+                  title="Next Episode"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* Reload Stream */}
+            <button
+              data-tv-focus="true"
+              onClick={() => setPlayerKey(k => k + 1)}
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all"
+              title="Reload Stream"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+
+            {/* Close */}
+            <button
+              data-tv-focus="true"
+              onClick={onClose}
+              className="p-2 rounded-xl bg-red-600/80 hover:bg-red-600 text-white transition-all shadow-lg"
+              title="Close Player (Esc)"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Bottom Helper Hint (Auto-fading) */}
+        <div
+          className={`absolute bottom-4 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-[11px] text-gray-300 transition-opacity duration-500 pointer-events-none flex items-center gap-4 ${
+            showControls ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <span>🎯 <b>Remote D-Pad</b> moves cursor • <b>OK</b> clicks Play/Controls</span>
+          <span>•</span>
+          <span>Press <b>C</b> for Cursor • <b>F</b> for Windowed</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       data-tv-modal="true"
@@ -213,6 +400,11 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         isLightsOff ? 'bg-black' : 'bg-black/95'
       }`}
     >
+      <VirtualCursor
+        isEnabled={isCursorActive}
+        onToggle={() => setIsCursorActive(prev => !prev)}
+      />
+
       {/* Top Header Bar */}
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4 border-b border-white/10 shrink-0">
         <div className="flex items-center gap-3 min-w-0">
@@ -239,6 +431,31 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
         {/* Top Actions */}
         <div className="flex items-center gap-2">
+          {/* True Fullscreen Toggle */}
+          <button
+            data-tv-focus="true"
+            onClick={() => setIsTrueFullscreen(true)}
+            className="px-3 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-indigo-600/30 border border-indigo-400 transition-all"
+            title="Expand to Fullscreen Cinema Mode (F)"
+          >
+            <Maximize2 className="w-4 h-4" />
+            <span className="hidden sm:inline">Cinema Mode</span>
+          </button>
+
+          {/* Virtual Cursor Toggle */}
+          <button
+            data-tv-focus="true"
+            onClick={() => setIsCursorActive(prev => !prev)}
+            className={`p-2.5 rounded-xl border transition-all ${
+              isCursorActive
+                ? 'bg-indigo-600 text-white border-indigo-400 shadow-lg shadow-indigo-600/30'
+                : 'bg-white/10 text-gray-400 border-white/10 hover:text-white'
+            }`}
+            title="Toggle TV Virtual Cursor (C)"
+          >
+            <MousePointer2 className="w-4 h-4 text-amber-400" />
+          </button>
+
           {/* Share Stream Button */}
           <button
             data-tv-focus="true"
