@@ -17,6 +17,7 @@ import {
   Maximize2,
   Minimize2,
   MousePointer2,
+  Play,
 } from 'lucide-react';
 import type { MediaItem, MediaType, Season } from '../types';
 import { STREAM_SERVERS, measureServerLatency } from '../services/streaming';
@@ -50,15 +51,24 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   const [seasonData, setSeasonData] = useState<Season | null>(null);
   const [isLoadingSeason, setIsLoadingSeason] = useState(false);
   const [playerKey, setPlayerKey] = useState(0);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const isTvModeInitial = typeof window !== 'undefined' && (
     document.body.classList.contains('tv-mode') || localStorage.getItem('vidlink_tv_mode') === 'true'
   );
-  // Default to True Fullscreen and Virtual Cursor on TV
-  const [isTrueFullscreen, setIsTrueFullscreen] = useState(isTvModeInitial);
+  // Default to True Fullscreen Cinema mode and Virtual Cursor on TV
+  const [isTrueFullscreen, setIsTrueFullscreen] = useState(true);
   const [isCursorActive, setIsCursorActive] = useState(isTvModeInitial);
   const [showControls, setShowControls] = useState(true);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Automatically focus video iframe on load so TV remote / Enter keys can trigger playback directly
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      iframeRef.current?.focus();
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [playerKey, currentServer, season, episode]);
 
   const triggerControlsActivity = useCallback(() => {
     setShowControls(true);
@@ -256,11 +266,12 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
       >
         {/* Fullscreen Video Iframe */}
         <iframe
+          ref={iframeRef}
           key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
           src={streamUrl}
           title={title}
           className="absolute inset-0 w-full h-full border-0 z-0 bg-black"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share"
+          allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
           allowFullScreen
         />
 
@@ -302,6 +313,17 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
           {/* Quick TV Actions */}
           <div className="flex items-center gap-2">
+            {/* Direct Remote Focus button */}
+            <button
+              data-tv-focus="true"
+              onClick={() => iframeRef.current?.focus()}
+              className="px-3 py-2 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-200 text-xs font-bold border border-emerald-500/40 flex items-center gap-1.5 transition-all shadow-md"
+              title="Direct TV Remote Focus (Sends OK / Arrow clicks straight into video player)"
+            >
+              <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+              <span>Remote Focus</span>
+            </button>
+
             {/* TV Cursor Toggle */}
             <button
               data-tv-focus="true"
@@ -533,11 +555,12 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           {/* Video Iframe Container */}
           <div className="relative w-full h-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
             <iframe
+              ref={iframeRef}
               key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
               src={streamUrl}
               title={title}
               className="w-full h-full border-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share"
+              allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
               allowFullScreen
             />
           </div>

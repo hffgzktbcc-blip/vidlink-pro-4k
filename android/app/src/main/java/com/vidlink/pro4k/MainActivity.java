@@ -16,32 +16,33 @@ public class MainActivity extends BridgeActivity {
         public void clickAt(final float x, final float y) {
             runOnUiThread(() -> {
                 if (bridge != null && bridge.getWebView() != null) {
-                    WebView webView = bridge.getWebView();
-                    long downTime = SystemClock.uptimeMillis();
-                    long eventTime = SystemClock.uptimeMillis() + 50;
+                    final WebView webView = bridge.getWebView();
+                    final long downTime = SystemClock.uptimeMillis();
 
                     MotionEvent down = MotionEvent.obtain(
                         downTime,
-                        eventTime,
+                        downTime,
                         MotionEvent.ACTION_DOWN,
                         x,
                         y,
                         0
                     );
-                    MotionEvent up = MotionEvent.obtain(
-                        downTime,
-                        eventTime + 50,
-                        MotionEvent.ACTION_UP,
-                        x,
-                        y,
-                        0
-                    );
-
                     webView.dispatchTouchEvent(down);
-                    webView.dispatchTouchEvent(up);
-
                     down.recycle();
-                    up.recycle();
+
+                    webView.postDelayed(() -> {
+                        long upTime = SystemClock.uptimeMillis();
+                        MotionEvent up = MotionEvent.obtain(
+                            downTime,
+                            upTime,
+                            MotionEvent.ACTION_UP,
+                            x,
+                            y,
+                            0
+                        );
+                        webView.dispatchTouchEvent(up);
+                        up.recycle();
+                    }, 65);
                 }
             });
         }

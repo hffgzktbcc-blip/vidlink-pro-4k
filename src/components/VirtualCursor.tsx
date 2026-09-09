@@ -37,13 +37,19 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
 
     // 1. Android Native WebView Touch Injection (pierces cross-origin iframes on Android TV!)
     if (window.AndroidTV?.clickAt) {
-      window.AndroidTV.clickAt(x, y);
+      const scale = window.devicePixelRatio || 1;
+      window.AndroidTV.clickAt(x * scale, y * scale);
       return;
     }
 
     // 2. Web Browser Fallback: find element and dispatch synthetic mouse/touch events
     const el = document.elementFromPoint(x, y);
     if (el) {
+      // If clicking directly on or inside an iframe, give it immediate DOM focus
+      if (el instanceof HTMLIFrameElement || el.tagName === 'IFRAME') {
+        (el as HTMLIFrameElement).focus();
+      }
+
       const opts = {
         bubbles: true,
         cancelable: true,
@@ -60,6 +66,21 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
     }
   }, []);
 
+  // Manage body cursor-active class and blur any highlighted tabs
+  useEffect(() => {
+    if (isEnabled) {
+      document.body.classList.add('cursor-active');
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    } else {
+      document.body.classList.remove('cursor-active');
+    }
+    return () => {
+      document.body.classList.remove('cursor-active');
+    };
+  }, [isEnabled]);
+
   useEffect(() => {
     if (!isEnabled) return;
 
@@ -71,12 +92,17 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
 
       // Toggle cursor mode hotkey 'c' or 'C'
       if (key.toLowerCase() === 'c' && !(e.target instanceof HTMLInputElement)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         onToggle();
         return;
       }
 
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         resetHideTimer();
 
         keyHoldCount++;
@@ -96,6 +122,8 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
         });
       } else if (key === 'Enter' || key === ' ') {
         e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         resetHideTimer();
         setPos(curr => {
           dispatchVirtualClick(curr.x, curr.y);
@@ -106,6 +134,9 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
 
     const handleKeyUp = (e: KeyboardEvent) => {
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         keyHoldCount = 0;
       }
     };

@@ -141,6 +141,11 @@ export function useSpatialNav(options: SpatialNavOptions = {}) {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // When virtual cursor is active, completely suspend spatial navigation to stop highlighting background tabs
+      if (document.body.classList.contains('cursor-active')) {
+        return;
+      }
+
       const key = e.key;
       const keyCode = e.keyCode;
 

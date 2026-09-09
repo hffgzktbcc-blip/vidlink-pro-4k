@@ -151,6 +151,15 @@ body.tv-mode [data-tv-focus="true"]:focus {
   transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease !important;
 }
 
+/* While Virtual Cursor is active, suppress all TV focus outlines and scaling */
+body.cursor-active [data-tv-focus="true"]:focus,
+body.cursor-active :focus,
+body.cursor-active :focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
 /* TV Mode Card Overlay reveals on focus */
 body.tv-mode .tv-card-container:focus .tv-card-overlay,
 body.tv-mode .tv-card-container:focus-within .tv-card-overlay {

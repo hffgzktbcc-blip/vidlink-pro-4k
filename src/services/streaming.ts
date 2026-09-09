@@ -33,9 +33,9 @@ export const STREAM_SERVERS: ServerOption[] = [
     getUrl: (id: number, type: MediaType, season = 1, episode = 1, accentColor = '6366f1', subLang = 'en') => {
       const cleanColor = accentColor.replace('#', '');
       if (type === 'movie') {
-        return `https://vidlink.pro/movie/${id}?primaryColor=${cleanColor}&secondaryColor=a855f7&iconColor=ffffff&title=true&poster=true&autoplay=true&sub_lang=${subLang}`;
+        return `https://vidlink.pro/movie/${id}?primaryColor=${cleanColor}&secondaryColor=a855f7&iconColor=ffffff&title=true&poster=true&autoplay=true&auto_play=true&sub_lang=${subLang}`;
       }
-      return `https://vidlink.pro/tv/${id}/${season}/${episode}?primaryColor=${cleanColor}&secondaryColor=a855f7&iconColor=ffffff&title=true&poster=true&autoplay=true&sub_lang=${subLang}`;
+      return `https://vidlink.pro/tv/${id}/${season}/${episode}?primaryColor=${cleanColor}&secondaryColor=a855f7&iconColor=ffffff&title=true&poster=true&autoplay=true&auto_play=true&sub_lang=${subLang}`;
     },
   },
   {
@@ -46,9 +46,9 @@ export const STREAM_SERVERS: ServerOption[] = [
     pingMs: 42,
     getUrl: (id: number, type: MediaType, season = 1, episode = 1) => {
       if (type === 'movie') {
-        return `https://vidlink.pro/movie/${id}`;
+        return `https://vidlink.pro/movie/${id}?autoplay=true&auto_play=true`;
       }
-      return `https://vidlink.pro/tv/${id}/${season}/${episode}`;
+      return `https://vidlink.pro/tv/${id}/${season}/${episode}?autoplay=true&auto_play=true`;
     },
   },
   {
@@ -59,9 +59,9 @@ export const STREAM_SERVERS: ServerOption[] = [
     pingMs: 51,
     getUrl: (id: number, type: MediaType, season = 1, episode = 1) => {
       if (type === 'movie') {
-        return `https://embed.su/embed/movie/${id}`;
+        return `https://embed.su/embed/movie/${id}?autoplay=1&auto_play=1`;
       }
-      return `https://embed.su/embed/tv/${id}/${season}/${episode}`;
+      return `https://embed.su/embed/tv/${id}/${season}/${episode}?autoplay=1&auto_play=1`;
     },
   },
   {
@@ -72,9 +72,9 @@ export const STREAM_SERVERS: ServerOption[] = [
     pingMs: 65,
     getUrl: (id: number, type: MediaType, season = 1, episode = 1) => {
       if (type === 'movie') {
-        return `https://player.autoembed.cc/embed/movie/${id}`;
+        return `https://player.autoembed.cc/embed/movie/${id}?autoplay=1&auto_play=1`;
       }
-      return `https://player.autoembed.cc/embed/tv/${id}/${season}/${episode}`;
+      return `https://player.autoembed.cc/embed/tv/${id}/${season}/${episode}?autoplay=1&auto_play=1`;
     },
   },
   {
@@ -85,9 +85,9 @@ export const STREAM_SERVERS: ServerOption[] = [
     pingMs: 88,
     getUrl: (id: number, type: MediaType, season = 1, episode = 1) => {
       if (type === 'movie') {
-        return `https://multiembed.mov/?video_id=${id}&tmdb=1`;
+        return `https://multiembed.mov/?video_id=${id}&tmdb=1&autoplay=1`;
       }
-      return `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${season}&e=${episode}`;
+      return `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${season}&e=${episode}&autoplay=1`;
     },
   },
   {
@@ -98,9 +98,9 @@ export const STREAM_SERVERS: ServerOption[] = [
     pingMs: 95,
     getUrl: (id: number, type: MediaType, season = 1, episode = 1) => {
       if (type === 'movie') {
-        return `https://vidsrc.cc/v2/embed/movie/${id}`;
+        return `https://vidsrc.cc/v2/embed/movie/${id}?autoplay=1&auto_play=1`;
       }
-      return `https://vidsrc.cc/v2/embed/tv/${id}/${season}/${episode}`;
+      return `https://vidsrc.cc/v2/embed/tv/${id}/${season}/${episode}?autoplay=1&auto_play=1`;
     },
   },
 ];
