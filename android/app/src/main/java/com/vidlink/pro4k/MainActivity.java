@@ -78,11 +78,47 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // Forward TV remote Back button to React app for modal/navigation handling
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (bridge != null && bridge.getWebView() != null) {
+        if (bridge != null && bridge.getWebView() != null) {
+            // Forward TV remote Back button (KeyCode 4)
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
                 bridge.getWebView().evaluateJavascript(
-                    "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', keyCode: 27, bubbles: true }));",
+                    "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', keyCode: 27, code: 'Escape', bubbles: true }));",
+                    null
+                );
+                return true;
+            }
+
+            // Forward TV remote D-Pad Center (OK button, KeyCode 23)
+            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                bridge.getWebView().evaluateJavascript(
+                    "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13, code: 'Enter', bubbles: true }));",
+                    null
+                );
+                return true;
+            }
+
+            // Forward TV remote Media Play/Pause (KeyCode 85, 126, 127)
+            if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY || keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE) {
+                bridge.getWebView().evaluateJavascript(
+                    "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'MediaPlayPause', keyCode: 85, code: 'MediaPlayPause', bubbles: true }));",
+                    null
+                );
+                return true;
+            }
+
+            // Forward TV remote Media Rewind (KeyCode 89)
+            if (keyCode == KeyEvent.KEYCODE_MEDIA_REWIND) {
+                bridge.getWebView().evaluateJavascript(
+                    "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'MediaRewind', keyCode: 89, code: 'MediaRewind', bubbles: true }));",
+                    null
+                );
+                return true;
+            }
+
+            // Forward TV remote Media Fast Forward (KeyCode 90)
+            if (keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD) {
+                bridge.getWebView().evaluateJavascript(
+                    "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'MediaFastForward', keyCode: 90, code: 'MediaFastForward', bubbles: true }));",
                     null
                 );
                 return true;

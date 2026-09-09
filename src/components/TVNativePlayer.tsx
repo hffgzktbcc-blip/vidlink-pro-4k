@@ -159,6 +159,9 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
               break;
             default:
               hls.destroy();
+              if (onSwitchToEmbed) {
+                onSwitchToEmbed();
+              }
               break;
           }
         }
@@ -224,8 +227,20 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         return;
       }
 
-      // Enter / OK button -> Play / Pause
-      if (key === 'Enter' || key === ' ') {
+      // Enter / OK button / Media Play/Pause -> Play / Pause
+      const isPlayPause =
+        key === 'Enter' ||
+        key === ' ' ||
+        key === 'Select' ||
+        key === 'Accept' ||
+        key === 'MediaPlayPause' ||
+        keyCode === 23 ||
+        keyCode === 13 ||
+        keyCode === 85 ||
+        keyCode === 126 ||
+        keyCode === 127;
+
+      if (isPlayPause) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -233,8 +248,8 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         return;
       }
 
-      // D-Pad Left -> Rewind 10s
-      if (key === 'ArrowLeft') {
+      // D-Pad Left / Media Rewind -> Rewind 10s
+      if (key === 'ArrowLeft' || key === 'MediaRewind' || keyCode === 21 || keyCode === 89) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -242,8 +257,8 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         return;
       }
 
-      // D-Pad Right -> Fast-Forward 10s
-      if (key === 'ArrowRight') {
+      // D-Pad Right / Media Fast Forward -> Fast-Forward 10s
+      if (key === 'ArrowRight' || key === 'MediaFastForward' || keyCode === 22 || keyCode === 90) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -252,7 +267,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
       }
 
       // D-Pad Up -> Show OSD Controls
-      if (key === 'ArrowUp') {
+      if (key === 'ArrowUp' || keyCode === 19) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -262,7 +277,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
       }
 
       // D-Pad Down -> Hide OSD Controls
-      if (key === 'ArrowDown') {
+      if (key === 'ArrowDown' || keyCode === 20) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();

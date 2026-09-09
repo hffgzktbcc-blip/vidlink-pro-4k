@@ -99,7 +99,14 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
         return;
       }
 
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+      const isArrow =
+        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key) ||
+        [19, 20, 21, 22].includes(e.keyCode);
+
+      const isClick =
+        key === 'Enter' || key === ' ' || key === 'Select' || key === 'Accept' || e.keyCode === 23 || e.keyCode === 13;
+
+      if (isArrow) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -113,14 +120,14 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
           let nx = prev.x;
           let ny = prev.y;
 
-          if (key === 'ArrowUp') ny = Math.max(20, prev.y - currentStep);
-          if (key === 'ArrowDown') ny = Math.min(window.innerHeight - 20, prev.y + currentStep);
-          if (key === 'ArrowLeft') nx = Math.max(20, prev.x - currentStep);
-          if (key === 'ArrowRight') nx = Math.min(window.innerWidth - 20, prev.x + currentStep);
+          if (key === 'ArrowUp' || e.keyCode === 19) ny = Math.max(20, prev.y - currentStep);
+          if (key === 'ArrowDown' || e.keyCode === 20) ny = Math.min(window.innerHeight - 20, prev.y + currentStep);
+          if (key === 'ArrowLeft' || e.keyCode === 21) nx = Math.max(20, prev.x - currentStep);
+          if (key === 'ArrowRight' || e.keyCode === 22) nx = Math.min(window.innerWidth - 20, prev.x + currentStep);
 
           return { x: nx, y: ny };
         });
-      } else if (key === 'Enter' || key === ' ') {
+      } else if (isClick) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -133,7 +140,10 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+      if (
+        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) ||
+        [19, 20, 21, 22].includes(e.keyCode)
+      ) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();

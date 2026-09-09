@@ -158,11 +158,22 @@ export function useSpatialNav(options: SpatialNavOptions = {}) {
         }
       }
 
+      // Handle Android TV D-Pad OK / Center button click on focused card or button
+      const isOkButton = key === 'Enter' || key === 'Select' || key === 'Accept' || keyCode === 23 || keyCode === 13;
+      if (isOkButton && !(document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement)) {
+        const current = (document.activeElement as HTMLElement) || activeElementRef.current;
+        if (current) {
+          e.preventDefault();
+          current.click();
+          return;
+        }
+      }
+
       let direction: Direction | null = null;
-      if (key === 'ArrowUp') direction = 'up';
-      else if (key === 'ArrowDown') direction = 'down';
-      else if (key === 'ArrowLeft') direction = 'left';
-      else if (key === 'ArrowRight') direction = 'right';
+      if (key === 'ArrowUp' || keyCode === 19) direction = 'up';
+      else if (key === 'ArrowDown' || keyCode === 20) direction = 'down';
+      else if (key === 'ArrowLeft' || keyCode === 21) direction = 'left';
+      else if (key === 'ArrowRight' || keyCode === 22) direction = 'right';
 
       if (!direction) return;
 
