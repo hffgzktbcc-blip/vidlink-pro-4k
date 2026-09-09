@@ -23,6 +23,8 @@ import type { MediaItem, MediaType, Season } from '../types';
 import { STREAM_SERVERS, measureServerLatency } from '../services/streaming';
 import { fetchSeasonDetails } from '../services/tmdb';
 import { VirtualCursor } from './VirtualCursor';
+import { TVNativePlayer } from './TVNativePlayer';
+import { resolveStreamSources, type DirectStream } from '../services/streamResolver';
 
 interface PlayerModalProps {
   media: MediaItem | null;
@@ -51,6 +53,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   const [seasonData, setSeasonData] = useState<Season | null>(null);
   const [isLoadingSeason, setIsLoadingSeason] = useState(false);
   const [playerKey, setPlayerKey] = useState(0);
+  const [playerMode, setPlayerMode] = useState<'native' | 'embed'>('native');
+  const [directStream, setDirectStream] = useState<DirectStream | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const isTvModeInitial = typeof window !== 'undefined' && (
@@ -61,6 +65,32 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   const [isCursorActive, setIsCursorActive] = useState(isTvModeInitial);
   const [showControls, setShowControls] = useState(true);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Resolve direct HLS stream for movie or TV show
+  useEffect(() => {
+    if (!media) return;
+    let isMounted = true;
+    const isTV = media.media_type === 'tv' || (!media.title && !!media.name);
+    const mType: MediaType = isTV ? 'tv' : 'movie';
+
+    resolveStreamSources(media.id, mType, season, episode)
+      .then(res => {
+        if (!isMounted) return;
+        if (res.defaultStream) {
+          setDirectStream(res.defaultStream);
+          setPlayerMode('native');
+        } else {
+          setPlayerMode('embed');
+        }
+      })
+      .catch(() => {
+        if (isMounted) setPlayerMode('embed');
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [media, season, episode]);
 
   // Automatically focus video iframe on load so TV remote / Enter keys can trigger playback directly
   useEffect(() => {
@@ -257,7 +287,26 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     subLang
   );
 
-  // True Fullscreen Cinema Mode Rendering
+  // 1. Native TV Player Mode (Direct HLS Stream with 100% remote D-Pad controls and zero iframes!)
+  if (playerMode === 'native' && directStream) {
+    return (
+      <TVNativePlayer
+        media={media}
+        stream={directStream}
+        season={season}
+        episode={episode}
+        episodeName={seasonData?.episodes?.[episode - 1]?.name}
+        onClose={onClose}
+        onPrevEpisode={handlePrevEpisode}
+        onNextEpisode={handleNextEpisode}
+        hasPrevEpisode={season > 1 || episode > 1}
+        hasNextEpisode={season < totalSeasons || episode < currentEpisodesCount}
+        onSwitchToEmbed={() => setPlayerMode('embed')}
+      />
+    );
+  }
+
+  // 2. True Fullscreen Cinema Mode Rendering (Embed Mirrors)
   if (isTrueFullscreen) {
     return (
       <div
