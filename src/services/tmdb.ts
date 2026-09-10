@@ -12,6 +12,41 @@ const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p';
 
 const STORAGE_KEY = 'vidlink_tmdb_api_key';
 
+interface TrendingCache {
+  updatedAt: string;
+  trendingMovies: MediaItem[];
+  trendingTV: MediaItem[];
+  popularMovies: MediaItem[];
+  popularTV: MediaItem[];
+  top4KList: MediaItem[];
+}
+
+let memoryTrendingCache: TrendingCache | null = null;
+let cacheLoadAttempted = false;
+
+export const loadTrendingCache = async (): Promise<TrendingCache | null> => {
+  if (memoryTrendingCache) return memoryTrendingCache;
+  if (cacheLoadAttempted) return null;
+  cacheLoadAttempted = true;
+
+  try {
+    const res = await fetch('/data/trending-cache.json');
+    if (res.ok) {
+      const data = await res.json();
+      memoryTrendingCache = data;
+      return data;
+    }
+  } catch {
+    // Silent failover to dynamic TMDB or mockCatalog
+  }
+  return null;
+};
+
+// Initiate non-blocking background prefetch
+if (typeof window !== 'undefined') {
+  loadTrendingCache().catch(() => {});
+}
+
 export const getStoredApiKey = (): string => {
   return localStorage.getItem(STORAGE_KEY) || (import.meta.env.VITE_TMDB_API_KEY as string) || '';
 };
@@ -70,6 +105,22 @@ export const fetchHeroFeatured = async (): Promise<MediaItem[]> => {
 };
 
 export const fetchTrending = async (type: 'all' | 'movie' | 'tv' = 'all', timeWindow: 'day' | 'week' = 'week'): Promise<MediaItem[]> => {
+  // If memory cache is available, provide zero-latency immediate response
+  if (!memoryTrendingCache) {
+    await loadTrendingCache();
+  }
+  if (memoryTrendingCache) {
+    if (type === 'movie' && memoryTrendingCache.trendingMovies?.length) {
+      return memoryTrendingCache.trendingMovies;
+    }
+    if (type === 'tv' && memoryTrendingCache.trendingTV?.length) {
+      return memoryTrendingCache.trendingTV;
+    }
+    if (type === 'all' && (memoryTrendingCache.trendingMovies?.length || memoryTrendingCache.trendingTV?.length)) {
+      return [...(memoryTrendingCache.trendingMovies || []), ...(memoryTrendingCache.trendingTV || [])];
+    }
+  }
+
   try {
     const client = createTmdbClient();
     const res = await client.get(`/trending/${type}/${timeWindow}`);
@@ -87,6 +138,13 @@ export const fetchTrending = async (type: 'all' | 'movie' | 'tv' = 'all', timeWi
 };
 
 export const fetchPopularMovies = async (page = 1): Promise<MediaItem[]> => {
+  if (page === 1) {
+    if (!memoryTrendingCache) await loadTrendingCache();
+    if (memoryTrendingCache?.popularMovies?.length) {
+      return memoryTrendingCache.popularMovies;
+    }
+  }
+
   try {
     const client = createTmdbClient();
     const res = await client.get('/movie/popular', { params: { page } });
@@ -121,6 +179,13 @@ export const fetchTopRatedMovies = async (page = 1): Promise<MediaItem[]> => {
 };
 
 export const fetchPopularTV = async (page = 1): Promise<MediaItem[]> => {
+  if (page === 1) {
+    if (!memoryTrendingCache) await loadTrendingCache();
+    if (memoryTrendingCache?.popularTV?.length) {
+      return memoryTrendingCache.popularTV;
+    }
+  }
+
   try {
     const client = createTmdbClient();
     const res = await client.get('/tv/popular', { params: { page } });
@@ -155,6 +220,11 @@ export const fetchTopRatedTV = async (page = 1): Promise<MediaItem[]> => {
 };
 
 export const fetch4KCollection = async (): Promise<MediaItem[]> => {
+  if (!memoryTrendingCache) await loadTrendingCache();
+  if (memoryTrendingCache?.top4KList?.length) {
+    return memoryTrendingCache.top4KList;
+  }
+
   try {
     const client = createTmdbClient();
     const [moviesRes, tvRes] = await Promise.all([

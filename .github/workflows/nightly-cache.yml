@@ -1,0 +1,46 @@
+name: Nightly Trending Cache Pre-fetch
+
+on:
+  schedule:
+    # Runs everyday at 03:00 UTC (1:00 AM EST)
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-cache:
+    name: Fetch & Commit Trending Cache
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run TMDB Cache Pre-fetch
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: bun scripts/fetch-trending-cache.ts
+
+      - name: Commit & Push updated cache
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/trending-cache.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(cache): update trending-cache.json [skip ci]"
+            git push origin main
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

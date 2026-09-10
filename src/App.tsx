@@ -29,6 +29,8 @@ import { PlayerModal } from './components/PlayerModal';
 import { WatchlistView } from './components/WatchlistView';
 import { UniversesView } from './components/UniversesView';
 import { SettingsModal } from './components/SettingsModal';
+import { UpdateModal } from './components/UpdateModal';
+import { checkForAppUpdate, type AppReleaseInfo } from './services/updateChecker';
 import { ToastContainer, type ToastMessage } from './components/Toast';
 
 const ACCENT_STORAGE_KEY = 'vidlink_accent_color_v1';
@@ -57,6 +59,8 @@ export const App: React.FC = () => {
   const [playerSeason, setPlayerSeason] = useState<number>(1);
   const [playerEpisode, setPlayerEpisode] = useState<number>(1);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [updateRelease, setUpdateRelease] = useState<AppReleaseInfo | null>(null);
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
 
   // Toast Alerts
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -96,7 +100,9 @@ export const App: React.FC = () => {
 
   // TV Remote Back navigation handler
   const handleBackNavigation = useCallback(() => {
-    if (playingMedia) {
+    if (updateRelease) {
+      setUpdateRelease(null);
+    } else if (playingMedia) {
       setPlayingMedia(null);
     } else if (trailerMedia) {
       setTrailerMedia(null);
@@ -109,10 +115,10 @@ export const App: React.FC = () => {
     } else if (activeTab !== 'home') {
       setActiveTab('home');
     }
-  }, [playingMedia, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
+  }, [updateRelease, playingMedia, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
 
   const { isTvMode, toggleTvMode } = useSpatialNav({
-    activeModalOpen: Boolean(playingMedia || trailerMedia || selectedMedia || isSettingsOpen),
+    activeModalOpen: Boolean(updateRelease || playingMedia || trailerMedia || selectedMedia || isSettingsOpen),
     onBack: handleBackNavigation,
   });
 
@@ -215,6 +221,40 @@ export const App: React.FC = () => {
     setPlayerEpisode(episode);
   };
 
+  // Check for updates on startup (debounced / rate-limited)
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      try {
+        const info = await checkForAppUpdate(false);
+        if (info?.hasUpdate) {
+          setUpdateRelease(info);
+        }
+      } catch (err) {
+        console.warn('Update check failed:', err);
+      }
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Manual update check handler (e.g. from Navbar button)
+  const handleManualUpdateCheck = async () => {
+    if (isCheckingUpdate) return;
+    setIsCheckingUpdate(true);
+    addToast('Checking for Updates', 'Contacting GitHub Releases...', 'info');
+    try {
+      const info = await checkForAppUpdate(true);
+      if (info?.hasUpdate) {
+        setUpdateRelease(info);
+      } else {
+        addToast('Up to Date!', `You are running the latest version (${info?.currentVersion || '1.1.0'}).`, 'success');
+      }
+    } catch {
+      addToast('Update Check Failed', 'Could not reach GitHub Releases. Check your internet.', 'warning');
+    } finally {
+      setIsCheckingUpdate(false);
+    }
+  };
+
   // Hero Featured list
   const heroItems = trendingMovies.length ? trendingMovies.slice(0, 5) : [];
 
@@ -225,6 +265,7 @@ export const App: React.FC = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onCheckUpdate={handleManualUpdateCheck}
         onSelectMedia={setSelectedMedia}
         watchlistCount={watchlist.length}
         searchQuery={searchQuery}
@@ -578,6 +619,14 @@ export const App: React.FC = () => {
         tmdbApiKey={tmdbApiKey}
         onSaveTmdbApiKey={handleSaveTmdbKey}
       />
+
+      {/* GitHub Auto-Update Modal */}
+      {updateRelease && (
+        <UpdateModal
+          release={updateRelease}
+          onClose={() => setUpdateRelease(null)}
+        />
+      )}
 
       {/* Android TV Mode Floating Quick Toggle & Status */}
       <div className="fixed bottom-4 right-4 z-40">

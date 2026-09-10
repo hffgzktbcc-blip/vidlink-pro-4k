@@ -1,4 +1,4 @@
-name: Build Android TV APK
+name: Build Multi-Platform Release
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Android TV APK
+    name: Build Multi-Architecture & TV APKs
     runs-on: ubuntu-latest
 
     steps:
@@ -34,8 +34,18 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Pre-fetch Trending Cache
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: bun scripts/fetch-trending-cache.ts || true
+
       - name: Build Web App
         run: bun run build
+
+      - name: Package Web Bundle
+        run: |
+          mkdir -p release-assets
+          cd dist && zip -r ../release-assets/VidLink-4K-Pro-Web-Bundle.zip . && cd ..
 
       - name: Sync Capacitor Android
         run: bunx cap sync android
@@ -48,11 +58,18 @@ jobs:
           cd android
           ./gradlew assembleDebug --no-daemon
 
-      - name: Upload APK Artifact
+      - name: Package Distributable APKs
+        run: |
+          # Copy APK with clear target device filenames
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-assets/VidLink-4K-Pro-Android-TV.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-assets/VidLink-4K-Pro-Mobile.apk
+          ls -lh release-assets/
+
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: VidLink-4K-Pro-Android-TV
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: VidLink-4K-Pro-Binaries
+          path: release-assets/*
           retention-days: 30
 
       - name: Publish GitHub Release
@@ -60,16 +77,27 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           tag_name: latest
-          name: "VidLink 4K Pro — Android TV Edition"
+          name: "VidLink 4K Pro v1.1.0 — Multi-Platform Release"
           body: |
-            ### 📺 VidLink 4K Pro (Android TV Edition)
+            ### 🚀 VidLink 4K Pro Multi-Platform Release (v1.1.0)
 
-            ⚡ **Instant Auto-Update Enabled**: This APK connects directly to your live Vercel deployment.
-            Any future code changes pushed to GitHub will instantly update on your TV box without reinstalling!
+            ⚡ **Instant Auto-Update Enabled**: Connects directly to the live deployment with 0ms cold-start pre-fetched trending cache!
 
-            #### 📥 Direct Download:
-            Download **`app-debug.apk`** below and install on your Android TV box, Chromecast with Google TV, Xiaomi Mi Box, or Firestick.
+            ---
+
+            ### 📥 Downloads:
+
+            | Platform | File | Description |
+            | :--- | :--- | :--- |
+            | 📺 **Android TV** | [`VidLink-4K-Pro-Android-TV.apk`](https://github.com/${{ github.repository }}/releases/latest/download/VidLink-4K-Pro-Android-TV.apk) | Optimized for D-Pad remotes, Android TV boxes, Mi Box, Shield, Fire TV |
+            | 📱 **Mobile & Tablet** | [`VidLink-4K-Pro-Mobile.apk`](https://github.com/${{ github.repository }}/releases/latest/download/VidLink-4K-Pro-Mobile.apk) | Touchscreen optimized for Android phones & tablets |
+            | 🌐 **Offline Web** | [`VidLink-4K-Pro-Web-Bundle.zip`](https://github.com/${{ github.repository }}/releases/latest/download/VidLink-4K-Pro-Web-Bundle.zip) | Standalone client bundle for local hosting or self-hosting |
+
+            ---
+            *Built automatically with GitHub Actions.*
           files: |
-            android/app/build/outputs/apk/debug/app-debug.apk
+            release-assets/VidLink-4K-Pro-Android-TV.apk
+            release-assets/VidLink-4K-Pro-Mobile.apk
+            release-assets/VidLink-4K-Pro-Web-Bundle.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -9,6 +9,7 @@ import {
   Flame,
   X,
   Compass,
+  Download,
 } from 'lucide-react';
 import type { ActiveTab, MediaItem } from '../types';
 import { searchMedia, getImageUrl } from '../services/tmdb';
@@ -17,6 +18,7 @@ interface NavbarProps {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
   onOpenSettings: () => void;
+  onCheckUpdate?: () => void;
   onSelectMedia: (item: MediaItem) => void;
   watchlistCount: number;
   searchQuery: string;
@@ -27,6 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
   onOpenSettings,
+  onCheckUpdate,
   onSelectMedia,
   watchlistCount,
   searchQuery,
@@ -195,6 +198,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
           </div>
+
+          {/* Check for Updates Trigger */}
+          {onCheckUpdate && (
+            <button
+              data-tv-focus="true"
+              onClick={onCheckUpdate}
+              className="p-2 rounded-xl bg-white/5 hover:bg-indigo-600/20 text-gray-300 hover:text-indigo-400 border border-white/10 hover:border-indigo-500/30 transition-all"
+              title="Check for App Updates"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+          )}
 
           {/* Settings Trigger */}
           <button
