@@ -6,8 +6,10 @@ import {
   Sparkles,
   Star,
   Zap,
+  History as HistoryIcon,
 } from 'lucide-react';
 import type { ActiveTab, MediaItem } from './types';
+import { playTaDum } from './services/soundEffects';
 import {
   fetchTrending,
   fetchPopularMovies,
@@ -124,11 +126,30 @@ export const App: React.FC = () => {
 
   // Load Catalogs on Mount
   useEffect(() => {
-    fetchTrending('movie', 'week').then(data => setTrendingMovies(data));
+    // Play subtle Netflix Ta-Dum sound once on startup
+    const timer = setTimeout(() => {
+      playTaDum();
+    }, 450);
+
+    fetchTrending('movie', 'week').then(data => {
+      setTrendingMovies(data);
+
+      // Sync top trending movies to Android TV Home Screen Channel
+      if (typeof window !== 'undefined' && (window as any).AndroidTVChannels) {
+        try {
+          (window as any).AndroidTVChannels.syncTrending(JSON.stringify(data.slice(0, 15)));
+        } catch (e) {
+          console.warn('Android TV Channel sync failed', e);
+        }
+      }
+    });
+
     fetchTrending('tv', 'week').then(data => setTrendingTV(data));
     fetchPopularMovies().then(data => setPopularMovies(data));
     fetchPopularTV().then(data => setPopularTV(data));
     fetch4KCollection().then(data => setTop4KList(data));
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Mood filter query
@@ -483,18 +504,48 @@ export const App: React.FC = () => {
               </div>
             )}
 
-            <div className="space-y-4 py-4">
-              {/* Trending 4K Movies */}
-              <MediaRow
-                title="Trending Movies in 4K"
-                items={trendingMovies}
-                icon={Flame}
-                badge="4K HDR"
-                onSelectMedia={setSelectedMedia}
-                onPlayMedia={handleStartPlaying}
-                isInWatchlist={isInWatchlist}
-                onToggleWatchlist={handleToggleWatchlistWithToast}
-              />
+            <div className="space-y-6 py-4">
+              {/* Netflix Continue Watching Row (if history exists) */}
+              {history.length > 0 && (
+                <MediaRow
+                  title="Continue Watching"
+                  items={history.map(h => ({
+                    id: h.id,
+                    title: h.title,
+                    name: h.title,
+                    media_type: h.mediaType,
+                    poster_path: h.posterPath || '',
+                    backdrop_path: h.backdropPath || '',
+                    overview: `Resume Season ${h.season || 1}, Episode ${h.episode || 1}`,
+                    vote_average: 8.5,
+                    vote_count: 100,
+                  }))}
+                  icon={HistoryIcon}
+                  badge="Resume"
+                  onSelectMedia={setSelectedMedia}
+                  onPlayMedia={(item) => {
+                    const h = history.find(entry => entry.id === item.id);
+                    handleStartPlaying(item, h?.season || 1, h?.episode || 1);
+                  }}
+                  isInWatchlist={isInWatchlist}
+                  onToggleWatchlist={handleToggleWatchlistWithToast}
+                />
+              )}
+
+              {/* Netflix Top 10 Movies Today */}
+              {trendingMovies.length > 0 && (
+                <MediaRow
+                  title="Top 10 Movies Today"
+                  items={trendingMovies.slice(0, 10)}
+                  icon={Flame}
+                  badge="Top 10"
+                  isTopTen={true}
+                  onSelectMedia={setSelectedMedia}
+                  onPlayMedia={handleStartPlaying}
+                  isInWatchlist={isInWatchlist}
+                  onToggleWatchlist={handleToggleWatchlistWithToast}
+                />
+              )}
 
               {/* Trending TV Series */}
               <MediaRow

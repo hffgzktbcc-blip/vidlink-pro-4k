@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { MediaCard } from './MediaCard';
+import { TopTenBadge } from './TopTenBadge';
 
 interface MediaRowProps {
   title: string;
@@ -14,6 +15,7 @@ interface MediaRowProps {
   isInWatchlist?: (id: number) => boolean;
   onToggleWatchlist?: (item: MediaItem) => void;
   cardSize?: 'normal' | 'large' | 'compact';
+  isTopTen?: boolean;
 }
 
 export const MediaRow: React.FC<MediaRowProps> = ({
@@ -26,6 +28,7 @@ export const MediaRow: React.FC<MediaRowProps> = ({
   isInWatchlist,
   onToggleWatchlist,
   cardSize = 'normal',
+  isTopTen = false,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -55,14 +58,14 @@ export const MediaRow: React.FC<MediaRowProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           {Icon && (
-            <div className="p-1.5 rounded-lg bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
+            <div className="p-1.5 rounded-lg bg-red-600/15 text-red-500 border border-red-500/30">
               <Icon className="w-4 h-4" />
             </div>
           )}
           <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white flex items-center gap-2">
             {title}
             {badge && (
-              <span className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider rounded bg-gradient-to-r from-amber-500 to-orange-500 text-black">
+              <span className="px-2 py-0.5 text-[10px] font-black uppercase tracking-wider rounded bg-gradient-to-r from-red-600 to-rose-600 text-white">
                 {badge}
               </span>
             )}
@@ -76,7 +79,7 @@ export const MediaRow: React.FC<MediaRowProps> = ({
         {showLeftArrow && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-indigo-600 border border-white/20 text-white flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 group-hover/row:opacity-100 transition-all duration-300 transform -translate-x-2 group-hover/row:translate-x-0"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-red-600 border border-white/20 text-white flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 group-hover/row:opacity-100 transition-all duration-300 transform -translate-x-2 group-hover/row:translate-x-0"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -87,7 +90,7 @@ export const MediaRow: React.FC<MediaRowProps> = ({
         {showRightArrow && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-indigo-600 border border-white/20 text-white flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 group-hover/row:opacity-100 transition-all duration-300 transform translate-x-2 group-hover/row:translate-x-0"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-red-600 border border-white/20 text-white flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 group-hover/row:opacity-100 transition-all duration-300 transform translate-x-2 group-hover/row:translate-x-0"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-6 h-6" />
@@ -98,18 +101,20 @@ export const MediaRow: React.FC<MediaRowProps> = ({
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex items-start gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth py-2 px-1"
+          className="flex items-start gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth py-3 px-1"
         >
-          {items.map(item => (
-            <MediaCard
-              key={`${item.media_type}-${item.id}`}
-              item={item}
-              size={cardSize}
-              onSelect={onSelectMedia}
-              onPlay={onPlayMedia}
-              isInWatchlist={isInWatchlist ? isInWatchlist(item.id) : false}
-              onToggleWatchlist={onToggleWatchlist}
-            />
+          {items.map((item, index) => (
+            <div key={`${item.media_type}-${item.id}`} className="flex items-center shrink-0">
+              {isTopTen && <TopTenBadge rank={index + 1} />}
+              <MediaCard
+                item={item}
+                size={cardSize}
+                onSelect={onSelectMedia}
+                onPlay={onPlayMedia}
+                isInWatchlist={isInWatchlist ? isInWatchlist(item.id) : false}
+                onToggleWatchlist={onToggleWatchlist}
+              />
+            </div>
           ))}
         </div>
       </div>

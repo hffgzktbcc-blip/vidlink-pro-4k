@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { playNavClick, playSelectSound } from '../services/soundEffects';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 
@@ -164,6 +165,7 @@ export function useSpatialNav(options: SpatialNavOptions = {}) {
         const current = (document.activeElement as HTMLElement) || activeElementRef.current;
         if (current) {
           e.preventDefault();
+          playSelectSound();
           current.click();
           return;
         }
@@ -199,6 +201,7 @@ export function useSpatialNav(options: SpatialNavOptions = {}) {
 
       if (!current || !candidates.includes(current)) {
         e.preventDefault();
+        playNavClick();
         focusElement(candidates[0]);
         return;
       }
@@ -206,6 +209,7 @@ export function useSpatialNav(options: SpatialNavOptions = {}) {
       const next = findBestCandidate(current, direction, candidates);
       if (next) {
         e.preventDefault();
+        playNavClick();
         focusElement(next);
       }
     };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Play, Plus, Check, Info, Star } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { getImageUrl } from '../services/tmdb';
+import { playSelectSound } from '../services/soundEffects';
 
 interface MediaCardProps {
   item: MediaItem;
@@ -36,12 +37,15 @@ export const MediaCard: React.FC<MediaCardProps> = ({
   const handleCardKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      playSelectSound();
       onSelect(item);
     } else if (e.key.toLowerCase() === 'p') {
       e.preventDefault();
+      playSelectSound();
       onPlay(item);
     } else if (e.key.toLowerCase() === 'w' && onToggleWatchlist) {
       e.preventDefault();
+      playSelectSound();
       onToggleWatchlist(item);
     }
   };

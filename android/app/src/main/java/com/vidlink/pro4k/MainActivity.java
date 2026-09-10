@@ -1,5 +1,7 @@
 package com.vidlink.pro4k;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.KeyEvent;
@@ -48,9 +50,50 @@ public class MainActivity extends BridgeActivity {
         }
     }
 
+    public class TVChannelInterface {
+        @JavascriptInterface
+        public void syncTrending(String jsonMediaArray) {
+            try {
+                TvChannelsHelper.syncTrendingPrograms(MainActivity.this, jsonMediaArray);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handleDeepLinkIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleDeepLinkIntent(intent);
+    }
+
+    private void handleDeepLinkIntent(Intent intent) {
+        if (intent == null) return;
+        Uri data = intent.getData();
+        if (data != null && "vidlink".equals(data.getScheme())) {
+            // Forward deep link path/query to web application
+            final String query = data.getQuery();
+            if (query != null && !query.isEmpty()) {
+                runOnUiThread(() -> {
+                    if (bridge != null && bridge.getWebView() != null) {
+                        bridge.getWebView().postDelayed(() -> {
+                            bridge.getWebView().evaluateJavascript(
+                                "window.history.pushState({}, '', '?" + query + "');" +
+                                "window.dispatchEvent(new PopStateEvent('popstate'));",
+                                null
+                            );
+                        }, 1200);
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -71,8 +114,12 @@ public class MainActivity extends BridgeActivity {
             settings.setSupportMultipleWindows(false);
             settings.setJavaScriptCanOpenWindowsAutomatically(false);
 
-            // Register native TV touch bridge for virtual cursor
+            // Register native TV touch bridge for virtual cursor & TV channel sync
             webView.addJavascriptInterface(new TVInterface(), "AndroidTV");
+            webView.addJavascriptInterface(new TVChannelInterface(), "AndroidTVChannels");
+
+            // Initialize TV channel row
+            TvChannelsHelper.getOrCreateTrendingChannel(this);
         }
     }
 

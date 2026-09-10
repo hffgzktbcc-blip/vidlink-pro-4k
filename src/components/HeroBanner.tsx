@@ -5,13 +5,14 @@ import {
   Plus,
   Check,
   Star,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
   Video,
+  Flame,
 } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { getBackdropUrl, getImageUrl } from '../services/tmdb';
+import { playSelectSound } from '../services/soundEffects';
 
 interface HeroBannerProps {
   items: MediaItem[];
@@ -84,17 +85,17 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         <div className="max-w-2xl">
           {/* Quality & Type Badges */}
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black tracking-wider uppercase rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-lg shadow-amber-500/30">
-              <Sparkles className="w-3.5 h-3.5 fill-black" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black tracking-wider uppercase rounded-md bg-[#E50914] text-white shadow-lg shadow-red-600/40">
+              <Flame className="w-3.5 h-3.5 fill-white" />
+              #1 IN MOVIES TODAY
+            </span>
+            <span className="px-2.5 py-0.5 text-xs font-black uppercase tracking-wider rounded-md bg-black/70 backdrop-blur-md text-amber-300 border border-amber-500/40">
               4K ULTRA HD
             </span>
-            <span className="px-2.5 py-0.5 text-xs font-black uppercase tracking-wider rounded-lg bg-black/70 backdrop-blur-md text-cyan-300 border border-cyan-500/40">
+            <span className="px-2.5 py-0.5 text-xs font-black uppercase tracking-wider rounded-md bg-black/70 backdrop-blur-md text-white/90 border border-white/20">
               DOLBY VISION
             </span>
-            <span className="px-2.5 py-0.5 text-xs font-black uppercase tracking-wider rounded-lg bg-black/70 backdrop-blur-md text-purple-300 border border-purple-500/40">
-              ATMOS
-            </span>
-            <span className="px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-white/10 backdrop-blur-md text-gray-300">
+            <span className="px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider rounded-md bg-white/10 backdrop-blur-md text-gray-300">
               {isMovie ? 'FEATURE FILM' : 'TV SERIES'}
             </span>
           </div>
@@ -106,7 +107,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
           {/* Meta Info Row */}
           <div className="flex flex-wrap items-center gap-3 mt-3 text-sm text-gray-300 font-medium">
-            <span className="text-emerald-400 font-black tracking-wide">
+            <span className="text-[#46d369] font-black tracking-wide">
               {matchPercent}% Match
             </span>
             {current.vote_average > 0 && (
@@ -128,15 +129,17 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 <span>{current.number_of_seasons} Seasons</span>
               </>
             )}
-            <span>•</span>
-            <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              FREE STREAM
+            <span className="px-1.5 py-0.5 text-[10px] font-bold rounded border border-white/40 text-gray-300">
+              16+
+            </span>
+            <span className="px-1.5 py-0.5 text-[10px] font-bold rounded border border-white/40 text-gray-300">
+              HD / 4K
             </span>
           </div>
 
           {/* Tagline or Overview */}
           {current.tagline && (
-            <p className="mt-2.5 text-indigo-300 text-sm font-semibold italic">
+            <p className="mt-2.5 text-gray-300 text-sm font-semibold italic">
               "{current.tagline}"
             </p>
           )}
@@ -145,37 +148,46 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {current.overview}
           </p>
 
-          {/* Action Buttons */}
+          {/* Netflix Action Buttons */}
           <div className="flex flex-wrap items-center gap-3.5 mt-6">
-            {/* Main Play Now Button */}
+            {/* Main Netflix Play Button (White with Black Text) */}
             <button
               data-tv-focus="true"
-              onClick={() => onPlayMedia(current)}
-              className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold text-sm sm:text-base flex items-center gap-2.5 shadow-xl shadow-indigo-600/40 transform hover:scale-105 active:scale-95 transition-all"
+              onClick={() => {
+                playSelectSound();
+                onPlayMedia(current);
+              }}
+              className="px-8 py-3.5 rounded-md bg-white hover:bg-white/90 text-black font-extrabold text-sm sm:text-base flex items-center gap-2.5 shadow-2xl transform hover:scale-105 active:scale-95 transition-all"
             >
-              <Play className="w-5 h-5 fill-white" />
-              <span>Watch in 4K Now</span>
+              <Play className="w-5 h-5 fill-black" />
+              <span>Play</span>
             </button>
 
-            {/* Info / Episodes Button */}
+            {/* Netflix More Info Button (Translucent dark) */}
             <button
               data-tv-focus="true"
-              onClick={() => onSelectMedia(current)}
-              className="px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 text-white font-semibold text-sm sm:text-base flex items-center gap-2 hover:border-white/40 transition-all"
+              onClick={() => {
+                playSelectSound();
+                onSelectMedia(current);
+              }}
+              className="px-6 py-3.5 rounded-md bg-white/25 hover:bg-white/35 backdrop-blur-xl text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all"
             >
               <Info className="w-5 h-5" />
-              <span>Details & Episodes</span>
+              <span>More Info</span>
             </button>
 
             {/* Trailer button */}
             {onOpenTrailer && (
               <button
                 data-tv-focus="true"
-                onClick={() => onOpenTrailer(current)}
-                className="px-4 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 text-white font-semibold text-sm flex items-center gap-2 transition-all"
+                onClick={() => {
+                  playSelectSound();
+                  onOpenTrailer(current);
+                }}
+                className="px-5 py-3.5 rounded-md bg-white/15 hover:bg-white/25 backdrop-blur-xl text-white font-bold text-sm flex items-center gap-2 transition-all"
                 title="Watch 4K Trailer"
               >
-                <Video className="w-4 h-4 text-indigo-400" />
+                <Video className="w-4 h-4 text-red-500" />
                 <span>Trailer</span>
               </button>
             )}
@@ -183,12 +195,15 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {/* Watchlist Toggle Button */}
             <button
               data-tv-focus="true"
-              onClick={() => onToggleWatchlist(current)}
+              onClick={() => {
+                playSelectSound();
+                onToggleWatchlist(current);
+              }}
               title={saved ? 'Remove from My List' : 'Add to My List'}
-              className={`p-3.5 rounded-xl backdrop-blur-xl border transition-all ${
+              className={`p-3.5 rounded-full border transition-all ${
                 saved
-                  ? 'bg-indigo-600 text-white border-indigo-400 shadow-lg shadow-indigo-600/30'
-                  : 'bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/40'
+                  ? 'bg-red-600 text-white border-red-500 shadow-lg shadow-red-600/40'
+                  : 'bg-black/50 hover:bg-black/70 text-white border-white/30 hover:border-white/60'
               }`}
             >
               {saved ? <Check className="w-5 h-5 stroke-[2.5]" /> : <Plus className="w-5 h-5" />}
