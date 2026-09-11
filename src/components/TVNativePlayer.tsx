@@ -12,6 +12,7 @@ import {
   Layers,
   ChevronLeft,
   ChevronRight,
+  ArrowLeft,
 } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { openInExternalPlayer, type DirectStream } from '../services/streamResolver';
@@ -346,9 +347,20 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         </div>
       )}
 
+      {/* Dedicated Always-Accessible Mobile Back & Exit Button */}
+      <button
+        onClick={onClose}
+        className="fixed top-4 left-4 z-50 p-3 sm:p-3.5 rounded-full bg-black/80 hover:bg-red-600 text-white border border-white/20 backdrop-blur-xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2"
+        aria-label="Exit Player"
+        title="Exit Player & Return to Catalog (Esc / Back)"
+      >
+        <ArrowLeft className="w-5 h-5 text-white" />
+        <span className="text-xs font-bold sm:hidden">Exit</span>
+      </button>
+
       {/* Top Header Bar (Auto-Fading) */}
       <div
-        className={`absolute top-0 left-0 right-0 z-40 p-5 bg-gradient-to-b from-black/95 via-black/60 to-transparent flex items-center justify-between gap-4 transition-opacity duration-300 ${
+        className={`absolute top-0 left-0 right-0 z-40 p-5 pl-20 sm:pl-24 bg-gradient-to-b from-black/95 via-black/60 to-transparent flex items-center justify-between gap-4 transition-opacity duration-300 ${
           showControls ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >

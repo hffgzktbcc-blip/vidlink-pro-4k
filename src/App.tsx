@@ -166,24 +166,33 @@ export const App: React.FC = () => {
 
   // Deep-Link URL Router (?watch=movie&id=693134 or ?watch=tv&id=94605&s=2&e=3)
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const watchType = params.get('watch');
-    const mediaId = params.get('id');
-    const s = params.get('s');
-    const e = params.get('e');
+    const handleUrlState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const watchType = params.get('watch');
+      const mediaId = params.get('id');
+      const s = params.get('s');
+      const e = params.get('e');
 
-    if (watchType && mediaId) {
-      const numId = Number(mediaId);
-      const isTV = watchType === 'tv';
-      if (s) setPlayerSeason(Number(s));
-      if (e) setPlayerEpisode(Number(e));
+      if (watchType && mediaId) {
+        const numId = Number(mediaId);
+        const isTV = watchType === 'tv';
+        if (s) setPlayerSeason(Number(s));
+        if (e) setPlayerEpisode(Number(e));
 
-      fetchMediaDetails(isTV ? 'tv' : 'movie', numId)
-        .then(item => {
-          if (item) setPlayingMedia(item);
-        })
-        .catch(console.error);
-    }
+        fetchMediaDetails(isTV ? 'tv' : 'movie', numId)
+          .then(item => {
+            if (item) setPlayingMedia(item);
+          })
+          .catch(console.error);
+      } else {
+        // When user swipes back on phone or clicks browser Back, cleanly close player
+        setPlayingMedia(null);
+      }
+    };
+
+    handleUrlState();
+    window.addEventListener('popstate', handleUrlState);
+    return () => window.removeEventListener('popstate', handleUrlState);
   }, []);
 
   // Handle Search Query
@@ -240,6 +249,13 @@ export const App: React.FC = () => {
     setPlayingMedia(item);
     setPlayerSeason(season);
     setPlayerEpisode(episode);
+
+    // Push browser history state so mobile swipe-back or browser Back button closes the movie
+    try {
+      const isTV = item.media_type === 'tv' || (!item.title && !!item.name);
+      const url = `?watch=${isTV ? 'tv' : 'movie'}&id=${item.id}${isTV ? `&s=${season}&e=${episode}` : ''}`;
+      window.history.pushState({ modal: 'player', id: item.id }, '', url);
+    } catch {}
   };
 
   // Check for updates on startup (debounced / rate-limited)
@@ -652,7 +668,14 @@ export const App: React.FC = () => {
           media={playingMedia}
           initialSeason={playerSeason}
           initialEpisode={playerEpisode}
-          onClose={() => setPlayingMedia(null)}
+          onClose={() => {
+            setPlayingMedia(null);
+            try {
+              if (window.location.search) {
+                window.history.pushState({}, '', window.location.pathname);
+              }
+            } catch {}
+          }}
           accentColor={accentColor}
           subLang={subLang}
           onRecordProgress={recordHistory}

@@ -18,6 +18,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   </head>
   <body class="bg-[#07080d] text-white min-h-screen selection:bg-indigo-600 selection:text-white font-sans antialiased overflow-x-hidden">
+    <!-- Ad & Popup Killer Guard -->
+    <script>
+      (function() {
+        // Intercept window.open from iframe ads
+        const originalOpen = window.open;
+        window.open = function(url, target, features) {
+          // Allow internal app navigation, block foreign ad networks
+          if (url && typeof url === 'string') {
+            if (url.includes('vidlink-pro-4k.vercel.app') || url.startsWith('/') || url.startsWith('intent:')) {
+              return originalOpen.apply(this, arguments);
+            }
+          }
+          console.warn('🛡️ VidLink Shield: Blocked unwanted popup/redirect to:', url);
+          return null;
+        };
+
+        // Suppress beforeunload and external ad redirects
+        window.addEventListener('beforeunload', function(e) {
+          // If in fullscreen or watching, stop ad page navigation hijack
+          if (document.querySelector('[data-tv-modal="true"]')) {
+            e.stopPropagation();
+          }
+        }, true);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

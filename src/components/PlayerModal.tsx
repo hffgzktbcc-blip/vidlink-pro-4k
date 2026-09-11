@@ -18,6 +18,7 @@ import {
   Minimize2,
   MousePointer2,
   Play,
+  ArrowLeft,
 } from 'lucide-react';
 import type { MediaItem, MediaType, Season } from '../types';
 import { STREAM_SERVERS, measureServerLatency } from '../services/streaming';
@@ -313,16 +314,28 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         data-tv-modal="true"
         className="fixed inset-0 z-50 w-screen h-screen bg-black overflow-hidden select-none"
       >
-        {/* Fullscreen Video Iframe */}
+        {/* Fullscreen Video Iframe with Anti-Popup Sandbox & Permissions */}
         <iframe
           ref={iframeRef}
           key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
           src={streamUrl}
           title={title}
           className="absolute inset-0 w-full h-full border-0 z-0 bg-black"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-encrypted-media"
           allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
           allowFullScreen
         />
+
+        {/* Dedicated Always-Accessible Mobile Back & Exit Button */}
+        <button
+          onClick={onClose}
+          className="fixed top-4 left-4 z-50 p-3 sm:p-3.5 rounded-full bg-black/80 hover:bg-red-600 text-white border border-white/20 backdrop-blur-xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2"
+          aria-label="Exit Player"
+          title="Exit Player & Return to Catalog (Esc)"
+        >
+          <ArrowLeft className="w-5 h-5 text-white" />
+          <span className="text-xs font-bold sm:hidden">Exit</span>
+        </button>
 
         {/* Virtual Remote Cursor Layer */}
         <VirtualCursor
@@ -332,11 +345,11 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
         {/* Auto-Hiding Top Control Bar */}
         <div
-          className={`absolute top-0 left-0 right-0 z-40 p-4 sm:p-6 bg-gradient-to-b from-black/95 via-black/60 to-transparent flex flex-wrap items-center justify-between gap-3 transition-opacity duration-300 ${
+          className={`absolute top-0 left-0 right-0 z-40 p-4 sm:p-6 pl-20 sm:pl-24 bg-gradient-to-b from-black/95 via-black/60 to-transparent flex flex-wrap items-center justify-between gap-3 transition-opacity duration-300 ${
             showControls ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
         >
-          {/* Back & Title */}
+          {/* Title & Metadata */}
           <div className="flex items-center gap-3">
             <button
               data-tv-focus="true"
@@ -609,6 +622,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               src={streamUrl}
               title={title}
               className="w-full h-full border-0"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-encrypted-media"
               allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
               allowFullScreen
             />
