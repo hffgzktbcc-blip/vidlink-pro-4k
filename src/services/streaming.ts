@@ -105,8 +105,68 @@ export const STREAM_SERVERS: ServerOption[] = [
   },
 ];
 
+interface StreamHealthReport {
+  updatedAt: string;
+  servers: Array<{
+    id: string;
+    online: boolean;
+    latencyMs: number;
+  }>;
+  fastestServerId: string;
+}
+
+let cachedHealth: StreamHealthReport | null = null;
+
+export const loadStreamHealth = async (): Promise<StreamHealthReport | null> => {
+  if (cachedHealth) return cachedHealth;
+  try {
+    const res = await fetch('/data/stream-health.json');
+    if (res.ok) {
+      const data = await res.json();
+      cachedHealth = data;
+      return data;
+    }
+  } catch {
+    // Ignore and fallback
+  }
+  return null;
+};
+
+// Helper to get healthiest servers ranked by latency and uptime
+export const getHealthyStreamServers = async (): Promise<ServerOption[]> => {
+  const health = await loadStreamHealth();
+  if (!health || !health.servers?.length) {
+    return STREAM_SERVERS;
+  }
+
+  const healthMap = new Map(health.servers.map(s => [s.id, s]));
+
+  return [...STREAM_SERVERS].sort((a, b) => {
+    const healthA = healthMap.get(a.id);
+    const healthB = healthMap.get(b.id);
+
+    // Online servers come first
+    const onlineA = healthA ? healthA.online : true;
+    const onlineB = healthB ? healthB.online : true;
+    if (onlineA !== onlineB) return onlineA ? -1 : 1;
+
+    // Lowest latency comes next
+    const latencyA = healthA ? healthA.latencyMs : 9999;
+    const latencyB = healthB ? healthB.latencyMs : 9999;
+    return latencyA - latencyB;
+  });
+};
+
 // Helper to benchmark server ping
 export const measureServerLatency = async (serverId: string): Promise<number> => {
+  if (!cachedHealth) {
+    await loadStreamHealth();
+  }
+  const match = cachedHealth?.servers.find(s => s.id === serverId);
+  if (match && match.online && match.latencyMs < 9000) {
+    return Math.min(999, Math.round(match.latencyMs / 10)); // Scale to responsive ping scale
+  }
+
   const baseLatencies: Record<string, number> = {
     'vidlink-pro': 32,
     'vidlink-v2': 40,
