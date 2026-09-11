@@ -32,6 +32,7 @@ import { WatchlistView } from './components/WatchlistView';
 import { UniversesView } from './components/UniversesView';
 import { SettingsModal } from './components/SettingsModal';
 import { UpdateModal } from './components/UpdateModal';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { checkForAppUpdate, type AppReleaseInfo } from './services/updateChecker';
 import { ToastContainer, type ToastMessage } from './components/Toast';
 
@@ -309,8 +310,8 @@ export const App: React.FC = () => {
         setSearchQuery={setSearchQuery}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1">
+      {/* Main Content Area with Mobile Safe Bottom Padding */}
+      <main className="flex-1 pb-24 md:pb-12">
         {/* Search Results Mode */}
         {searchQuery.trim() ? (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-28">
@@ -721,7 +722,7 @@ export const App: React.FC = () => {
       )}
 
       {/* Android TV Mode Floating Quick Toggle & Status */}
-      <div className="fixed bottom-4 right-4 z-40">
+      <div className="fixed bottom-20 md:bottom-4 right-4 z-30">
         <button
           data-tv-focus="true"
           onClick={toggleTvMode}
@@ -741,6 +742,14 @@ export const App: React.FC = () => {
           />
         </button>
       </div>
+
+      {/* Native Mobile & iOS Bottom Navigation Bar */}
+      <MobileBottomNav
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        watchlistCount={watchlist.length}
+        onClearSearch={() => setSearchQuery('')}
+      />
 
       {/* Global Toast Notifications */}
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />

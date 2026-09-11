@@ -347,10 +347,10 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         </div>
       )}
 
-      {/* Dedicated Always-Accessible Mobile Back & Exit Button */}
+      {/* Dedicated Always-Accessible Mobile Back & Exit Button with iOS Safe Area */}
       <button
         onClick={onClose}
-        className="fixed top-4 left-4 z-50 p-3 sm:p-3.5 rounded-full bg-black/80 hover:bg-red-600 text-white border border-white/20 backdrop-blur-xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2"
+        className="fixed top-[max(1rem,env(safe-area-inset-top,16px))] left-[max(1rem,env(safe-area-inset-left,16px))] z-50 p-3 sm:p-3.5 rounded-full bg-black/80 hover:bg-red-600 text-white border border-white/20 backdrop-blur-xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2"
         aria-label="Exit Player"
         title="Exit Player & Return to Catalog (Esc / Back)"
       >

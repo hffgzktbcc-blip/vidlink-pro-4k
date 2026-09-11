@@ -1,0 +1,72 @@
+name: 🛡️ Automated Debug Sentinel & Self-Healing
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Every night at 03:00 UTC
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'public/data/**'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sentinel:
+    name: Run Synthetic Diagnostics & Self-Healing
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun Runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run Sentinel Health Benchmark
+        id: sentinel
+        continue-on-error: true
+        run: |
+          bun run scripts/auto-debug-sentinel.ts
+
+      - name: Update Stream Mirrors & Self-Heal Fallbacks
+        run: |
+          bun run scripts/check-stream-health.ts
+
+      - name: Run Automated Code Health Check (Oxlint)
+        run: |
+          bunx oxlint
+
+      - name: Commit Auto-Healed Data & Caches
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/
+          if git diff --staged --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "chore(sentinel): automated mirror health & cache refresh [skip ci]"
+            git push origin main
+          fi
+
+      - name: Auto-File GitHub Issue on Degraded Health
+        if: steps.sentinel.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f public/data/sentinel-report.md ]; then
+            gh issue create \
+              --title "🚨 [Automated Sentinel] Stream Mirror Degradation Detected" \
+              --body-file public/data/sentinel-report.md \
+              --label "bug,automated-sentinel" || true
+          fi
