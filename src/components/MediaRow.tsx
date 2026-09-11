@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { MediaCard } from './MediaCard';
+import { LandscapeMediaCard } from './LandscapeMediaCard';
 import { TopTenBadge } from './TopTenBadge';
 
 interface MediaRowProps {
@@ -16,6 +17,9 @@ interface MediaRowProps {
   onToggleWatchlist?: (item: MediaItem) => void;
   cardSize?: 'normal' | 'large' | 'compact';
   isTopTen?: boolean;
+  layout?: 'poster' | 'landscape';
+  getItemProgress?: (item: MediaItem) => number | undefined;
+  getItemSubtitle?: (item: MediaItem) => string | undefined;
 }
 
 export const MediaRow: React.FC<MediaRowProps> = ({
@@ -29,6 +33,9 @@ export const MediaRow: React.FC<MediaRowProps> = ({
   onToggleWatchlist,
   cardSize = 'normal',
   isTopTen = false,
+  layout = 'poster',
+  getItemProgress,
+  getItemSubtitle,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -106,14 +113,27 @@ export const MediaRow: React.FC<MediaRowProps> = ({
           {items.map((item, index) => (
             <div key={`${item.media_type}-${item.id}`} className="flex items-center shrink-0">
               {isTopTen && <TopTenBadge rank={index + 1} />}
-              <MediaCard
-                item={item}
-                size={cardSize}
-                onSelect={onSelectMedia}
-                onPlay={onPlayMedia}
-                isInWatchlist={isInWatchlist ? isInWatchlist(item.id) : false}
-                onToggleWatchlist={onToggleWatchlist}
-              />
+              {layout === 'landscape' ? (
+                <LandscapeMediaCard
+                  item={item}
+                  size={cardSize}
+                  onSelect={onSelectMedia}
+                  onPlay={onPlayMedia}
+                  isInWatchlist={isInWatchlist ? isInWatchlist(item.id) : false}
+                  onToggleWatchlist={onToggleWatchlist}
+                  progressPercent={getItemProgress ? getItemProgress(item) : undefined}
+                  subtitle={getItemSubtitle ? getItemSubtitle(item) : undefined}
+                />
+              ) : (
+                <MediaCard
+                  item={item}
+                  size={cardSize}
+                  onSelect={onSelectMedia}
+                  onPlay={onPlayMedia}
+                  isInWatchlist={isInWatchlist ? isInWatchlist(item.id) : false}
+                  onToggleWatchlist={onToggleWatchlist}
+                />
+              )}
             </div>
           ))}
         </div>

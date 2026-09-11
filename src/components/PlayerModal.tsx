@@ -314,14 +314,13 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         data-tv-modal="true"
         className="fixed inset-0 z-50 w-screen h-screen bg-black overflow-hidden select-none"
       >
-        {/* Fullscreen Video Iframe with Anti-Popup Sandbox & Permissions */}
+        {/* Fullscreen Video Iframe */}
         <iframe
           ref={iframeRef}
           key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
           src={streamUrl}
           title={title}
           className="absolute inset-0 w-full h-full border-0 z-0 bg-black"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-encrypted-media"
           allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
           allowFullScreen
         />
@@ -622,7 +621,6 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               src={streamUrl}
               title={title}
               className="w-full h-full border-0"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-encrypted-media"
               allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
               allowFullScreen
             />

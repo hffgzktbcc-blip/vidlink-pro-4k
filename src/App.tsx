@@ -465,6 +465,7 @@ export const App: React.FC = () => {
           <>
             <HeroBanner
               items={heroItems}
+              railItems={trendingTV.length > 0 ? trendingTV : heroItems}
               onSelectMedia={setSelectedMedia}
               onPlayMedia={handleStartPlaying}
               onOpenTrailer={item => setTrailerMedia(item)}
@@ -521,32 +522,49 @@ export const App: React.FC = () => {
             )}
 
             <div className="space-y-6 py-4">
-              {/* Netflix Continue Watching Row (if history exists) */}
-              {history.length > 0 && (
-                <MediaRow
-                  title="Continue Watching"
-                  items={history.map(h => ({
-                    id: h.id,
-                    title: h.title,
-                    name: h.title,
-                    media_type: h.mediaType,
-                    poster_path: h.posterPath || '',
-                    backdrop_path: h.backdropPath || '',
-                    overview: `Resume Season ${h.season || 1}, Episode ${h.episode || 1}`,
-                    vote_average: 8.5,
-                    vote_count: 100,
-                  }))}
-                  icon={HistoryIcon}
-                  badge="Resume"
-                  onSelectMedia={setSelectedMedia}
-                  onPlayMedia={(item) => {
-                    const h = history.find(entry => entry.id === item.id);
-                    handleStartPlaying(item, h?.season || 1, h?.episode || 1);
-                  }}
-                  isInWatchlist={isInWatchlist}
-                  onToggleWatchlist={handleToggleWatchlistWithToast}
-                />
-              )}
+              {/* Modern 16:9 Landscape Continue Row (Matching Reference Mockup) */}
+              <MediaRow
+                title="Continue"
+                layout="landscape"
+                items={
+                  history.length > 0
+                    ? history.map(h => ({
+                        id: h.id,
+                        title: h.title,
+                        name: h.title,
+                        media_type: h.mediaType,
+                        poster_path: h.posterPath || '',
+                        backdrop_path: h.backdropPath || '',
+                        overview: `Resume Season ${h.season || 1}, Episode ${h.episode || 1}`,
+                        vote_average: 8.5,
+                        vote_count: 100,
+                      }))
+                    : (trendingMovies.length > 0 ? trendingMovies : heroItems).slice(0, 6).map((item, idx) => ({
+                        ...item,
+                        overview: `Resume Part ${idx + 1}`,
+                      }))
+                }
+                getItemProgress={item => {
+                  const h = history.find(entry => entry.id === item.id);
+                  if (h) return h.progressPercent || 50;
+                  const sampleProgress = [72, 45, 88, 30, 60, 15];
+                  return sampleProgress[item.id % sampleProgress.length];
+                }}
+                getItemSubtitle={item => {
+                  const h = history.find(entry => entry.id === item.id);
+                  if (h) return h.season ? `S${h.season} E${h.episode || 1} • In Progress` : 'Movie • In Progress';
+                  return item.media_type === 'tv' ? 'Season 1 • 28m left' : '4K Feature • 45m left';
+                }}
+                icon={HistoryIcon}
+                badge="16:9 Resume"
+                onSelectMedia={setSelectedMedia}
+                onPlayMedia={(item) => {
+                  const h = history.find(entry => entry.id === item.id);
+                  handleStartPlaying(item, h?.season || 1, h?.episode || 1);
+                }}
+                isInWatchlist={isInWatchlist}
+                onToggleWatchlist={handleToggleWatchlistWithToast}
+              />
 
               {/* Netflix Top 10 Movies Today */}
               {trendingMovies.length > 0 && (
