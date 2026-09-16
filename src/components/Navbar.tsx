@@ -122,14 +122,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold tracking-tight text-xl text-white">
-                VidLink <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Pro</span>
+                Lumia <span className="bg-gradient-to-r from-rose-500 via-indigo-400 to-purple-400 bg-clip-text text-transparent">4K</span>
               </span>
               <span className="px-1.5 py-0.2 text-[9px] font-black uppercase tracking-wider rounded bg-gradient-to-r from-amber-500 to-orange-500 text-black">
-                4K HDR
+                CINEMA
               </span>
             </div>
             <span className="text-[10px] text-gray-400 tracking-widest uppercase font-medium -mt-1 hidden sm:block">
-              Free Cinema Streamer
+              Ultra HD Streaming
             </span>
           </div>
         </div>

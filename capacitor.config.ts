@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.vidlink.pro4k',
-  appName: 'VidLink Pro 4K',
+  appId: 'com.lumia.cinema4k',
+  appName: 'Lumia 4K',
   webDir: 'dist',
   server: {
     url: 'https://vidlink-pro-4k.vercel.app',

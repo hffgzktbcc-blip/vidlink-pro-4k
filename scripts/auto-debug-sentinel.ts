@@ -13,7 +13,7 @@ async function runDiagnostics(): Promise<{ results: DiagnosticResult[]; hasFailu
   const results: DiagnosticResult[] = [];
   let hasFailures = false;
 
-  console.log('🤖 VidLink Pro Sentinel: Running automated system diagnostics...\n');
+  console.log('🤖 Lumia 4K Sentinel: Running automated system diagnostics...\n');
 
   // 1. Check Streaming Mirrors
   const mirrors = [
@@ -115,7 +115,7 @@ async function main() {
   );
 
   // Generate GitHub Issue / PR Markdown body
-  let markdown = `# 🛡️ VidLink Pro Sentinel Diagnostic Report\n\n`;
+  let markdown = `# 🛡️ Lumia 4K Sentinel Diagnostic Report\n\n`;
   markdown += `*Generated automatically on ${new Date().toUTCString()}*\n\n`;
   markdown += `| Category | Diagnostic Check | Status | Details |\n`;
   markdown += `| :--- | :--- | :---: | :--- |\n`;

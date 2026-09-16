@@ -627,14 +627,14 @@ export const App: React.FC = () => {
           <div className="flex flex-col items-center md:items-start gap-1.5">
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-base text-white">
-                VidLink <span className="text-indigo-400">Pro</span>
+                Lumia <span className="text-indigo-400">4K</span>
               </span>
               <span className="px-1.5 py-0.2 text-[9px] font-black uppercase rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                ULTRA 4K
+                ULTRA CINEMA
               </span>
             </div>
             <p className="text-gray-400 text-center md:text-left max-w-sm">
-              Free streaming cinema platform. Multi-server streams with 4K UHD playback.
+              Next-gen cinema streaming platform. Multi-server streaming with 4K UHD playback.
             </p>
           </div>
 
