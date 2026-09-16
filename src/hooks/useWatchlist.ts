@@ -92,6 +92,19 @@ export const useWatchlist = () => {
     setHistory([]);
   };
 
+  const importSyncData = (newWatchlist: MediaItem[], newHistory: WatchHistoryItem[]) => {
+    setWatchlist(prev => {
+      const existingIds = new Set(prev.map(item => item.id));
+      const additions = newWatchlist.filter(item => !existingIds.has(item.id));
+      return [...additions, ...prev].slice(0, 50);
+    });
+    setHistory(prev => {
+      const existingKeys = new Set(prev.map(h => `${h.id}-${h.mediaType}`));
+      const additions = newHistory.filter(h => !existingKeys.has(`${h.id}-${h.mediaType}`));
+      return [...additions, ...prev].slice(0, 50);
+    });
+  };
+
   return {
     watchlist,
     history,
@@ -102,5 +115,6 @@ export const useWatchlist = () => {
     recordHistory,
     removeFromHistory,
     clearWatchHistory,
+    importSyncData,
   };
 };

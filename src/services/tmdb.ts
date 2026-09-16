@@ -75,7 +75,7 @@ export const getBackdropUrl = (path: string | null | undefined, size: 'w780' | '
   return `${TMDB_IMAGE_BASE}/${size}${path}`;
 };
 
-const createTmdbClient = () => {
+export const createTmdbClient = () => {
   const apiKey = getStoredApiKey();
   return axios.create({
     baseURL: TMDB_BASE_URL,

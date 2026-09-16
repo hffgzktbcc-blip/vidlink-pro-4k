@@ -10,6 +10,8 @@ import {
   X,
   Compass,
   Download,
+  Dices,
+  QrCode,
 } from 'lucide-react';
 import type { ActiveTab, MediaItem } from '../types';
 import { searchMedia, getImageUrl } from '../services/tmdb';
@@ -23,6 +25,8 @@ interface NavbarProps {
   watchlistCount: number;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  onOpenSurpriseMe?: () => void;
+  onOpenSync?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -34,6 +38,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   watchlistCount,
   searchQuery,
   setSearchQuery,
+  onOpenSurpriseMe,
+  onOpenSync,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [suggestions, setSuggestions] = useState<MediaItem[]>([]);
@@ -198,6 +204,32 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
           </div>
+
+          {/* Surprise Me (Cinema Roulette) */}
+          {onOpenSurpriseMe && (
+            <button
+              data-tv-focus="true"
+              onClick={onOpenSurpriseMe}
+              className="p-2 rounded-xl bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 text-pink-300 border border-pink-500/30 transition-all flex items-center gap-1.5"
+              title="Cinema Roulette - Surprise Me!"
+            >
+              <Dices className="w-4 h-4 text-pink-400" />
+              <span className="hidden lg:inline text-xs font-bold">Surprise Me</span>
+            </button>
+          )}
+
+          {/* Device Sync */}
+          {onOpenSync && (
+            <button
+              data-tv-focus="true"
+              onClick={onOpenSync}
+              className="p-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 transition-all flex items-center gap-1.5"
+              title="Sync with Phone / TV (Instant QR Transfer)"
+            >
+              <QrCode className="w-4 h-4 text-indigo-400" />
+              <span className="hidden lg:inline text-xs font-bold">Sync</span>
+            </button>
+          )}
 
           {/* Check for Updates Trigger */}
           {onCheckUpdate && (

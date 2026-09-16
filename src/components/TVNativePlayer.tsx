@@ -54,6 +54,16 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   const [showControls, setShowControls] = useState(true);
   const [seekFeedback, setSeekFeedback] = useState<'forward' | 'backward' | null>(null);
   const [playStateFeedback, setPlayStateFeedback] = useState<'play' | 'pause' | null>(null);
+  const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
+
+  const cycleSpeed = () => {
+    const speeds = [1.0, 1.25, 1.5, 2.0, 0.75];
+    const next = speeds[(speeds.indexOf(playbackSpeed) + 1) % speeds.length];
+    setPlaybackSpeed(next);
+    if (videoRef.current) {
+      videoRef.current.playbackRate = next;
+    }
+  };
 
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -497,6 +507,15 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
               <span className="text-gray-500 mx-1">/</span>
               <span className="text-gray-400">{formatTime(duration)}</span>
             </div>
+
+            {/* Playback Speed Selector */}
+            <button
+              onClick={cycleSpeed}
+              className="px-2.5 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold border border-white/15 transition-all ml-2"
+              title="Change Playback Speed (0.75x - 2.0x)"
+            >
+              {playbackSpeed}x
+            </button>
           </div>
 
           {/* Right Status & TV Remote Helper */}

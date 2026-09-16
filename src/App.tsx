@@ -33,6 +33,9 @@ import { UniversesView } from './components/UniversesView';
 import { SettingsModal } from './components/SettingsModal';
 import { UpdateModal } from './components/UpdateModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { SurpriseMeModal } from './components/SurpriseMeModal';
+import { ActorFilmographyModal } from './components/ActorFilmographyModal';
+import { DeviceSyncModal, decodeSyncPayload } from './components/DeviceSyncModal';
 import { checkForAppUpdate, type AppReleaseInfo } from './services/updateChecker';
 import { ToastContainer, type ToastMessage } from './components/Toast';
 
@@ -59,9 +62,14 @@ export const App: React.FC = () => {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [trailerMedia, setTrailerMedia] = useState<MediaItem | null>(null);
   const [playingMedia, setPlayingMedia] = useState<MediaItem | null>(null);
+  const [isPiP, setIsPiP] = useState(false);
   const [playerSeason, setPlayerSeason] = useState<number>(1);
   const [playerEpisode, setPlayerEpisode] = useState<number>(1);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSurpriseMeOpen, setIsSurpriseMeOpen] = useState(false);
+  const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
+  const [selectedActor, setSelectedActor] = useState<{ id: number; name: string; profile_path: string | null } | null>(null);
+  const [recommendedForYou, setRecommendedForYou] = useState<MediaItem[]>([]);
   const [updateRelease, setUpdateRelease] = useState<AppReleaseInfo | null>(null);
   const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
 
@@ -99,13 +107,20 @@ export const App: React.FC = () => {
     removeFromWatchlist,
     removeFromHistory,
     clearWatchHistory,
+    importSyncData,
   } = useWatchlist();
 
   // TV Remote Back navigation handler
   const handleBackNavigation = useCallback(() => {
     if (updateRelease) {
       setUpdateRelease(null);
-    } else if (playingMedia) {
+    } else if (isSyncModalOpen) {
+      setIsSyncModalOpen(false);
+    } else if (isSurpriseMeOpen) {
+      setIsSurpriseMeOpen(false);
+    } else if (selectedActor) {
+      setSelectedActor(null);
+    } else if (playingMedia && !isPiP) {
       setPlayingMedia(null);
     } else if (trailerMedia) {
       setTrailerMedia(null);
@@ -118,10 +133,10 @@ export const App: React.FC = () => {
     } else if (activeTab !== 'home') {
       setActiveTab('home');
     }
-  }, [updateRelease, playingMedia, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
+  }, [updateRelease, isSyncModalOpen, isSurpriseMeOpen, selectedActor, playingMedia, isPiP, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
 
   const { isTvMode, toggleTvMode } = useSpatialNav({
-    activeModalOpen: Boolean(updateRelease || playingMedia || trailerMedia || selectedMedia || isSettingsOpen),
+    activeModalOpen: Boolean(updateRelease || (playingMedia && !isPiP) || trailerMedia || selectedMedia || isSettingsOpen || isSurpriseMeOpen || isSyncModalOpen || selectedActor),
     onBack: handleBackNavigation,
   });
 
@@ -165,7 +180,21 @@ export const App: React.FC = () => {
     }
   }, [selectedMood]);
 
-  // Deep-Link URL Router (?watch=movie&id=693134 or ?watch=tv&id=94605&s=2&e=3)
+  // Dynamic "Because You Watched..." Recommendations from watch history
+  useEffect(() => {
+    if (history.length > 0) {
+      const last = history[0];
+      fetchMediaDetails(last.mediaType, last.id)
+        .then(details => {
+          if (details?.similar?.results && details.similar.results.length > 0) {
+            setRecommendedForYou(details.similar.results);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [history]);
+
+  // Deep-Link URL Router (?watch=movie&id=693134 or ?watch=tv&id=94605&s=2&e=3 or ?sync=...)
   useEffect(() => {
     const handleUrlState = () => {
       const params = new URLSearchParams(window.location.search);
@@ -173,6 +202,16 @@ export const App: React.FC = () => {
       const mediaId = params.get('id');
       const s = params.get('s');
       const e = params.get('e');
+
+      // Check for QR / Peer Sync Payload in URL
+      const syncCode = params.get('sync');
+      if (syncCode) {
+        const decoded = decodeSyncPayload(syncCode);
+        if (decoded && (decoded.watchlist.length > 0 || decoded.history.length > 0)) {
+          importSyncData(decoded.watchlist, decoded.history);
+          addToast('Sync Complete', `Synchronized ${decoded.watchlist.length} saved titles and progress across devices!`, 'success');
+        }
+      }
 
       if (watchType && mediaId) {
         const numId = Number(mediaId);
@@ -194,7 +233,7 @@ export const App: React.FC = () => {
     handleUrlState();
     window.addEventListener('popstate', handleUrlState);
     return () => window.removeEventListener('popstate', handleUrlState);
-  }, []);
+  }, [importSyncData, addToast]);
 
   // Handle Search Query
   useEffect(() => {
@@ -308,6 +347,8 @@ export const App: React.FC = () => {
         watchlistCount={watchlist.length}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        onOpenSurpriseMe={() => setIsSurpriseMeOpen(true)}
+        onOpenSync={() => setIsSyncModalOpen(true)}
       />
 
       {/* Main Content Area with Mobile Safe Bottom Padding */}
@@ -582,6 +623,20 @@ export const App: React.FC = () => {
                 />
               )}
 
+              {/* Dynamic Personalized Recommendations based on Last Watched */}
+              {recommendedForYou.length > 0 && history.length > 0 && (
+                <MediaRow
+                  title={`Because You Watched ${history[0]?.title || 'Recent Picks'}`}
+                  items={recommendedForYou}
+                  icon={Sparkles}
+                  badge="Recommended For You"
+                  onSelectMedia={setSelectedMedia}
+                  onPlayMedia={handleStartPlaying}
+                  isInWatchlist={isInWatchlist}
+                  onToggleWatchlist={handleToggleWatchlistWithToast}
+                />
+              )}
+
               {/* Trending TV Series */}
               <MediaRow
                 title="Trending TV Series & Binge Shows"
@@ -670,6 +725,7 @@ export const App: React.FC = () => {
           onOpenTrailer={item => setTrailerMedia(item)}
           isInWatchlist={isInWatchlist}
           onToggleWatchlist={handleToggleWatchlistWithToast}
+          onSelectActor={actor => setSelectedActor(actor)}
         />
       )}
 
@@ -681,7 +737,7 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* Player Modal with Ambilight & Server Ping */}
+      {/* Player Modal with Ambilight, Server Ping & Mini-Player PiP */}
       {playingMedia && (
         <PlayerModal
           media={playingMedia}
@@ -689,6 +745,7 @@ export const App: React.FC = () => {
           initialEpisode={playerEpisode}
           onClose={() => {
             setPlayingMedia(null);
+            setIsPiP(false);
             try {
               if (window.location.search) {
                 window.history.pushState({}, '', window.location.pathname);
@@ -698,8 +755,39 @@ export const App: React.FC = () => {
           accentColor={accentColor}
           subLang={subLang}
           onRecordProgress={recordHistory}
+          isPiP={isPiP}
+          onTogglePiP={() => setIsPiP(prev => !prev)}
         />
       )}
+
+      {/* Cinema Roulette "Surprise Me" Modal */}
+      <SurpriseMeModal
+        isOpen={isSurpriseMeOpen}
+        onClose={() => setIsSurpriseMeOpen(false)}
+        onPlay={handleStartPlaying}
+        onSelectMedia={setSelectedMedia}
+        items={[...trendingMovies, ...trendingTV, ...top4KList]}
+      />
+
+      {/* Cast & Director Filmography Modal */}
+      <ActorFilmographyModal
+        actor={selectedActor}
+        onClose={() => setSelectedActor(null)}
+        onSelectMedia={setSelectedMedia}
+        onPlayMedia={handleStartPlaying}
+      />
+
+      {/* Multi-Device QR / Peer Sync Modal */}
+      <DeviceSyncModal
+        isOpen={isSyncModalOpen}
+        onClose={() => setIsSyncModalOpen(false)}
+        watchlist={watchlist}
+        history={history}
+        onImportData={(w, h) => {
+          importSyncData(w, h);
+          addToast('Sync Complete', `Synchronized ${w.length} saved titles and watch progress across devices!`, 'success');
+        }}
+      />
 
       {/* Settings Modal */}
       <SettingsModal

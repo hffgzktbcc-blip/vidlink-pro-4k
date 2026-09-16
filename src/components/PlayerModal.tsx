@@ -19,13 +19,15 @@ import {
   MousePointer2,
   Play,
   ArrowLeft,
+  ListVideo,
+  ExternalLink,
 } from 'lucide-react';
 import type { MediaItem, MediaType, Season } from '../types';
 import { STREAM_SERVERS, measureServerLatency } from '../services/streaming';
 import { fetchSeasonDetails } from '../services/tmdb';
 import { VirtualCursor } from './VirtualCursor';
 import { TVNativePlayer } from './TVNativePlayer';
-import { resolveStreamSources, type DirectStream } from '../services/streamResolver';
+import { resolveStreamSources, openInExternalPlayer, type DirectStream } from '../services/streamResolver';
 
 interface PlayerModalProps {
   media: MediaItem | null;
@@ -35,6 +37,8 @@ interface PlayerModalProps {
   accentColor?: string;
   subLang?: string;
   onRecordProgress?: (item: any) => void;
+  isPiP?: boolean;
+  onTogglePiP?: () => void;
 }
 
 const WATCHED_EPISODES_KEY = 'vidlink_watched_episodes_v1';
@@ -47,6 +51,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   accentColor = '6366f1',
   subLang = 'en',
   onRecordProgress,
+  isPiP = false,
+  onTogglePiP,
 }) => {
   const [currentServer, setCurrentServer] = useState(STREAM_SERVERS[0]);
   const [season, setSeason] = useState(initialSeason);
@@ -56,6 +62,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   const [playerKey, setPlayerKey] = useState(0);
   const [playerMode, setPlayerMode] = useState<'native' | 'embed'>('native');
   const [directStream, setDirectStream] = useState<DirectStream | null>(null);
+  const [isEpisodeDrawerOpen, setIsEpisodeDrawerOpen] = useState(false);
+  const [nextCountdown, setNextCountdown] = useState<number | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const isTvModeInitial = typeof window !== 'undefined' && (
@@ -120,6 +128,20 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
       if (hideControlsTimer.current) clearTimeout(hideControlsTimer.current);
     };
   }, [triggerControlsActivity]);
+
+  // Auto-Next Episode Countdown Effect
+  useEffect(() => {
+    if (nextCountdown === null) return;
+    if (nextCountdown <= 0) {
+      handleNextEpisode();
+      setNextCountdown(null);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setNextCountdown(prev => (prev !== null ? prev - 1 : null));
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [nextCountdown]);
 
   // Turn off GPU-heavy Ambilight by default on TV to eliminate sluggishness
   const [isAmbilightOn, setIsAmbilightOn] = useState(!isTvModeInitial);
@@ -307,6 +329,62 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     );
   }
 
+  // Picture-in-Picture Floating Mini-Player Mode
+  if (isPiP) {
+    return (
+      <div className="fixed bottom-24 md:bottom-6 right-4 z-50 w-72 sm:w-80 md:w-96 aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/20 ring-1 ring-white/10 group animate-in fade-in slide-in-from-bottom-5 duration-300 select-none">
+        <iframe
+          ref={iframeRef}
+          key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
+          src={streamUrl}
+          title={title}
+          className="w-full h-full border-0 pointer-events-auto"
+          allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
+          allowFullScreen
+        />
+
+        {/* Floating PiP Hover Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3 pointer-events-none">
+          <div className="flex items-center justify-between pointer-events-auto">
+            <span className="text-xs font-bold text-white truncate max-w-[180px]">
+              {title} {isTV ? `• S${season} E${episode}` : ''}
+            </span>
+            <div className="flex items-center gap-1.5">
+              {onTogglePiP && (
+                <button
+                  onClick={onTogglePiP}
+                  className="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-colors"
+                  title="Maximize to Fullscreen"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <button
+                onClick={onClose}
+                className="p-1.5 rounded-lg bg-red-600/80 hover:bg-red-600 text-white transition-colors"
+                title="Close Player"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center pointer-events-auto">
+            {onTogglePiP && (
+              <button
+                onClick={onTogglePiP}
+                className="px-4 py-1.5 rounded-full bg-white/90 hover:bg-white text-black text-xs font-bold flex items-center gap-1.5 shadow-lg active:scale-95 transition-all"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span>Expand Fullscreen</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // 2. True Fullscreen Cinema Mode Rendering (Embed Mirrors)
   if (isTrueFullscreen) {
     return (
@@ -440,6 +518,59 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               </div>
             )}
 
+            {/* In-Player Episode Drawer Toggle */}
+            {isTV && (
+              <button
+                data-tv-focus="true"
+                onClick={() => setIsEpisodeDrawerOpen(prev => !prev)}
+                className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all border ${
+                  isEpisodeDrawerOpen
+                    ? 'bg-indigo-600 text-white border-indigo-400 shadow-md shadow-indigo-600/40'
+                    : 'bg-white/10 hover:bg-white/20 text-white border-white/15'
+                }`}
+                title="Episode List"
+              >
+                <ListVideo className="w-3.5 h-3.5 text-indigo-400" />
+                <span className="hidden sm:inline">Episodes</span>
+              </button>
+            )}
+
+            {/* Auto-Play Next Countdown Trigger */}
+            {isTV && (
+              <button
+                data-tv-focus="true"
+                onClick={() => setNextCountdown(10)}
+                className="px-2.5 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 text-xs font-bold border border-purple-500/40 flex items-center gap-1 transition-all"
+                title="Countdown to Next Episode"
+              >
+                <Play className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Next Ep</span>
+              </button>
+            )}
+
+            {/* Open in External Player (VLC / Infuse / Nova) */}
+            <button
+              data-tv-focus="true"
+              onClick={() => openInExternalPlayer(streamUrl, title)}
+              className="px-2.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 text-xs font-bold border border-amber-500/40 flex items-center gap-1.5 transition-all"
+              title="Open in VLC / Infuse / Nova Player"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">VLC</span>
+            </button>
+
+            {/* Mini-Player (PiP) */}
+            {onTogglePiP && (
+              <button
+                data-tv-focus="true"
+                onClick={onTogglePiP}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all"
+                title="Picture-in-Picture Mini Player"
+              >
+                <Minimize2 className="w-4 h-4 text-cyan-400" />
+              </button>
+            )}
+
             {/* Reload Stream */}
             <button
               data-tv-focus="true"
@@ -461,6 +592,114 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Auto-Play Next Episode Countdown Card */}
+        {nextCountdown !== null && (
+          <div className="absolute bottom-16 right-8 z-50 p-5 rounded-2xl bg-black/90 backdrop-blur-xl border border-indigo-500/50 shadow-2xl flex flex-col gap-3 animate-in slide-in-from-bottom-5 duration-300">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">Up Next in {nextCountdown}s</span>
+              <button onClick={() => setNextCountdown(null)} className="text-gray-400 hover:text-white p-1">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="text-sm font-black text-white">
+              Season {season} • Episode {episode + 1}
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  handleNextEpisode();
+                  setNextCountdown(null);
+                }}
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-indigo-600/40"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Play Now</span>
+              </button>
+              <button
+                onClick={() => setNextCountdown(null)}
+                className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-gray-300 text-xs font-semibold"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* In-Player Season & Episode Drawer */}
+        {isEpisodeDrawerOpen && isTV && (
+          <div className="absolute top-0 right-0 bottom-0 w-80 sm:w-96 z-50 bg-black/95 backdrop-blur-2xl border-l border-white/15 p-6 flex flex-col shadow-2xl animate-in slide-in-from-right duration-300">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <ListVideo className="w-5 h-5 text-indigo-400" />
+                <h3 className="text-base font-black text-white">Episodes</h3>
+              </div>
+              <button
+                onClick={() => setIsEpisodeDrawerOpen(false)}
+                className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Season Selector */}
+            <div className="py-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
+              {Array.from({ length: totalSeasons }, (_, i) => i + 1).map(sNum => (
+                <button
+                  key={sNum}
+                  onClick={() => {
+                    setSeason(sNum);
+                    setEpisode(1);
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
+                    season === sNum ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/40' : 'bg-white/10 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Season {sNum}
+                </button>
+              ))}
+            </div>
+
+            {/* Episode list */}
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1 pt-2">
+              {isLoadingSeason ? (
+                <div className="flex justify-center py-10">
+                  <RefreshCw className="w-6 h-6 animate-spin text-indigo-400" />
+                </div>
+              ) : seasonData?.episodes && seasonData.episodes.length > 0 ? (
+                seasonData.episodes.map(ep => {
+                  const isCurrent = episode === ep.episode_number;
+                  return (
+                    <button
+                      key={ep.id}
+                      onClick={() => {
+                        setEpisode(ep.episode_number);
+                        setIsEpisodeDrawerOpen(false);
+                      }}
+                      className={`w-full text-left p-3 rounded-xl transition-all flex items-start gap-3 border ${
+                        isCurrent
+                          ? 'bg-indigo-600/30 border-indigo-500 text-white'
+                          : 'bg-white/5 border-white/10 hover:bg-white/10 text-gray-300'
+                      }`}
+                    >
+                      <span className={`text-xs font-black px-1.5 py-0.5 rounded ${isCurrent ? 'bg-indigo-600 text-white' : 'bg-white/10 text-gray-400'}`}>
+                        E{ep.episode_number}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-bold truncate">{ep.name || `Episode ${ep.episode_number}`}</div>
+                        {ep.overview && (
+                          <p className="text-[10px] text-gray-400 line-clamp-2 mt-0.5">{ep.overview}</p>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })
+              ) : (
+                <div className="text-xs text-gray-500 py-4 text-center">No episode details available</div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Bottom Helper Hint (Auto-fading) */}
         <div
@@ -577,6 +816,29 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           >
             <Sun className="w-4 h-4" />
           </button>
+
+          {/* Open in External Player (VLC / Infuse / Nova) */}
+          <button
+            data-tv-focus="true"
+            onClick={() => openInExternalPlayer(streamUrl, title)}
+            className="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 text-xs font-bold border border-amber-500/40 flex items-center gap-1.5 transition-all"
+            title="Open in VLC / Infuse / Nova Player"
+          >
+            <ExternalLink className="w-4 h-4" />
+            <span className="hidden sm:inline">VLC</span>
+          </button>
+
+          {/* Mini-Player (PiP) */}
+          {onTogglePiP && (
+            <button
+              data-tv-focus="true"
+              onClick={onTogglePiP}
+              className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-cyan-400 border border-white/10 hover:border-cyan-400/40 transition-all"
+              title="Shrink into Floating Mini Player"
+            >
+              <Minimize2 className="w-4 h-4" />
+            </button>
+          )}
 
           {/* Reload stream button */}
           <button

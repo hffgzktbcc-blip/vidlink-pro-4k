@@ -25,6 +25,7 @@ interface MediaDetailModalProps {
   onOpenTrailer: (item: MediaItem) => void;
   isInWatchlist: (id: number) => boolean;
   onToggleWatchlist: (item: MediaItem) => void;
+  onSelectActor?: (actor: { id: number; name: string; profile_path: string | null }) => void;
 }
 
 export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
@@ -34,6 +35,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
   onOpenTrailer,
   isInWatchlist,
   onToggleWatchlist,
+  onSelectActor,
 }) => {
   const [detailedItem, setDetailedItem] = useState<MediaItem | null>(null);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
@@ -353,22 +355,29 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
           {activeTab === 'cast' && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
               {castList.map(actor => (
-                <div
+                <button
                   key={actor.id}
-                  className="p-3 rounded-2xl bg-white/5 border border-white/5 text-center flex flex-col items-center"
+                  onClick={() => onSelectActor && onSelectActor(actor)}
+                  className="p-3 rounded-2xl bg-white/5 border border-white/5 text-center flex flex-col items-center hover:bg-white/10 hover:border-indigo-500/40 hover:scale-105 active:scale-95 transition-all cursor-pointer group focus:outline-none"
+                  title={`View ${actor.name}'s filmography`}
                 >
-                  <img
-                    src={getImageUrl(actor.profile_path, 'w300')}
-                    alt={actor.name}
-                    className="w-20 h-20 rounded-full object-cover mb-2 border border-white/10 shadow bg-black/40"
-                  />
-                  <h4 className="text-xs font-bold text-white truncate w-full">
+                  <div className="relative">
+                    <img
+                      src={getImageUrl(actor.profile_path, 'w300')}
+                      alt={actor.name}
+                      className="w-20 h-20 rounded-full object-cover mb-2 border border-white/10 shadow group-hover:border-indigo-400 bg-black/40 transition-colors"
+                    />
+                    <div className="absolute -bottom-1 -right-1 p-1 bg-indigo-600 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Sparkles className="w-2.5 h-2.5" />
+                    </div>
+                  </div>
+                  <h4 className="text-xs font-bold text-white group-hover:text-indigo-300 truncate w-full">
                     {actor.name}
                   </h4>
                   <p className="text-[11px] text-gray-400 truncate w-full mt-0.5">
                     {actor.character}
                   </p>
-                </div>
+                </button>
               ))}
             </div>
           )}
