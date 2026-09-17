@@ -219,11 +219,15 @@ export const App: React.FC = () => {
         if (s) setPlayerSeason(Number(s));
         if (e) setPlayerEpisode(Number(e));
 
-        fetchMediaDetails(isTV ? 'tv' : 'movie', numId)
-          .then(item => {
-            if (item) setPlayingMedia(item);
-          })
-          .catch(console.error);
+        setPlayingMedia(prev => {
+          if (prev && prev.id === numId) return prev;
+          fetchMediaDetails(isTV ? 'tv' : 'movie', numId)
+            .then(item => {
+              if (item) setPlayingMedia(item);
+            })
+            .catch(console.error);
+          return prev;
+        });
       } else {
         // When user swipes back on phone or clicks browser Back, cleanly close player
         setPlayingMedia(null);
@@ -233,7 +237,7 @@ export const App: React.FC = () => {
     handleUrlState();
     window.addEventListener('popstate', handleUrlState);
     return () => window.removeEventListener('popstate', handleUrlState);
-  }, [importSyncData, addToast]);
+  }, []); // Run once on mount and listen to popstate navigation only
 
   // Handle Search Query
   useEffect(() => {

@@ -39,20 +39,6 @@ export async function resolveStreamSources(
 
   const streams: DirectStream[] = [];
 
-  // 1. Attempt to fetch direct HLS streams from our serverless resolver / API
-  try {
-    const apiUrl = `/api/stream?id=${tmdbId}&type=${type}&s=${season}&e=${episode}`;
-    const res = await fetch(apiUrl, { signal: AbortSignal.timeout(5000) });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data.streams) && data.streams.length > 0) {
-        streams.push(...data.streams);
-      }
-    }
-  } catch {
-    // API resolution failed or timed out, will check secondary or fallback
-  }
-
   return {
     directStreams: streams,
     defaultStream: streams[0],

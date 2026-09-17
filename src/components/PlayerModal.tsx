@@ -99,7 +99,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [media, season, episode]);
+  }, [media?.id, season, episode]);
 
   // Automatically focus video iframe on load so TV remote / Enter keys can trigger playback directly
   useEffect(() => {

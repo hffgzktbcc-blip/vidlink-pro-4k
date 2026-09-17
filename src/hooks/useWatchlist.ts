@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { MediaItem, WatchHistoryItem, MediaType } from '../types';
 
 const WATCHLIST_STORAGE_KEY = 'vidlink_watchlist_v1';
@@ -92,7 +92,7 @@ export const useWatchlist = () => {
     setHistory([]);
   };
 
-  const importSyncData = (newWatchlist: MediaItem[], newHistory: WatchHistoryItem[]) => {
+  const importSyncData = useCallback((newWatchlist: MediaItem[], newHistory: WatchHistoryItem[]) => {
     setWatchlist(prev => {
       const existingIds = new Set(prev.map(item => item.id));
       const additions = newWatchlist.filter(item => !existingIds.has(item.id));
@@ -103,7 +103,7 @@ export const useWatchlist = () => {
       const additions = newHistory.filter(h => !existingKeys.has(`${h.id}-${h.mediaType}`));
       return [...additions, ...prev].slice(0, 50);
     });
-  };
+  }, []);
 
   return {
     watchlist,
