@@ -7,7 +7,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
-  ShieldAlert,
   RefreshCw,
   Sun,
   Share2,
@@ -76,30 +75,6 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     if (typeof window === 'undefined') return false;
     return isTvModeInitial || window.innerWidth < 768;
   });
-
-  // Anti-Popup & Ad Shield Guard (Defaults to TRUE: blocks all popups, clickjacking, and top redirects)
-  const [isShieldActive, setIsShieldActive] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('lumia_popup_shield_v1') !== 'false';
-    } catch {
-      return true;
-    }
-  });
-
-  const toggleShield = () => {
-    setIsShieldActive(prev => {
-      const next = !prev;
-      try {
-        localStorage.setItem('lumia_popup_shield_v1', String(next));
-      } catch {}
-      setPlayerKey(k => k + 1);
-      return next;
-    });
-  };
-
-  const iframeSandbox = isShieldActive
-    ? 'allow-scripts allow-same-origin allow-forms allow-presentation'
-    : 'allow-scripts allow-same-origin allow-forms allow-presentation allow-popups allow-popups-to-escape-sandbox';
 
   const [isCursorActive, setIsCursorActive] = useState(isTvModeInitial);
   const [showControls, setShowControls] = useState(true);
@@ -368,7 +343,6 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
           src={streamUrl}
           title={title}
-          sandbox={iframeSandbox}
           className="w-full h-full border-0 pointer-events-auto"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
           allowFullScreen
@@ -429,7 +403,6 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
           src={streamUrl}
           title={title}
-          sandbox={iframeSandbox}
           className="absolute inset-0 w-full h-full border-0 z-0 bg-black"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
           allowFullScreen
@@ -602,21 +575,6 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                 <Minimize2 className="w-4 h-4 text-cyan-400" />
               </button>
             )}
-
-            {/* Ad & Popup Shield Toggle */}
-            <button
-              data-tv-focus="true"
-              onClick={toggleShield}
-              className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all border ${
-                isShieldActive
-                  ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500/40 shadow-md shadow-emerald-600/20'
-                  : 'bg-amber-600/30 text-amber-300 border-amber-500/40'
-              }`}
-              title={isShieldActive ? 'Popup Shield: ON (Blocking all ad popups & redirects)' : 'Popup Shield: OFF (Popups allowed)'}
-            >
-              {isShieldActive ? <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> : <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />}
-              <span className="hidden md:inline">{isShieldActive ? 'Shield: ON' : 'Shield: OFF'}</span>
-            </button>
 
             {/* Reload Stream */}
             <button
@@ -887,21 +845,6 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
             </button>
           )}
 
-          {/* Ad & Popup Shield Toggle */}
-          <button
-            data-tv-focus="true"
-            onClick={toggleShield}
-            className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition-all ${
-              isShieldActive
-                ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/40 shadow-sm'
-                : 'bg-amber-600/20 text-amber-300 border-amber-500/40'
-            }`}
-            title={isShieldActive ? 'Popup Shield: ON (Blocking all ad popups & redirects)' : 'Popup Shield: OFF (Compatibility mode)'}
-          >
-            {isShieldActive ? <ShieldCheck className="w-4 h-4 text-emerald-400" /> : <ShieldAlert className="w-4 h-4 text-amber-400" />}
-            <span className="hidden sm:inline">{isShieldActive ? 'Shield: Active' : 'Shield: Off'}</span>
-          </button>
-
           {/* Reload stream button */}
           <button
             data-tv-focus="true"
@@ -944,7 +887,6 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
               src={streamUrl}
               title={title}
-              sandbox={iframeSandbox}
               className="w-full h-full border-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
               allowFullScreen
@@ -1115,18 +1057,18 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           </div>
         )}
 
-        {/* Streaming Tips & Keybinding Cheatsheet */}
+        {/* Streaming Tips & Popup Blocker Guide */}
         {!isLightsOff && (
-          <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 flex flex-wrap items-center justify-between text-xs text-gray-400 gap-3">
+          <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-gray-400 gap-3">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>
-                Tip: Press <kbd className="px-1.5 py-0.5 bg-black/60 rounded border border-white/10 font-mono text-[10px] text-white">L</kbd> for Ambilight, <kbd className="px-1.5 py-0.5 bg-black/60 rounded border border-white/10 font-mono text-[10px] text-white">S</kbd> to cycle fast servers, <kbd className="px-1.5 py-0.5 bg-black/60 rounded border border-white/10 font-mono text-[10px] text-white">Esc</kbd> to exit.
+                <strong className="text-emerald-300">Stop Chrome Popups:</strong> Click the <span className="text-white font-medium">Site settings icon</span> (left of URL bar) &rarr; set <span className="text-white font-medium">Pop-ups and redirects</span> to <span className="text-emerald-400 font-bold">Block</span> for 100% ad-free playback!
               </span>
             </div>
-            <span className="text-[10px] font-mono text-gray-400 shrink-0">
-              VidLink Cinema Engine v4.5
-            </span>
+            <div className="text-[10px] text-gray-500 shrink-0 font-mono">
+              Press <kbd className="px-1 py-0.5 bg-black/60 rounded border border-white/10 text-white">L</kbd> Ambilight • <kbd className="px-1 py-0.5 bg-black/60 rounded border border-white/10 text-white">S</kbd> Next Server • <kbd className="px-1 py-0.5 bg-black/60 rounded border border-white/10 text-white">Esc</kbd> Exit
+            </div>
           </div>
         )}
       </div>

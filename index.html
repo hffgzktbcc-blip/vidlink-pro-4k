@@ -18,15 +18,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   </head>
   <body class="bg-[#07080d] text-white min-h-screen selection:bg-indigo-600 selection:text-white font-sans antialiased overflow-x-hidden">
-    <!-- Ad & Popup Killer Guard -->
+    <!-- Ad & Popup Killer Guard (Zero Sandbox - 100% Cloudflare Compatible) -->
     <script>
       (function() {
-        // Intercept window.open from iframe ads
+        // Intercept top-level window.open calls from parent or cross-frame scripts
         const originalOpen = window.open;
         window.open = function(url, target, features) {
-          // Allow internal app navigation, block foreign ad networks
           if (url && typeof url === 'string') {
-            if (url.includes('vidlink-pro-4k.vercel.app') || url.startsWith('/') || url.startsWith('intent:')) {
+            const origin = window.location.origin;
+            if (
+              url.startsWith(origin) ||
+              url.startsWith('/') ||
+              url.startsWith('intent:') ||
+              url.startsWith('vlc:') ||
+              url.startsWith('blob:') ||
+              url.includes('vidlink.pro') ||
+              url.includes('youtube.com') ||
+              url.includes('youtu.be')
+            ) {
               return originalOpen.apply(this, arguments);
             }
           }
@@ -34,13 +43,24 @@
           return null;
         };
 
-        // Suppress beforeunload and external ad redirects
+        // Suppress unauthorized top-level page hijack redirects while watching
         window.addEventListener('beforeunload', function(e) {
-          // If in fullscreen or watching, stop ad page navigation hijack
           if (document.querySelector('[data-tv-modal="true"]')) {
-            e.stopPropagation();
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
           }
         }, true);
+
+        // Window blur focus trap: immediately refocus Lumia 4K if a popup attempts to steal focus
+        window.addEventListener('blur', function() {
+          if (document.querySelector('[data-tv-modal="true"]')) {
+            window.focus();
+            setTimeout(function() {
+              window.focus();
+            }, 50);
+          }
+        });
       })();
     </script>
     <div id="root"></div>

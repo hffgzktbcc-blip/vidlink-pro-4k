@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lumia-4k-v3';
+const CACHE_NAME = 'lumia-4k-v4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
