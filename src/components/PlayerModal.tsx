@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ShieldCheck,
+  ShieldAlert,
   RefreshCw,
   Sun,
   Share2,
@@ -69,8 +70,37 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   const isTvModeInitial = typeof window !== 'undefined' && (
     document.body.classList.contains('tv-mode') || localStorage.getItem('vidlink_tv_mode') === 'true'
   );
-  // Default to True Fullscreen Cinema mode and Virtual Cursor on TV
-  const [isTrueFullscreen, setIsTrueFullscreen] = useState(true);
+
+  // Default to Fullscreen Cinema mode on TV or mobile; windowed theater on desktop Chrome
+  const [isTrueFullscreen, setIsTrueFullscreen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return isTvModeInitial || window.innerWidth < 768;
+  });
+
+  // Anti-Popup & Ad Shield Guard (Defaults to TRUE: blocks all popups, clickjacking, and top redirects)
+  const [isShieldActive, setIsShieldActive] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('lumia_popup_shield_v1') !== 'false';
+    } catch {
+      return true;
+    }
+  });
+
+  const toggleShield = () => {
+    setIsShieldActive(prev => {
+      const next = !prev;
+      try {
+        localStorage.setItem('lumia_popup_shield_v1', String(next));
+      } catch {}
+      setPlayerKey(k => k + 1);
+      return next;
+    });
+  };
+
+  const iframeSandbox = isShieldActive
+    ? 'allow-scripts allow-same-origin allow-forms allow-presentation'
+    : 'allow-scripts allow-same-origin allow-forms allow-presentation allow-popups allow-popups-to-escape-sandbox';
+
   const [isCursorActive, setIsCursorActive] = useState(isTvModeInitial);
   const [showControls, setShowControls] = useState(true);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -338,8 +368,9 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
           src={streamUrl}
           title={title}
+          sandbox={iframeSandbox}
           className="w-full h-full border-0 pointer-events-auto"
-          allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
           allowFullScreen
         />
 
@@ -398,8 +429,9 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
           src={streamUrl}
           title={title}
+          sandbox={iframeSandbox}
           className="absolute inset-0 w-full h-full border-0 z-0 bg-black"
-          allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
           allowFullScreen
         />
 
@@ -570,6 +602,21 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
                 <Minimize2 className="w-4 h-4 text-cyan-400" />
               </button>
             )}
+
+            {/* Ad & Popup Shield Toggle */}
+            <button
+              data-tv-focus="true"
+              onClick={toggleShield}
+              className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all border ${
+                isShieldActive
+                  ? 'bg-emerald-600/30 text-emerald-300 border-emerald-500/40 shadow-md shadow-emerald-600/20'
+                  : 'bg-amber-600/30 text-amber-300 border-amber-500/40'
+              }`}
+              title={isShieldActive ? 'Popup Shield: ON (Blocking all ad popups & redirects)' : 'Popup Shield: OFF (Popups allowed)'}
+            >
+              {isShieldActive ? <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> : <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />}
+              <span className="hidden md:inline">{isShieldActive ? 'Shield: ON' : 'Shield: OFF'}</span>
+            </button>
 
             {/* Reload Stream */}
             <button
@@ -840,6 +887,21 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
             </button>
           )}
 
+          {/* Ad & Popup Shield Toggle */}
+          <button
+            data-tv-focus="true"
+            onClick={toggleShield}
+            className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition-all ${
+              isShieldActive
+                ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/40 shadow-sm'
+                : 'bg-amber-600/20 text-amber-300 border-amber-500/40'
+            }`}
+            title={isShieldActive ? 'Popup Shield: ON (Blocking all ad popups & redirects)' : 'Popup Shield: OFF (Compatibility mode)'}
+          >
+            {isShieldActive ? <ShieldCheck className="w-4 h-4 text-emerald-400" /> : <ShieldAlert className="w-4 h-4 text-amber-400" />}
+            <span className="hidden sm:inline">{isShieldActive ? 'Shield: Active' : 'Shield: Off'}</span>
+          </button>
+
           {/* Reload stream button */}
           <button
             data-tv-focus="true"
@@ -882,8 +944,9 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               key={`${playerKey}-${currentServer.id}-${season}-${episode}`}
               src={streamUrl}
               title={title}
+              sandbox={iframeSandbox}
               className="w-full h-full border-0"
-              allow="accelerometer; autoplay *; clipboard-write; encrypted-media *; gyroscope; picture-in-picture *; fullscreen *; web-share"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
               allowFullScreen
             />
           </div>
