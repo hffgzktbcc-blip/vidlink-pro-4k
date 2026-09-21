@@ -21,6 +21,7 @@ import {
   ArrowLeft,
   ListVideo,
   ExternalLink,
+  Users,
 } from 'lucide-react';
 import type { MediaItem, MediaType, Season } from '../types';
 import { STREAM_SERVERS, measureServerLatency } from '../services/streaming';
@@ -28,6 +29,7 @@ import { fetchSeasonDetails } from '../services/tmdb';
 import { VirtualCursor } from './VirtualCursor';
 import { TVNativePlayer } from './TVNativePlayer';
 import { resolveStreamSources, openInExternalPlayer, type DirectStream } from '../services/streamResolver';
+import { WatchPartyReactions } from './WatchPartyReactions';
 
 interface PlayerModalProps {
   media: MediaItem | null;
@@ -39,6 +41,7 @@ interface PlayerModalProps {
   onRecordProgress?: (item: any) => void;
   isPiP?: boolean;
   onTogglePiP?: () => void;
+  onOpenWatchParty?: () => void;
 }
 
 const WATCHED_EPISODES_KEY = 'vidlink_watched_episodes_v1';
@@ -53,6 +56,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   onRecordProgress,
   isPiP = false,
   onTogglePiP,
+  onOpenWatchParty,
 }) => {
   const [currentServer, setCurrentServer] = useState(STREAM_SERVERS[0]);
   const [season, setSeason] = useState(initialSeason);
@@ -330,6 +334,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         hasPrevEpisode={season > 1 || episode > 1}
         hasNextEpisode={season < totalSeasons || episode < currentEpisodesCount}
         onSwitchToEmbed={() => setPlayerMode('embed')}
+        onOpenPartyModal={onOpenWatchParty}
       />
     );
   }
@@ -564,6 +569,19 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               <span className="hidden md:inline">VLC</span>
             </button>
 
+            {/* SyncPlay Watch Party */}
+            {onOpenWatchParty && (
+              <button
+                data-tv-focus="true"
+                onClick={onOpenWatchParty}
+                className="px-2.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 text-xs font-bold border border-purple-500/40 flex items-center gap-1.5 transition-all"
+                title="Watch Party (P2P SyncPlay with Friends)"
+              >
+                <Users className="w-3.5 h-3.5 text-purple-400" />
+                <span className="hidden md:inline">Party</span>
+              </button>
+            )}
+
             {/* Mini-Player (PiP) */}
             {onTogglePiP && (
               <button
@@ -716,6 +734,12 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           <span>•</span>
           <span>Press <b>C</b> for Cursor • <b>F</b> for Windowed</span>
         </div>
+
+        {/* Floating Watch Party Emoji Reactions & Reaction Bar */}
+        <WatchPartyReactions
+          onOpenPartyModal={onOpenWatchParty || (() => {})}
+          showBar={showControls}
+        />
       </div>
     );
   }
@@ -832,6 +856,19 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
             <ExternalLink className="w-4 h-4" />
             <span className="hidden sm:inline">VLC</span>
           </button>
+
+          {/* SyncPlay Watch Party */}
+          {onOpenWatchParty && (
+            <button
+              data-tv-focus="true"
+              onClick={onOpenWatchParty}
+              className="px-3 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/40 text-purple-300 text-xs font-bold border border-purple-500/40 flex items-center gap-1.5 transition-all"
+              title="Watch Party (P2P SyncPlay with Friends)"
+            >
+              <Users className="w-4 h-4 text-purple-400" />
+              <span className="hidden sm:inline">Party</span>
+            </button>
+          )}
 
           {/* Mini-Player (PiP) */}
           {onTogglePiP && (
@@ -1072,6 +1109,12 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           </div>
         )}
       </div>
+
+      {/* Floating Watch Party Emoji Reactions & Reaction Bar */}
+      <WatchPartyReactions
+        onOpenPartyModal={onOpenWatchParty || (() => {})}
+        showBar={true}
+      />
     </div>
   );
 };

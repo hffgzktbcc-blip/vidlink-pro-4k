@@ -13,9 +13,12 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowLeft,
+  Users,
 } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { openInExternalPlayer, type DirectStream } from '../services/streamResolver';
+import { watchPartyManager } from '../services/watchParty';
+import { WatchPartyReactions } from './WatchPartyReactions';
 
 interface TVNativePlayerProps {
   media: MediaItem;
@@ -29,6 +32,7 @@ interface TVNativePlayerProps {
   hasPrevEpisode?: boolean;
   hasNextEpisode?: boolean;
   onSwitchToEmbed?: () => void;
+  onOpenPartyModal?: () => void;
 }
 
 export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
@@ -43,6 +47,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   hasPrevEpisode = false,
   hasNextEpisode = false,
   onSwitchToEmbed,
+  onOpenPartyModal,
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const hlsRef = useRef<Hls | null>(null);
@@ -67,6 +72,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
 
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isRemoteSyncRef = useRef(false);
 
   const isTV = media.media_type === 'tv' || (!media.title && !!media.name);
   const title = media.title || media.name || 'Now Playing';
@@ -109,22 +115,43 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
     }, 700);
   };
 
-  // Play / Pause toggle
+  // Play / Pause toggle with P2P Watch Party broadcast
   const togglePlay = useCallback(() => {
     if (!videoRef.current) return;
     if (videoRef.current.paused) {
       videoRef.current.play().catch(console.error);
       setIsPlaying(true);
       triggerPlayFeedback('play');
+      if (!isRemoteSyncRef.current) {
+        watchPartyManager.broadcastSync({
+          action: 'PLAY',
+          currentTime: videoRef.current.currentTime,
+          season: isTV ? season : undefined,
+          episode: isTV ? episode : undefined,
+          mediaId: media.id,
+          mediaType: isTV ? 'tv' : 'movie',
+        });
+      }
     } else {
       videoRef.current.pause();
       setIsPlaying(false);
       triggerPlayFeedback('pause');
+      if (!isRemoteSyncRef.current) {
+        watchPartyManager.broadcastSync({
+          action: 'PAUSE',
+          currentTime: videoRef.current.currentTime,
+          season: isTV ? season : undefined,
+          episode: isTV ? episode : undefined,
+          mediaId: media.id,
+          mediaType: isTV ? 'tv' : 'movie',
+        });
+      }
     }
+    isRemoteSyncRef.current = false;
     triggerActivity();
-  }, [triggerActivity]);
+  }, [triggerActivity, isTV, season, episode, media.id]);
 
-  // Fast seek by offset (+10s or -10s)
+  // Fast seek by offset (+10s or -10s) with P2P Watch Party broadcast
   const seekBy = useCallback(
     (seconds: number) => {
       if (!videoRef.current) return;
@@ -132,10 +159,66 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
       videoRef.current.currentTime = newTime;
       setCurrentTime(newTime);
       triggerSeekFeedback(seconds > 0 ? 'forward' : 'backward');
+      if (!isRemoteSyncRef.current) {
+        watchPartyManager.broadcastSync({
+          action: 'SEEK',
+          currentTime: newTime,
+          season: isTV ? season : undefined,
+          episode: isTV ? episode : undefined,
+          mediaId: media.id,
+          mediaType: isTV ? 'tv' : 'movie',
+        });
+      }
+      isRemoteSyncRef.current = false;
       triggerActivity();
     },
-    [duration, triggerActivity]
+    [duration, triggerActivity, isTV, season, episode, media.id]
   );
+
+  // Subscribe to incoming P2P Watch Party Sync commands
+  useEffect(() => {
+    const unsub = watchPartyManager.subscribe(
+      msg => {
+        if (msg.type === 'SYNC' && msg.payload) {
+          const { action, currentTime: targetTime, episode: targetEpisode } = msg.payload;
+          const video = videoRef.current;
+          if (!video) return;
+
+          if (isTV && targetEpisode !== undefined && targetEpisode !== episode) {
+            if (targetEpisode > episode && onNextEpisode) {
+              onNextEpisode();
+            } else if (targetEpisode < episode && onPrevEpisode) {
+              onPrevEpisode();
+            }
+          }
+
+          if (action === 'PLAY') {
+            if (video.paused) {
+              isRemoteSyncRef.current = true;
+              video.play().catch(console.error);
+              setIsPlaying(true);
+              triggerPlayFeedback('play');
+            }
+          } else if (action === 'PAUSE') {
+            if (!video.paused) {
+              isRemoteSyncRef.current = true;
+              video.pause();
+              setIsPlaying(false);
+              triggerPlayFeedback('pause');
+            }
+          } else if (action === 'SEEK') {
+            if (typeof targetTime === 'number' && Math.abs(video.currentTime - targetTime) > 1.5) {
+              isRemoteSyncRef.current = true;
+              video.currentTime = targetTime;
+              setCurrentTime(targetTime);
+            }
+          }
+        }
+      },
+      () => {}
+    );
+    return unsub;
+  }, [episode, isTV, onNextEpisode, onPrevEpisode]);
 
   // Initialize HLS / Native Video Playback
   useEffect(() => {
@@ -419,6 +502,18 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
             <span className="hidden sm:inline">VLC / Just Player</span>
           </button>
 
+          {/* Watch Party SyncPlay Button */}
+          {onOpenPartyModal && (
+            <button
+              onClick={onOpenPartyModal}
+              className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-bold border border-purple-500/30 flex items-center gap-1.5 transition-all"
+              title="Watch Party (P2P SyncPlay with Friends)"
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Party</span>
+            </button>
+          )}
+
           {/* Close button */}
           <button
             onClick={onClose}
@@ -526,6 +621,12 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Floating Watch Party Emoji Reactions and Reaction Bar */}
+      <WatchPartyReactions
+        onOpenPartyModal={onOpenPartyModal || (() => {})}
+        showBar={showControls}
+      />
     </div>
   );
 };

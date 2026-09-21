@@ -1,4 +1,5 @@
 import type { MediaType } from '../types';
+import { resolveStremioStreams, isStremioEngineConfigured } from './stremioResolver';
 
 export interface DirectSubtitle {
   label: string;
@@ -23,8 +24,9 @@ export interface StreamResolutionResult {
 }
 
 /**
- * Resolves direct HLS (.m3u8) video streams for movies and TV episodes.
- * If a direct stream is available, Native TV Player plays it with 100% remote D-Pad controls.
+ * Resolves direct HLS (.m3u8) / MP4 4K Remux video streams for movies and TV episodes.
+ * If Stremio / Real-Debrid is configured, fetches uncompressed 4K Blu-ray Remux streams.
+ * Otherwise, falls back to the clean 1-click VidLink Pro 4K web mirror.
  */
 export async function resolveStreamSources(
   tmdbId: number,
@@ -37,7 +39,16 @@ export async function resolveStreamSources(
       ? `https://vidlink.pro/movie/${tmdbId}?autoplay=true`
       : `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}?autoplay=true`;
 
-  const streams: DirectStream[] = [];
+  let streams: DirectStream[] = [];
+
+  // Check if user has Stremio Addon or Real-Debrid configured
+  if (isStremioEngineConfigured()) {
+    try {
+      streams = await resolveStremioStreams(tmdbId, type, season, episode);
+    } catch (err) {
+      console.warn('Fallback to standard stream due to resolver error:', err);
+    }
+  }
 
   return {
     directStreams: streams,

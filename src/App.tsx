@@ -36,8 +36,16 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 import { SurpriseMeModal } from './components/SurpriseMeModal';
 import { ActorFilmographyModal } from './components/ActorFilmographyModal';
 import { DeviceSyncModal, decodeSyncPayload } from './components/DeviceSyncModal';
+import { WatchPartyModal } from './components/WatchPartyModal';
+import { watchPartyManager } from './services/watchParty';
 import { checkForAppUpdate, type AppReleaseInfo } from './services/updateChecker';
 import { ToastContainer, type ToastMessage } from './components/Toast';
+import {
+  getStoredStremioAddonUrl,
+  setStoredStremioAddonUrl,
+  getStoredRealDebridKey,
+  setStoredRealDebridKey,
+} from './services/stremioResolver';
 
 const ACCENT_STORAGE_KEY = 'vidlink_accent_color_v1';
 const SUBLANG_STORAGE_KEY = 'vidlink_sublang_v1';
@@ -68,6 +76,7 @@ export const App: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSurpriseMeOpen, setIsSurpriseMeOpen] = useState(false);
   const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
+  const [isWatchPartyOpen, setIsWatchPartyOpen] = useState(false);
   const [selectedActor, setSelectedActor] = useState<{ id: number; name: string; profile_path: string | null } | null>(null);
   const [recommendedForYou, setRecommendedForYou] = useState<MediaItem[]>([]);
   const [updateRelease, setUpdateRelease] = useState<AppReleaseInfo | null>(null);
@@ -98,6 +107,34 @@ export const App: React.FC = () => {
     return localStorage.getItem(TMDB_KEY_STORAGE) || '';
   });
 
+  const [stremioAddonUrl, setStremioAddonUrl] = useState<string>(() => {
+    return getStoredStremioAddonUrl();
+  });
+
+  const [realDebridKey, setRealDebridKey] = useState<string>(() => {
+    return getStoredRealDebridKey();
+  });
+
+  const handleSaveStremioUrl = useCallback((url: string) => {
+    setStremioAddonUrl(url);
+    setStoredStremioAddonUrl(url);
+    addToast(
+      url ? 'Stremio 4K Remux Engine Active' : 'Stremio Addon Cleared',
+      url ? 'Direct 4K Blu-ray remux streams will be prioritized' : 'Reverted to default free mirrors',
+      'info'
+    );
+  }, [addToast]);
+
+  const handleSaveRealDebridKey = useCallback((key: string) => {
+    setRealDebridKey(key);
+    setStoredRealDebridKey(key);
+    addToast(
+      key ? 'Real-Debrid Saved' : 'Real-Debrid Cleared',
+      key ? 'High-speed uncompressed debrid streams unlocked' : 'Reverted to default free mirrors',
+      'info'
+    );
+  }, [addToast]);
+
   const {
     watchlist,
     history,
@@ -114,6 +151,8 @@ export const App: React.FC = () => {
   const handleBackNavigation = useCallback(() => {
     if (updateRelease) {
       setUpdateRelease(null);
+    } else if (isWatchPartyOpen) {
+      setIsWatchPartyOpen(false);
     } else if (isSyncModalOpen) {
       setIsSyncModalOpen(false);
     } else if (isSurpriseMeOpen) {
@@ -133,10 +172,10 @@ export const App: React.FC = () => {
     } else if (activeTab !== 'home') {
       setActiveTab('home');
     }
-  }, [updateRelease, isSyncModalOpen, isSurpriseMeOpen, selectedActor, playingMedia, isPiP, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
+  }, [updateRelease, isWatchPartyOpen, isSyncModalOpen, isSurpriseMeOpen, selectedActor, playingMedia, isPiP, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
 
   const { isTvMode, toggleTvMode } = useSpatialNav({
-    activeModalOpen: Boolean(updateRelease || (playingMedia && !isPiP) || trailerMedia || selectedMedia || isSettingsOpen || isSurpriseMeOpen || isSyncModalOpen || selectedActor),
+    activeModalOpen: Boolean(updateRelease || isWatchPartyOpen || (playingMedia && !isPiP) || trailerMedia || selectedMedia || isSettingsOpen || isSurpriseMeOpen || isSyncModalOpen || selectedActor),
     onBack: handleBackNavigation,
   });
 
@@ -213,6 +252,20 @@ export const App: React.FC = () => {
         }
       }
 
+      // Check for Watch Party Invite in URL (?party=lumia-XXXXXX)
+      const partyId = params.get('party');
+      if (partyId) {
+        setIsWatchPartyOpen(true);
+        watchPartyManager
+          .joinRoom(partyId)
+          .then(() => {
+            addToast('Watch Party Connected', `Joined room #${partyId}!`, 'success');
+          })
+          .catch(() => {
+            addToast('Party Connection Failed', `Could not reach host room #${partyId}.`, 'warning');
+          });
+      }
+
       if (watchType && mediaId) {
         const numId = Number(mediaId);
         const isTV = watchType === 'tv';
@@ -238,6 +291,31 @@ export const App: React.FC = () => {
     window.addEventListener('popstate', handleUrlState);
     return () => window.removeEventListener('popstate', handleUrlState);
   }, []); // Run once on mount and listen to popstate navigation only
+
+  // Listen for Watch Party remote media/episode changes
+  useEffect(() => {
+    const unsub = watchPartyManager.subscribe(
+      msg => {
+        if (msg.type === 'SYNC' && msg.payload?.mediaId) {
+          const { mediaId, mediaType, season: s, episode: e } = msg.payload;
+          if (playingMedia?.id !== mediaId) {
+            fetchMediaDetails(mediaType || 'movie', mediaId)
+              .then(item => {
+                if (item) {
+                  setPlayingMedia(item);
+                  if (s) setPlayerSeason(s);
+                  if (e) setPlayerEpisode(e);
+                  addToast('Watch Party Sync', `Party host started playing ${item.title || item.name}`, 'info');
+                }
+              })
+              .catch(console.error);
+          }
+        }
+      },
+      () => {}
+    );
+    return unsub;
+  }, [playingMedia?.id, addToast]);
 
   // Handle Search Query
   useEffect(() => {
@@ -353,6 +431,7 @@ export const App: React.FC = () => {
         setSearchQuery={setSearchQuery}
         onOpenSurpriseMe={() => setIsSurpriseMeOpen(true)}
         onOpenSync={() => setIsSyncModalOpen(true)}
+        onOpenWatchParty={() => setIsWatchPartyOpen(true)}
       />
 
       {/* Main Content Area with Mobile Safe Bottom Padding */}
@@ -761,6 +840,7 @@ export const App: React.FC = () => {
           onRecordProgress={recordHistory}
           isPiP={isPiP}
           onTogglePiP={() => setIsPiP(prev => !prev)}
+          onOpenWatchParty={() => setIsWatchPartyOpen(true)}
         />
       )}
 
@@ -793,6 +873,13 @@ export const App: React.FC = () => {
         }}
       />
 
+      {/* P2P Watch Party SyncPlay Modal */}
+      <WatchPartyModal
+        isOpen={isWatchPartyOpen}
+        onClose={() => setIsWatchPartyOpen(false)}
+        onNotifyToast={addToast}
+      />
+
       {/* Settings Modal */}
       <SettingsModal
         isOpen={isSettingsOpen}
@@ -803,6 +890,10 @@ export const App: React.FC = () => {
         onSelectSubLang={handleSelectSubLang}
         tmdbApiKey={tmdbApiKey}
         onSaveTmdbApiKey={handleSaveTmdbKey}
+        stremioAddonUrl={stremioAddonUrl}
+        onSaveStremioAddonUrl={handleSaveStremioUrl}
+        realDebridKey={realDebridKey}
+        onSaveRealDebridKey={handleSaveRealDebridKey}
       />
 
       {/* GitHub Auto-Update Modal */}

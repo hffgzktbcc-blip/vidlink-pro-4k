@@ -5,9 +5,14 @@ import {
   Copy,
   Check,
   Download,
+  Tv,
+  Sparkles,
+  ArrowRight,
+  RefreshCw,
 } from 'lucide-react';
 import type { MediaItem, WatchHistoryItem } from '../types';
 import { playSelectSound } from '../services/soundEffects';
+import { generateTvPairingPin, redeemTvPairingPin, type PairingResult } from '../services/pairingService';
 
 interface DeviceSyncModalProps {
   isOpen: boolean;
@@ -41,12 +46,66 @@ export const DeviceSyncModal: React.FC<DeviceSyncModalProps> = ({
   history,
   onImportData,
 }) => {
-  const [activeTab, setActiveTab] = useState<'export' | 'import'>('export');
+  const [activeTab, setActiveTab] = useState<'tv-pin' | 'qr' | 'import'>('tv-pin');
   const [importCode, setImportCode] = useState('');
   const [copied, setCopied] = useState(false);
   const [importSuccess, setImportSuccess] = useState(false);
 
+  // 6-Digit TV Pairing State
+  const [generatedPin, setGeneratedPin] = useState<PairingResult | null>(null);
+  const [isGeneratingPin, setIsGeneratingPin] = useState(false);
+  const [enteredPin, setEnteredPin] = useState('');
+  const [isRedeemingPin, setIsRedeemingPin] = useState(false);
+  const [pinError, setPinError] = useState<string | null>(null);
+
   if (!isOpen) return null;
+
+  const handleGeneratePin = async () => {
+    setIsGeneratingPin(true);
+    setPinError(null);
+    try {
+      const result = await generateTvPairingPin(watchlist, history);
+      if (result) {
+        setGeneratedPin(result);
+        playSelectSound();
+      } else {
+        setPinError('Failed to generate PIN. Try QR code.');
+      }
+    } catch {
+      setPinError('Connection error. Try QR code.');
+    } finally {
+      setIsGeneratingPin(false);
+    }
+  };
+
+  const handleRedeemPin = async () => {
+    const clean = enteredPin.replace(/\D/g, '');
+    if (clean.length !== 6) {
+      setPinError('Please enter all 6 digits');
+      return;
+    }
+
+    setIsRedeemingPin(true);
+    setPinError(null);
+    try {
+      const data = await redeemTvPairingPin(clean);
+      if (data && (data.watchlist.length > 0 || data.history.length > 0)) {
+        onImportData(data.watchlist, data.history);
+        setImportSuccess(true);
+        playSelectSound();
+        setTimeout(() => {
+          setImportSuccess(false);
+          onClose();
+        }, 1200);
+      } else {
+        setPinError('PIN expired or invalid. Please generate a new code.');
+      }
+    } catch {
+      setPinError('Could not connect to pairing server.');
+    } finally {
+      setIsRedeemingPin(false);
+    }
+  };
 
   // Compress essential data into a portable payload
   const syncPayload = {
@@ -104,7 +163,7 @@ export const DeviceSyncModal: React.FC<DeviceSyncModalProps> = ({
     }
   };
 
-  // Generate a dynamic SVG QR code representation via Google Chart API fallback
+  // Generate dynamic QR code representation
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(
     syncUrl
   )}&bgcolor=0b0d17&color=ffffff&margin=1`;
@@ -123,12 +182,17 @@ export const DeviceSyncModal: React.FC<DeviceSyncModalProps> = ({
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 shadow-lg">
-            <QrCode className="w-6 h-6" />
+            <Tv className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Instant Device Sync</h2>
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <span>Instant TV & Device Sync</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-600/30 text-indigo-300 border border-indigo-500/40">
+                Cloudflare Edge
+              </span>
+            </h2>
             <p className="text-xs text-gray-400">
-              Sync watchlist & resume progress between TV, Phone, and PC.
+              Sync watchlist & resume progress between Android TV, Phone, and PC.
             </p>
           </div>
         </div>
@@ -136,27 +200,118 @@ export const DeviceSyncModal: React.FC<DeviceSyncModalProps> = ({
         {/* Tab Selector */}
         <div className="flex items-center bg-white/5 p-1 rounded-2xl mb-6 border border-white/10">
           <button
-            onClick={() => setActiveTab('export')}
-            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
-              activeTab === 'export' ? 'bg-indigo-600 text-white shadow' : 'text-gray-400 hover:text-white'
+            onClick={() => setActiveTab('tv-pin')}
+            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+              activeTab === 'tv-pin' ? 'bg-indigo-600 text-white shadow' : 'text-gray-400 hover:text-white'
             }`}
           >
-            Export to Phone/TV (QR)
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>6-Digit TV PIN</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('qr')}
+            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+              activeTab === 'qr' ? 'bg-indigo-600 text-white shadow' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <QrCode className="w-3.5 h-3.5" />
+            <span>QR Code</span>
           </button>
           <button
             onClick={() => setActiveTab('import')}
-            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+            className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'import' ? 'bg-indigo-600 text-white shadow' : 'text-gray-400 hover:text-white'
             }`}
           >
-            Import Sync Code
+            <Download className="w-3.5 h-3.5" />
+            <span>Direct Code</span>
           </button>
         </div>
 
-        {/* Export Tab */}
-        {activeTab === 'export' && (
+        {/* 6-Digit TV PIN Tab (Stremio Killer Flagship) */}
+        {activeTab === 'tv-pin' && (
+          <div className="space-y-5">
+            {/* Section 1: Generate Code to send TO another device */}
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-950/40 to-black border border-indigo-500/30 flex flex-col gap-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-300">
+                Step A: Push Data to Your TV
+              </span>
+              <p className="text-[11px] text-gray-400">
+                Generate a temporary 6-digit code on this device, then type it on your TV or tablet to sync immediately.
+              </p>
+
+              {generatedPin ? (
+                <div className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-black/60 border border-white/10">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-wider">Your Pairing PIN (Valid 10 mins):</span>
+                  <div className="text-3xl font-black font-mono tracking-widest text-emerald-400">
+                    {generatedPin.formattedPin}
+                  </div>
+                  <span className="text-[10px] text-gray-500">Type this code on your TV below</span>
+                </div>
+              ) : (
+                <button
+                  onClick={handleGeneratePin}
+                  disabled={isGeneratingPin}
+                  className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isGeneratingPin ? 'animate-spin' : ''}`} />
+                  <span>{isGeneratingPin ? 'Generating PIN...' : 'Generate 6-Digit TV PIN'}</span>
+                </button>
+              )}
+            </div>
+
+            {/* Section 2: Enter Code from another device */}
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-col gap-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-white">
+                Step B: Receive Data on this Device
+              </span>
+              <p className="text-[11px] text-gray-400">
+                Enter the 6 digits generated from your other device to download your watchlist and watch progress:
+              </p>
+
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  maxLength={7}
+                  value={enteredPin}
+                  onChange={e => {
+                    const digits = e.target.value.replace(/\D/g, '');
+                    if (digits.length > 3) {
+                      setEnteredPin(`${digits.slice(0, 3)}-${digits.slice(3, 6)}`);
+                    } else {
+                      setEnteredPin(digits);
+                    }
+                  }}
+                  placeholder="e.g. 482-195"
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-black/50 border border-white/15 text-center text-lg font-black font-mono text-white tracking-widest placeholder-gray-600 focus:outline-none focus:border-indigo-500"
+                />
+                <button
+                  onClick={handleRedeemPin}
+                  disabled={enteredPin.replace(/\D/g, '').length !== 6 || isRedeemingPin}
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-lg shadow-emerald-600/30 shrink-0"
+                >
+                  {isRedeemingPin ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <ArrowRight className="w-3.5 h-3.5" />}
+                  <span>{isRedeemingPin ? 'Pairing...' : 'Pair & Sync'}</span>
+                </button>
+              </div>
+
+              {pinError && (
+                <span className="text-xs text-red-400 font-semibold">{pinError}</span>
+              )}
+
+              {importSuccess && (
+                <div className="p-2 rounded-xl bg-emerald-950/40 text-emerald-300 border border-emerald-500/30 text-xs flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400" />
+                  <span>Data successfully synced! Closing...</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* QR Code Tab */}
+        {activeTab === 'qr' && (
           <div className="flex flex-col items-center text-center space-y-4">
-            {/* QR Code Container */}
             <div className="p-4 rounded-3xl bg-[#07080e] border border-white/15 shadow-2xl">
               <img
                 src={qrCodeUrl}
@@ -179,7 +334,7 @@ export const DeviceSyncModal: React.FC<DeviceSyncModalProps> = ({
           </div>
         )}
 
-        {/* Import Tab */}
+        {/* Direct Import Tab */}
         {activeTab === 'import' && (
           <div className="space-y-4">
             <p className="text-xs text-gray-300 leading-relaxed">

@@ -12,6 +12,7 @@ import {
   Download,
   Dices,
   QrCode,
+  Users,
 } from 'lucide-react';
 import type { ActiveTab, MediaItem } from '../types';
 import { searchMedia, getImageUrl } from '../services/tmdb';
@@ -27,6 +28,7 @@ interface NavbarProps {
   setSearchQuery: (query: string) => void;
   onOpenSurpriseMe?: () => void;
   onOpenSync?: () => void;
+  onOpenWatchParty?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -40,6 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setSearchQuery,
   onOpenSurpriseMe,
   onOpenSync,
+  onOpenWatchParty,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [suggestions, setSuggestions] = useState<MediaItem[]>([]);
@@ -218,13 +221,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
+          {/* SyncPlay Watch Party */}
+          {onOpenWatchParty && (
+            <button
+              data-tv-focus="true"
+              onClick={onOpenWatchParty}
+              className="p-2 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 transition-all flex items-center gap-1.5"
+              title="Watch Party (P2P SyncPlay with Friends)"
+            >
+              <Users className="w-4 h-4 text-purple-400" />
+              <span className="hidden lg:inline text-xs font-bold">Party</span>
+            </button>
+          )}
+
           {/* Device Sync */}
           {onOpenSync && (
             <button
               data-tv-focus="true"
               onClick={onOpenSync}
               className="p-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 transition-all flex items-center gap-1.5"
-              title="Sync with Phone / TV (Instant QR Transfer)"
+              title="Sync with Phone / TV (Instant QR & PIN Transfer)"
             >
               <QrCode className="w-4 h-4 text-indigo-400" />
               <span className="hidden lg:inline text-xs font-bold">Sync</span>

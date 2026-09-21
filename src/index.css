@@ -212,4 +212,27 @@ body.tv-mode {
   padding-right: env(safe-area-inset-right, 16px);
 }
 
+/* Floating Watch Party Emoji Reactions */
+@keyframes floatUpFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(0.8) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-60px) scale(1.25) rotate(-6deg);
+  }
+  70% {
+    opacity: 0.9;
+    transform: translateY(-130px) scale(1.35) rotate(6deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-220px) scale(1.5) rotate(0deg);
+  }
+}
 
+.animate-float-up {
+  animation: floatUpFade 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}

@@ -365,3 +365,19 @@ export const fetchSeasonDetails = async (tvId: number, seasonNumber: number): Pr
     })),
   };
 };
+
+/**
+ * Resolves the IMDb ID (e.g. "tt15398776") for a movie or TV show using TMDB external_ids.
+ * Stremio addons and Debrid resolvers index streams by IMDb ID.
+ */
+export const fetchImdbId = async (tmdbId: number, type: MediaType): Promise<string | null> => {
+  try {
+    const client = createTmdbClient();
+    const endpoint = type === 'movie' ? `/movie/${tmdbId}/external_ids` : `/tv/${tmdbId}/external_ids`;
+    const res = await client.get(endpoint);
+    return res.data?.imdb_id || null;
+  } catch (err) {
+    console.warn('Could not fetch IMDb ID for TMDB ID', tmdbId, err);
+    return null;
+  }
+};
