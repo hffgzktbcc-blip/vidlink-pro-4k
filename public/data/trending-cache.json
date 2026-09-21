@@ -1,29 +1,6 @@
 {
-  "updatedAt": "2026-09-20T08:17:01.272Z",
+  "updatedAt": "2026-09-21T08:34:34.729Z",
   "trendingMovies": [
-    {
-      "adult": false,
-      "backdrop_path": "/b9q9VmbXDvJmTziRqkwdEmFdwhr.jpg",
-      "id": 1101383,
-      "title": "The End of Oak Street",
-      "original_title": "The End of Oak Street",
-      "overview": "After a mysterious cosmic event rips Oak Street from suburbia and transports their neighborhood to someplace unknown, the Platt family soon discovers that their very survival depends on them sticking together as they navigate their now unrecognizable surroundings.",
-      "poster_path": "/fYXqpgPmHMphSF2W30GbTeJVIa5.jpg",
-      "media_type": "movie",
-      "original_language": "en",
-      "genre_ids": [
-        878,
-        9648,
-        53
-      ],
-      "popularity": 514.5001,
-      "release_date": "2026-08-12",
-      "softcore": false,
-      "video": false,
-      "vote_average": 6.982,
-      "vote_count": 1244,
-      "is4K": true
-    },
     {
       "adult": false,
       "backdrop_path": "/1CIaRYKf3zg2Xyce1CSfCMg2Vfw.jpg",
@@ -39,12 +16,35 @@
         878,
         12
       ],
-      "popularity": 556.6877,
+      "popularity": 525.4108,
       "release_date": "2026-09-16",
       "softcore": false,
       "video": false,
-      "vote_average": 7.359,
-      "vote_count": 167,
+      "vote_average": 7.4,
+      "vote_count": 227,
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/b9q9VmbXDvJmTziRqkwdEmFdwhr.jpg",
+      "id": 1101383,
+      "title": "The End of Oak Street",
+      "original_title": "The End of Oak Street",
+      "overview": "After a mysterious cosmic event rips Oak Street from suburbia and transports their neighborhood to someplace unknown, the Platt family soon discovers that their very survival depends on them sticking together as they navigate their now unrecognizable surroundings.",
+      "poster_path": "/fYXqpgPmHMphSF2W30GbTeJVIa5.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        878,
+        9648,
+        53
+      ],
+      "popularity": 566.3338,
+      "release_date": "2026-08-12",
+      "softcore": false,
+      "video": false,
+      "vote_average": 7,
+      "vote_count": 1337,
       "is4K": true
     },
     {
@@ -62,12 +62,12 @@
         28,
         12
       ],
-      "popularity": 684.7189,
+      "popularity": 704.4472,
       "release_date": "2026-07-29",
       "softcore": false,
       "video": false,
-      "vote_average": 7.854,
-      "vote_count": 2780,
+      "vote_average": 7.86,
+      "vote_count": 2798,
       "is4K": true
     },
     {
@@ -85,12 +85,12 @@
         27,
         10749
       ],
-      "popularity": 64.8235,
+      "popularity": 80.0517,
       "release_date": "2026-08-06",
       "softcore": false,
       "video": false,
-      "vote_average": 6.5,
-      "vote_count": 133,
+      "vote_average": 6.48,
+      "vote_count": 149,
       "is4K": true
     },
     {
@@ -108,34 +108,12 @@
         28,
         14
       ],
-      "popularity": 377.4824,
+      "popularity": 387.2478,
       "release_date": "2026-07-15",
       "softcore": false,
       "video": false,
-      "vote_average": 8.018,
-      "vote_count": 3802,
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/rZfmzpixLKLR3Hg2u0WgC7XLFl8.jpg",
-      "id": 1339713,
-      "title": "Obsession",
-      "original_title": "Obsession",
-      "overview": "After breaking the mysterious \"One Wish Willow\" to win his crush's heart, a hopeless romantic finds himself getting exactly what he asked for but soon discovers that some desires come at a dark, sinister price.",
-      "poster_path": "/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg",
-      "media_type": "movie",
-      "original_language": "en",
-      "genre_ids": [
-        27,
-        53
-      ],
-      "popularity": 142.7581,
-      "release_date": "2026-05-13",
-      "softcore": false,
-      "video": false,
-      "vote_average": 8.191,
-      "vote_count": 5621,
+      "vote_average": 8.017,
+      "vote_count": 3824,
       "is4K": true
     },
     {
@@ -154,35 +132,56 @@
         35,
         12
       ],
-      "popularity": 216.803,
+      "popularity": 213.0753,
       "release_date": "2026-07-08",
       "softcore": false,
       "video": false,
-      "vote_average": 7.359,
-      "vote_count": 704,
+      "vote_average": 7.402,
+      "vote_count": 724,
       "is4K": true
     },
     {
       "adult": false,
-      "backdrop_path": "/7GOW6jod9lLurW5utokAatxg7ql.jpg",
-      "id": 1204680,
-      "title": "Coyote vs. Acme",
-      "original_title": "Coyote vs. Acme",
-      "overview": "After Acme products fail him one too many times in his dogged pursuit of the Roadrunner, Wile E. Coyote decides to hire a billboard lawyer to sue the Acme Corporation.",
-      "poster_path": "/kYDCl2y0VPvhT5eYWbMRInPoB03.jpg",
+      "backdrop_path": "/rZfmzpixLKLR3Hg2u0WgC7XLFl8.jpg",
+      "id": 1339713,
+      "title": "Obsession",
+      "original_title": "Obsession",
+      "overview": "After breaking the mysterious \"One Wish Willow\" to win his crush's heart, a hopeless romantic finds himself getting exactly what he asked for but soon discovers that some desires come at a dark, sinister price.",
+      "poster_path": "/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg",
       "media_type": "movie",
       "original_language": "en",
       "genre_ids": [
-        35,
-        12,
-        10751
+        27,
+        53
       ],
-      "popularity": 485.616,
-      "release_date": "2026-08-20",
+      "popularity": 147.6875,
+      "release_date": "2026-05-13",
       "softcore": false,
       "video": false,
-      "vote_average": 7.6,
-      "vote_count": 457,
+      "vote_average": 8.192,
+      "vote_count": 5641,
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/nkEhDomjmPHJSA4Tx8pxv0NlKEy.jpg",
+      "id": 1641629,
+      "title": "You+Me - Against the World",
+      "original_title": "Toi+Moi - Seuls contre tous",
+      "overview": "Alma Lancaster, 18, appears to lead a perfect life within a wealthy family who believes she is studying law. In secret, she pursues her true dream: filmmaking. On campus, she meets Vadim Arcadi, 20, a magnetic and solitary rebel with a troubled past. Forced to collaborate on a student film, they clash, grow closer and fall in love — despite themselves. But someone is watching them, determined to tear them apart and expose secrets that could destroy both Alma and Vadim.",
+      "poster_path": "/bAbBNVplg7h79sm94OyHeKk8Phz.jpg",
+      "media_type": "movie",
+      "original_language": "fr",
+      "genre_ids": [
+        10749,
+        18
+      ],
+      "popularity": 88.8837,
+      "release_date": "2026-09-18",
+      "softcore": false,
+      "video": false,
+      "vote_average": 5.7,
+      "vote_count": 32,
       "is4K": true
     },
     {
@@ -200,34 +199,12 @@
         9648,
         28
       ],
-      "popularity": 99.6239,
+      "popularity": 90.6672,
       "release_date": "2026-07-15",
       "softcore": false,
       "video": false,
-      "vote_average": 7.4,
-      "vote_count": 79,
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/nkEhDomjmPHJSA4Tx8pxv0NlKEy.jpg",
-      "id": 1641629,
-      "title": "You+Me - Against the World",
-      "original_title": "Toi+Moi - Seuls contre tous",
-      "overview": "Alma Lancaster, 18, appears to lead a perfect life within a wealthy family who believes she is studying law. In secret, she pursues her true dream: filmmaking. On campus, she meets Vadim Arcadi, 20, a magnetic and solitary rebel with a troubled past. Forced to collaborate on a student film, they clash, grow closer and fall in love — despite themselves. But someone is watching them, determined to tear them apart and expose secrets that could destroy both Alma and Vadim.",
-      "poster_path": "/bAbBNVplg7h79sm94OyHeKk8Phz.jpg",
-      "media_type": "movie",
-      "original_language": "fr",
-      "genre_ids": [
-        10749,
-        18
-      ],
-      "popularity": 75.2724,
-      "release_date": "2026-09-18",
-      "softcore": false,
-      "video": false,
-      "vote_average": 5.881,
-      "vote_count": 21,
+      "vote_average": 7.414,
+      "vote_count": 81,
       "is4K": true
     },
     {
@@ -245,12 +222,58 @@
         80,
         18
       ],
-      "popularity": 53.0336,
+      "popularity": 51.0249,
       "release_date": "2026-08-13",
       "softcore": false,
       "video": false,
-      "vote_average": 6.688,
-      "vote_count": 69,
+      "vote_average": 6.8,
+      "vote_count": 74,
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/bicMU6xVD5deVyKP2azpyx7xkmH.jpg",
+      "id": 1263337,
+      "title": "Heart of the Beast",
+      "original_title": "Heart of the Beast",
+      "overview": "After a harrowing plane crash, Special Forces officer James Belmont and his combat dog, Odin, find themselves stranded deep in the Alaskan wilderness. Together, they are forced into a brutal fight for survival against the elements.",
+      "poster_path": "/1ApfSA8JTqeha3GTFEY8syV4auq.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        12,
+        53,
+        18
+      ],
+      "popularity": 35.4449,
+      "release_date": "2026-09-19",
+      "softcore": false,
+      "video": false,
+      "vote_average": 7.8,
+      "vote_count": 9,
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/7GOW6jod9lLurW5utokAatxg7ql.jpg",
+      "id": 1204680,
+      "title": "Coyote vs. Acme",
+      "original_title": "Coyote vs. Acme",
+      "overview": "After Acme products fail him one too many times in his dogged pursuit of the Roadrunner, Wile E. Coyote decides to hire a billboard lawyer to sue the Acme Corporation.",
+      "poster_path": "/kYDCl2y0VPvhT5eYWbMRInPoB03.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        35,
+        12,
+        10751
+      ],
+      "popularity": 472.0999,
+      "release_date": "2026-08-20",
+      "softcore": false,
+      "video": false,
+      "vote_average": 7.559,
+      "vote_count": 467,
       "is4K": true
     },
     {
@@ -267,12 +290,80 @@
         28,
         35
       ],
-      "popularity": 119.6787,
+      "popularity": 117.1846,
       "release_date": "2026-09-03",
       "softcore": false,
       "video": false,
-      "vote_average": 8.033,
-      "vote_count": 702,
+      "vote_average": 8.036,
+      "vote_count": 725,
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/2o9FzuBzCqrDTdlHRuEVnGD2d5h.jpg",
+      "id": 1465063,
+      "title": "Forgotten Island",
+      "original_title": "Forgotten Island",
+      "overview": "While celebrating their last night together, high school graduates and best friends Jo and Raissa stumble upon a mysterious portal that transports them to the fantastical island of Nakali. When they discover that the memories of their entire friendship are the price for returning home, Jo and Raissa must race to find a way to leave the island before they forget each other forever.",
+      "poster_path": "/Lr0Ng7Gg02RW1AyfYEL6P0WUvd.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        16,
+        12,
+        14,
+        35,
+        10751
+      ],
+      "popularity": 31.027,
+      "release_date": "2026-09-10",
+      "softcore": false,
+      "video": false,
+      "vote_average": 8.5,
+      "vote_count": 8,
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/5m1j7Wibh3HnZq5QHm97v8dI3GH.jpg",
+      "id": 1514863,
+      "title": "Best of the Best",
+      "original_title": "Best of the Best",
+      "overview": "Two best friends at UCLA leap into the competitive and cutthroat world of collegiate Bollywood-fusion dance.",
+      "poster_path": "/9soOjsZ91vtMzypK2F3MC378JI5.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        35
+      ],
+      "popularity": 53.413,
+      "release_date": "2026-09-18",
+      "softcore": false,
+      "video": false,
+      "vote_average": 5.167,
+      "vote_count": 21,
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/dJTWIecL2vxsCRl5G0lRhPsfrhc.jpg",
+      "id": 1228834,
+      "title": "The Fix",
+      "original_title": "The Fix",
+      "overview": "Disillusioned by the end of the war in Afghanistan, a group of disgraced, war-torn ex-CIA operatives set out to Tehran to take down a life-changing score.",
+      "poster_path": "/yopXjun3ICFfJci2ukcEzceZjUs.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        28,
+        53
+      ],
+      "popularity": 74.7893,
+      "release_date": "2026-09-10",
+      "softcore": false,
+      "video": false,
+      "vote_average": 7.4,
+      "vote_count": 15,
       "is4K": true
     },
     {
@@ -290,79 +381,12 @@
         9648,
         878
       ],
-      "popularity": 89.4898,
+      "popularity": 94.1246,
       "release_date": "2026-05-27",
       "softcore": false,
       "video": false,
-      "vote_average": 7.038,
-      "vote_count": 3342,
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/dJTWIecL2vxsCRl5G0lRhPsfrhc.jpg",
-      "id": 1228834,
-      "title": "The Fix",
-      "original_title": "The Fix",
-      "overview": "Disillusioned by the end of the war in Afghanistan, a group of disgraced, war-torn ex-CIA operatives set out to Tehran to take down a life-changing score.",
-      "poster_path": "/yopXjun3ICFfJci2ukcEzceZjUs.jpg",
-      "media_type": "movie",
-      "original_language": "en",
-      "genre_ids": [
-        28,
-        53
-      ],
-      "popularity": 78.2818,
-      "release_date": "2026-09-10",
-      "softcore": false,
-      "video": false,
-      "vote_average": 7.3,
-      "vote_count": 12,
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/8Tfys3mDZVp4tNoH2ktm06a0Tau.jpg",
-      "id": 687163,
-      "title": "Project Hail Mary",
-      "original_title": "Project Hail Mary",
-      "overview": "Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction.",
-      "poster_path": "/yihdXomYb5kTeSivtFndMy5iDmf.jpg",
-      "media_type": "movie",
-      "original_language": "en",
-      "genre_ids": [
-        878,
-        12
-      ],
-      "popularity": 99.5429,
-      "release_date": "2026-03-15",
-      "softcore": false,
-      "video": false,
-      "vote_average": 8.639,
-      "vote_count": 7848,
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/wE6syT1vv6W24iLGfhR4kQHnIDN.jpg",
-      "id": 1302904,
-      "title": "Practical Magic 2",
-      "original_title": "Practical Magic 2",
-      "overview": "The Owens sisters must confront the dark curse that threatens to unravel their family once and for all.",
-      "poster_path": "/ogwQOLbCfncjvBhFb5l0OmQH8KC.jpg",
-      "media_type": "movie",
-      "original_language": "en",
-      "genre_ids": [
-        10749,
-        14,
-        35
-      ],
-      "popularity": 69.9114,
-      "release_date": "2026-09-09",
-      "softcore": false,
-      "video": false,
-      "vote_average": 6,
-      "vote_count": 68,
+      "vote_average": 7,
+      "vote_count": 3357,
       "is4K": true
     },
     {
@@ -381,78 +405,56 @@
         35,
         12
       ],
-      "popularity": 152.0103,
+      "popularity": 159.0305,
       "release_date": "2026-06-17",
       "softcore": false,
       "video": false,
       "vote_average": 8.361,
-      "vote_count": 2206,
+      "vote_count": 2227,
       "is4K": true
     },
     {
       "adult": false,
-      "backdrop_path": "/kgZFECKytirVvmIbWF6slEoWZng.jpg",
-      "id": 1451944,
-      "title": "Lust Stories 3",
-      "original_title": "Lust Stories 3",
-      "overview": "Through four bite-sized yet emotionally resonant films, the anthology once again explores lust, love, relationships, and repressed desire, offering fresh perspectives on intimacy, longing, and human connection in all their complexity.",
-      "poster_path": "/qbsuF8RazV42POTJLxItQ6Udd3n.jpg",
-      "media_type": "movie",
-      "original_language": "hi",
-      "genre_ids": [
-        10749,
-        18
-      ],
-      "popularity": 52.4475,
-      "release_date": "2026-09-18",
-      "softcore": false,
-      "video": false,
-      "vote_average": 7,
-      "vote_count": 3,
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/i65y7cMae36K0giN0GRaMjAHUru.jpg",
-      "id": 1440098,
-      "title": "Drawn Together",
-      "original_title": "Enfrentados: Marfil",
-      "overview": "Marfil, daughter of a powerful Spanish businessman, sees her life in New York turned upside down when she is kidnapped and released without explanation. Her father hires Sebastian Moore as bodyguard and, forced to spend every minute together, an inevitable attraction ignites in a world where nothing is as it seems.",
-      "poster_path": "/6rpvddXbaQPOi0fB2HKWbZ3uUSg.jpg",
-      "media_type": "movie",
-      "original_language": "es",
-      "genre_ids": [
-        10749,
-        53
-      ],
-      "popularity": 167.0017,
-      "release_date": "2026-09-09",
-      "softcore": false,
-      "video": false,
-      "vote_average": 6.626,
-      "vote_count": 99,
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/e2QAGrEmbpmZpMymDRkDisJkvg9.jpg",
-      "id": 1288445,
-      "title": "Mutiny",
-      "original_title": "Mutiny",
-      "overview": "After witnessing his billionaire boss' murder and being framed for the crime, Cole Reed boards a cargo ship on a one-man crusade to avenge his boss' death only to discover an international conspiracy.",
-      "poster_path": "/pu2VxGlpGwffOx292w18b1tv96j.jpg",
+      "backdrop_path": "/8Tfys3mDZVp4tNoH2ktm06a0Tau.jpg",
+      "id": 687163,
+      "title": "Project Hail Mary",
+      "original_title": "Project Hail Mary",
+      "overview": "Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction.",
+      "poster_path": "/yihdXomYb5kTeSivtFndMy5iDmf.jpg",
       "media_type": "movie",
       "original_language": "en",
       "genre_ids": [
-        28,
-        53
+        878,
+        12
       ],
-      "popularity": 254.1106,
-      "release_date": "2026-08-19",
+      "popularity": 101.1844,
+      "release_date": "2026-03-15",
       "softcore": false,
       "video": false,
-      "vote_average": 6.4,
-      "vote_count": 418,
+      "vote_average": 8.639,
+      "vote_count": 7874,
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/2Got7QkJgecX5JAgoo4A4gzRneL.jpg",
+      "id": 1433367,
+      "title": "One Night Only",
+      "original_title": "One Night Only",
+      "overview": "Two love-starved strangers crash into each other on the one night of the year when single people are allowed to have sex.",
+      "poster_path": "/46q8z1TbbVcF8uhRHsvt5s0h2SH.jpg",
+      "media_type": "movie",
+      "original_language": "en",
+      "genre_ids": [
+        10749,
+        35
+      ],
+      "popularity": 44.067,
+      "release_date": "2026-08-06",
+      "softcore": false,
+      "video": false,
+      "vote_average": 6.5,
+      "vote_count": 140,
       "is4K": true
     }
   ],
@@ -464,7 +466,7 @@
       "name": "Neagley",
       "original_name": "Neagley",
       "overview": "Frances Neagley is a private investigator in Chicago and former military colleague of Jack Reacher in the Army's 110th Special Investigations Unit. When she learns that a beloved friend from her past has been killed in a suspicious accident, she becomes hell-bent on justice.",
-      "poster_path": "/lKOPmO0ah17ogQ9hWg7lSd40kIr.jpg",
+      "poster_path": "/tEPDFIa21VK0Q2YLuzhTt2xrw5W.jpg",
       "media_type": "tv",
       "original_language": "en",
       "genre_ids": [
@@ -472,11 +474,11 @@
         9648,
         80
       ],
-      "popularity": 155.9482,
+      "popularity": 166.2382,
       "first_air_date": "2026-09-16",
       "softcore": false,
-      "vote_average": 7.951,
-      "vote_count": 72,
+      "vote_average": 7.973,
+      "vote_count": 91,
       "origin_country": [
         "US"
       ],
@@ -496,11 +498,11 @@
         18,
         80
       ],
-      "popularity": 136.9655,
+      "popularity": 157.0329,
       "first_air_date": "2026-09-17",
       "softcore": false,
-      "vote_average": 6.9,
-      "vote_count": 38,
+      "vote_average": 7.1,
+      "vote_count": 51,
       "origin_country": [
         "US"
       ],
@@ -520,11 +522,11 @@
         10759,
         80
       ],
-      "popularity": 924.8967,
+      "popularity": 918.352,
       "first_air_date": "2022-02-03",
       "softcore": false,
-      "vote_average": 8.125,
-      "vote_count": 3363,
+      "vote_average": 8.127,
+      "vote_count": 3372,
       "origin_country": [
         "US"
       ],
@@ -532,7 +534,7 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/h0OC7ouop8YLwbAVfS3UUE2Lw4T.jpg",
+      "backdrop_path": "/vW6oPZEdqxZyQIYimouqA5b78mT.jpg",
       "id": 247718,
       "name": "MobLand",
       "original_name": "MobLand",
@@ -544,11 +546,11 @@
         80,
         18
       ],
-      "popularity": 224.6664,
+      "popularity": 233.6858,
       "first_air_date": "2025-03-30",
       "softcore": false,
-      "vote_average": 8.384,
-      "vote_count": 865,
+      "vote_average": 8.392,
+      "vote_count": 869,
       "origin_country": [
         "GB",
         "US"
@@ -570,11 +572,11 @@
         9648,
         10765
       ],
-      "popularity": 223.2856,
+      "popularity": 229.2047,
       "first_air_date": "2026-08-16",
       "softcore": false,
-      "vote_average": 8.3,
-      "vote_count": 363,
+      "vote_average": 8.305,
+      "vote_count": 375,
       "origin_country": [
         "US"
       ],
@@ -587,19 +589,43 @@
       "name": "The Scandal",
       "original_name": "스캔들",
       "overview": "In Joseon, a secret proposal ignites hidden desires in a gifted noblewoman, a famed lover and an unsuspecting lady caught in their dangerous game.",
-      "poster_path": "/pJsIzlTjmx07ilwEkl0cglrMVa1.jpg",
+      "poster_path": "/4TU0PcHBIl0wPW5B6aVRGExOnHE.jpg",
       "media_type": "tv",
       "original_language": "ko",
       "genre_ids": [
         18
       ],
-      "popularity": 4764.8935,
+      "popularity": 3427.0312,
       "first_air_date": "2026-09-18",
       "softcore": false,
-      "vote_average": 6.6,
-      "vote_count": 5,
+      "vote_average": 6.5,
+      "vote_count": 8,
       "origin_country": [
         "KR"
+      ],
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/4NBYDOnEjAzyuP7CMkD5s7fs44K.jpg",
+      "id": 113962,
+      "name": "Lioness",
+      "original_name": "Lioness",
+      "overview": "Cruz Manuelos, a rough-around-the-edges but passionate young Marine, is recruited to join the CIA's Lioness Engagement Team to help bring down a terrorist organization from within. Joe, the station chief of the Lioness program, is tasked with training, managing and leading her female undercover operatives.",
+      "poster_path": "/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
+      "media_type": "tv",
+      "original_language": "en",
+      "genre_ids": [
+        18,
+        10768
+      ],
+      "popularity": 497.8167,
+      "first_air_date": "2023-07-23",
+      "softcore": false,
+      "vote_average": 8.218,
+      "vote_count": 1581,
+      "origin_country": [
+        "US"
       ],
       "is4K": true
     },
@@ -618,11 +644,11 @@
         18,
         9648
       ],
-      "popularity": 154.7621,
+      "popularity": 158.9498,
       "first_air_date": "2022-04-01",
       "softcore": false,
-      "vote_average": 8.026,
-      "vote_count": 988,
+      "vote_average": 8.024,
+      "vote_count": 991,
       "origin_country": [
         "GB"
       ],
@@ -630,49 +656,25 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/fQGrzO0Iwo7CO4b2zVdJLkcnhwK.jpg",
-      "id": 125988,
-      "name": "Silo",
-      "original_name": "Silo",
-      "overview": "In a ruined and toxic future, thousands live in a giant silo deep underground. After its sheriff breaks a cardinal rule and residents die mysteriously, engineer Juliette starts to uncover shocking secrets and the truth about the silo.",
-      "poster_path": "/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg",
+      "backdrop_path": "/3yoTM5JtkxnPZvVzQOrL0c2ILVM.jpg",
+      "id": 232018,
+      "name": "Has Fallen",
+      "original_name": "Has Fallen",
+      "overview": "A protection officer and an MI6 operative team up after a terrorist attack. They suspect a mole as they race to thwart a larger conspiracy threatening Paris.",
+      "poster_path": "/pbjUYxmI2BdqpXpr89XaBnKlc6F.jpg",
       "media_type": "tv",
-      "original_language": "en",
+      "original_language": "fr",
       "genre_ids": [
-        10765,
-        18
-      ],
-      "popularity": 220.1763,
-      "first_air_date": "2023-05-04",
-      "softcore": false,
-      "vote_average": 8.219,
-      "vote_count": 2700,
-      "origin_country": [
-        "US"
-      ],
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/4NBYDOnEjAzyuP7CMkD5s7fs44K.jpg",
-      "id": 113962,
-      "name": "Lioness",
-      "original_name": "Lioness",
-      "overview": "Cruz Manuelos, a rough-around-the-edges but passionate young Marine, is recruited to join the CIA's Lioness Engagement Team to help bring down a terrorist organization from within. Joe, the station chief of the Lioness program, is tasked with training, managing and leading her female undercover operatives.",
-      "poster_path": "/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
-      "media_type": "tv",
-      "original_language": "en",
-      "genre_ids": [
-        18,
+        10759,
         10768
       ],
-      "popularity": 385.7829,
-      "first_air_date": "2023-07-23",
+      "popularity": 53.9106,
+      "first_air_date": "2024-09-23",
       "softcore": false,
-      "vote_average": 8.2,
-      "vote_count": 1570,
+      "vote_average": 7,
+      "vote_count": 122,
       "origin_country": [
-        "US"
+        "FR"
       ],
       "is4K": true
     },
@@ -690,11 +692,11 @@
         16,
         35
       ],
-      "popularity": 139.3968,
+      "popularity": 144.7365,
       "first_air_date": "1997-08-13",
       "softcore": false,
-      "vote_average": 8.331,
-      "vote_count": 5150,
+      "vote_average": 8.332,
+      "vote_count": 5153,
       "origin_country": [
         "US"
       ],
@@ -713,88 +715,13 @@
       "genre_ids": [
         9648
       ],
-      "popularity": 48.3113,
+      "popularity": 49.6207,
       "first_air_date": "2026-09-16",
       "softcore": false,
-      "vote_average": 7.4,
-      "vote_count": 7,
+      "vote_average": 6.9,
+      "vote_count": 8,
       "origin_country": [
         "DE"
-      ],
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/qrYep23cjwdlwgfvyoO51YD9JrI.jpg",
-      "id": 65942,
-      "name": "Re:ZERO -Starting Life in Another World-",
-      "original_name": "Re:ゼロから始める異世界生活",
-      "overview": "Natsuki Subaru, an ordinary high school  student, is on his way home from the convenience store when he finds  himself transported to another world. As he's lost and confused in a new  world where he doesn't even know left from right, the only person to  reach out to him was a beautiful girl with silver hair. Determined to  repay her somehow for saving him from his own despair, Subaru agrees to  help the girl find something she's looking for.",
-      "poster_path": "/oHqYrPAsIiTD5m4DuxumV4er8BU.jpg",
-      "media_type": "tv",
-      "original_language": "ja",
-      "genre_ids": [
-        16,
-        9648,
-        10759,
-        10765
-      ],
-      "popularity": 112.0871,
-      "first_air_date": "2016-04-04",
-      "softcore": false,
-      "vote_average": 8.111,
-      "vote_count": 786,
-      "origin_country": [
-        "JP"
-      ],
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/6h23WrCtrojF92ZgU2MhWcyqBMy.jpg",
-      "id": 270476,
-      "name": "Widow's Bay",
-      "original_name": "Widow's Bay",
-      "overview": "The mayor of a New England town resolves to turn it into the next tourist hot spot, despite local warnings that it's cursed.",
-      "poster_path": "/vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg",
-      "media_type": "tv",
-      "original_language": "en",
-      "genre_ids": [
-        18,
-        35,
-        9648
-      ],
-      "popularity": 73.9504,
-      "first_air_date": "2026-04-28",
-      "softcore": false,
-      "vote_average": 8.059,
-      "vote_count": 475,
-      "origin_country": [
-        "US"
-      ],
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/nE94ejEbzNCU48bW1oju0dqBONz.jpg",
-      "id": 97546,
-      "name": "Ted Lasso",
-      "original_name": "Ted Lasso",
-      "overview": "Ted Lasso, an American football coach, moves to England when he's hired to manage a soccer team—despite having no experience. With cynical players and a doubtful town, will he get them to see the Ted Lasso Way?",
-      "poster_path": "/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg",
-      "media_type": "tv",
-      "original_language": "en",
-      "genre_ids": [
-        18,
-        35
-      ],
-      "popularity": 253.806,
-      "first_air_date": "2020-08-14",
-      "softcore": false,
-      "vote_average": 8.37,
-      "vote_count": 2672,
-      "origin_country": [
-        "US"
       ],
       "is4K": true
     },
@@ -814,62 +741,13 @@
         9648,
         10759
       ],
-      "popularity": 49.918,
+      "popularity": 50.5594,
       "first_air_date": "2026-04-23",
       "softcore": false,
       "vote_average": 7.6,
       "vote_count": 109,
       "origin_country": [
         "US"
-      ],
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/o0NsbcIvsllg6CJX0FBFY8wWbsn.jpg",
-      "id": 30984,
-      "name": "Bleach",
-      "original_name": "BLEACH",
-      "overview": "For as long as he can remember, Ichigo Kurosaki has been able to see ghosts. But when he meets Rukia, a Soul Reaper who battles evil spirits known as Hollows, he finds his life is changed forever. Now, with a newfound wealth of spiritual energy, Ichigo discovers his true calling: to protect the living and the dead from evil.",
-      "poster_path": "/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg",
-      "media_type": "tv",
-      "original_language": "ja",
-      "genre_ids": [
-        10759,
-        16,
-        10765
-      ],
-      "popularity": 213.0962,
-      "first_air_date": "2004-10-05",
-      "softcore": false,
-      "vote_average": 8.349,
-      "vote_count": 2275,
-      "origin_country": [
-        "JP"
-      ],
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/oS5vwLiVvfZrQ0NpbRJRfuXJhUX.jpg",
-      "id": 232018,
-      "name": "Has Fallen",
-      "original_name": "Has Fallen",
-      "overview": "A protection officer and an MI6 operative team up after a terrorist attack. They suspect a mole as they race to thwart a larger conspiracy threatening Paris.",
-      "poster_path": "/eyK6fy2NWfjmyBjUvRAR14FynPK.jpg",
-      "media_type": "tv",
-      "original_language": "fr",
-      "genre_ids": [
-        10759,
-        10768
-      ],
-      "popularity": 54.4761,
-      "first_air_date": "2024-09-23",
-      "softcore": false,
-      "vote_average": 7,
-      "vote_count": 122,
-      "origin_country": [
-        "FR"
       ],
       "is4K": true
     },
@@ -888,11 +766,11 @@
         35,
         16
       ],
-      "popularity": 91.5924,
+      "popularity": 85.8668,
       "first_air_date": "1999-10-20",
       "softcore": false,
       "vote_average": 8.748,
-      "vote_count": 5551,
+      "vote_count": 5552,
       "origin_country": [
         "JP"
       ],
@@ -900,26 +778,148 @@
     },
     {
       "adult": false,
-      "backdrop_path": "/kgaQnDdDaPqvGN7i8LLz1aWJdjP.jpg",
-      "id": 258230,
-      "name": "Last Seen",
-      "original_name": "Last Seen",
-      "overview": "When emergency dispatcher Ian Ridley receives a frantic call from a teenager he believes could be his long-missing daughter, he stops at nothing to find her.",
-      "poster_path": "/vozJZjHv0Yyv4PjoOxF5tVMUGFI.jpg",
+      "backdrop_path": "/o0NsbcIvsllg6CJX0FBFY8wWbsn.jpg",
+      "id": 30984,
+      "name": "Bleach",
+      "original_name": "BLEACH",
+      "overview": "For as long as he can remember, Ichigo Kurosaki has been able to see ghosts. But when he meets Rukia, a Soul Reaper who battles evil spirits known as Hollows, he finds his life is changed forever. Now, with a newfound wealth of spiritual energy, Ichigo discovers his true calling: to protect the living and the dead from evil.",
+      "poster_path": "/2EewmxXe72ogD0EaWM8gqa0ccIw.jpg",
+      "media_type": "tv",
+      "original_language": "ja",
+      "genre_ids": [
+        10759,
+        16,
+        10765
+      ],
+      "popularity": 222.8188,
+      "first_air_date": "2004-10-05",
+      "softcore": false,
+      "vote_average": 8.35,
+      "vote_count": 2276,
+      "origin_country": [
+        "JP"
+      ],
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/fQGrzO0Iwo7CO4b2zVdJLkcnhwK.jpg",
+      "id": 125988,
+      "name": "Silo",
+      "original_name": "Silo",
+      "overview": "In a ruined and toxic future, thousands live in a giant silo deep underground. After its sheriff breaks a cardinal rule and residents die mysteriously, engineer Juliette starts to uncover shocking secrets and the truth about the silo.",
+      "poster_path": "/gMYZZvnkVNTqSVnVCphWbPXwWwb.jpg",
       "media_type": "tv",
       "original_language": "en",
       "genre_ids": [
-        80,
-        18,
-        9648
+        10765,
+        18
       ],
-      "popularity": 39.2747,
-      "first_air_date": "2026-09-09",
+      "popularity": 215.941,
+      "first_air_date": "2023-05-04",
       "softcore": false,
-      "vote_average": 8.286,
-      "vote_count": 14,
+      "vote_average": 8.22,
+      "vote_count": 2705,
       "origin_country": [
-        "GB"
+        "US"
+      ],
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/nE94ejEbzNCU48bW1oju0dqBONz.jpg",
+      "id": 97546,
+      "name": "Ted Lasso",
+      "original_name": "Ted Lasso",
+      "overview": "Ted Lasso, an American football coach, moves to England when he's hired to manage a soccer team—despite having no experience. With cynical players and a doubtful town, will he get them to see the Ted Lasso Way?",
+      "poster_path": "/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg",
+      "media_type": "tv",
+      "original_language": "en",
+      "genre_ids": [
+        18,
+        35
+      ],
+      "popularity": 252.2491,
+      "first_air_date": "2020-08-14",
+      "softcore": false,
+      "vote_average": 8.371,
+      "vote_count": 2673,
+      "origin_country": [
+        "US"
+      ],
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/nW7oUFiJrIWwll4mZ8tYays7XRm.jpg",
+      "id": 287620,
+      "name": "Stuart Fails to Save the Universe",
+      "original_name": "Stuart Fails to Save the Universe",
+      "overview": "After accidentally creating a new multiverse, comic book store owner Stuart Bloom must locate a quantum-interference device to restore reality.",
+      "poster_path": "/txj8ujTZwGUjpCdhCsQBnTlh4aS.jpg",
+      "media_type": "tv",
+      "original_language": "en",
+      "genre_ids": [
+        35,
+        10765
+      ],
+      "popularity": 58.3798,
+      "first_air_date": "2026-07-23",
+      "softcore": false,
+      "vote_average": 8.716,
+      "vote_count": 174,
+      "origin_country": [
+        "US"
+      ],
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/4xKG4S1IyLIglHbCYGJDsptgQNh.jpg",
+      "id": 615,
+      "name": "Futurama",
+      "original_name": "Futurama",
+      "overview": "The adventures of a late-20th-century New York City pizza delivery boy, Philip J. Fry, who, after being unwittingly cryogenically frozen for one thousand years, finds employment at Planet Express, an interplanetary delivery company in the retro-futuristic 31st century.",
+      "poster_path": "/eM8bbTn8C8vUwwS6upzzm7gX31u.jpg",
+      "media_type": "tv",
+      "original_language": "en",
+      "genre_ids": [
+        16,
+        35,
+        10765
+      ],
+      "popularity": 110.6914,
+      "first_air_date": "1999-03-28",
+      "softcore": false,
+      "vote_average": 8.4,
+      "vote_count": 3907,
+      "origin_country": [
+        "US"
+      ],
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/j9fRIimor0AMFJR9kjZubXcABzZ.jpg",
+      "id": 94664,
+      "name": "Mushoku Tensei: Jobless Reincarnation",
+      "original_name": "無職転生 ～異世界行ったら本気だす～",
+      "overview": "When a 34-year-old underachiever gets run over by a truck, his story doesn't end there. Reincarnated in a new world as an infant, Rudy will seize every opportunity to live the life he's always wanted. Armed with new friends, some freshly acquired magical abilities, and the courage to do the things he's always dreamed of, he's embarking on an epic adventure—with all of his past experience intact!",
+      "poster_path": "/gLKOYIMyKlUHW0SVdskhgf9C0yy.jpg",
+      "media_type": "tv",
+      "original_language": "ja",
+      "genre_ids": [
+        10759,
+        16,
+        10765
+      ],
+      "popularity": 244.7441,
+      "first_air_date": "2021-01-11",
+      "softcore": false,
+      "vote_average": 8.4,
+      "vote_count": 1723,
+      "origin_country": [
+        "JP"
       ],
       "is4K": true
     },
@@ -937,11 +937,11 @@
         10765,
         18
       ],
-      "popularity": 74.0641,
+      "popularity": 64.3332,
       "first_air_date": "2024-05-07",
       "softcore": false,
-      "vote_average": 7.8,
-      "vote_count": 785,
+      "vote_average": 7.787,
+      "vote_count": 788,
       "origin_country": [
         "US"
       ],
@@ -962,59 +962,13 @@
       "original_language": "en",
       "original_title": "Spider-Man: Brand New Day",
       "overview": "Fighting crime full-time as Spider-Man in a world that doesn't remember him—and the pressure of seeing his old friends move on without him—sparks a change in Peter Parker he may not have the power to control. But that transformation might also be the only thing that can stop a shocking new threat to the city and those he loves - a powerful villain no one can even see.",
-      "popularity": 684.7189,
+      "popularity": 704.4472,
       "poster_path": "/bjiS5ipwxb9JFy3XRRN4OAilSeX.jpg",
       "release_date": "2026-07-29",
       "softcore": false,
       "video": false,
-      "vote_average": 7.852,
-      "vote_count": 2776,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/b9q9VmbXDvJmTziRqkwdEmFdwhr.jpg",
-      "genre_ids": [
-        878,
-        9648,
-        53
-      ],
-      "id": 1101383,
-      "title": "The End of Oak Street",
-      "original_language": "en",
-      "original_title": "The End of Oak Street",
-      "overview": "After a mysterious cosmic event rips Oak Street from suburbia and transports their neighborhood to someplace unknown, the Platt family soon discovers that their very survival depends on them sticking together as they navigate their now unrecognizable surroundings.",
-      "popularity": 514.5001,
-      "poster_path": "/3SifFCwwFzXdU1Ew0nA4Z92Bs15.jpg",
-      "release_date": "2026-08-12",
-      "softcore": false,
-      "video": false,
-      "vote_average": 6.965,
-      "vote_count": 1217,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/7GOW6jod9lLurW5utokAatxg7ql.jpg",
-      "genre_ids": [
-        35,
-        12,
-        10751
-      ],
-      "id": 1204680,
-      "title": "Coyote vs. Acme",
-      "original_language": "en",
-      "original_title": "Coyote vs. Acme",
-      "overview": "After Acme products fail him one too many times in his dogged pursuit of the Roadrunner, Wile E. Coyote decides to hire a billboard lawyer to sue the Acme Corporation.",
-      "popularity": 485.616,
-      "poster_path": "/kYDCl2y0VPvhT5eYWbMRInPoB03.jpg",
-      "release_date": "2026-08-20",
-      "softcore": false,
-      "video": false,
-      "vote_average": 7.55,
-      "vote_count": 454,
+      "vote_average": 7.86,
+      "vote_count": 2795,
       "media_type": "movie",
       "is4K": true
     },
@@ -1031,13 +985,59 @@
       "original_language": "en",
       "original_title": "Resident Evil",
       "overview": "Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.",
-      "popularity": 556.6877,
+      "popularity": 525.4108,
       "poster_path": "/i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg",
       "release_date": "2026-09-16",
       "softcore": false,
       "video": false,
-      "vote_average": 7.3,
-      "vote_count": 151,
+      "vote_average": 7.336,
+      "vote_count": 217,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/b9q9VmbXDvJmTziRqkwdEmFdwhr.jpg",
+      "genre_ids": [
+        878,
+        9648,
+        53
+      ],
+      "id": 1101383,
+      "title": "The End of Oak Street",
+      "original_language": "en",
+      "original_title": "The End of Oak Street",
+      "overview": "After a mysterious cosmic event rips Oak Street from suburbia and transports their neighborhood to someplace unknown, the Platt family soon discovers that their very survival depends on them sticking together as they navigate their now unrecognizable surroundings.",
+      "popularity": 566.3338,
+      "poster_path": "/fYXqpgPmHMphSF2W30GbTeJVIa5.jpg",
+      "release_date": "2026-08-12",
+      "softcore": false,
+      "video": false,
+      "vote_average": 6.998,
+      "vote_count": 1321,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/7GOW6jod9lLurW5utokAatxg7ql.jpg",
+      "genre_ids": [
+        35,
+        12,
+        10751
+      ],
+      "id": 1204680,
+      "title": "Coyote vs. Acme",
+      "original_language": "en",
+      "original_title": "Coyote vs. Acme",
+      "overview": "After Acme products fail him one too many times in his dogged pursuit of the Roadrunner, Wile E. Coyote decides to hire a billboard lawyer to sue the Acme Corporation.",
+      "popularity": 472.0999,
+      "poster_path": "/kYDCl2y0VPvhT5eYWbMRInPoB03.jpg",
+      "release_date": "2026-08-20",
+      "softcore": false,
+      "video": false,
+      "vote_average": 7.554,
+      "vote_count": 466,
       "media_type": "movie",
       "is4K": true
     },
@@ -1054,13 +1054,13 @@
       "original_language": "en",
       "original_title": "The Odyssey",
       "overview": "Odysseus, the legendary King of Ithaca, embarks on a long and perilous journey home following the Trojan War. Throughout his voyage, he is forced to confront the whims of gods, mythological monsters, and trials that stretch both his cunning and his humanity to the breaking point.",
-      "popularity": 377.4824,
+      "popularity": 387.2478,
       "poster_path": "/5rhTDKUhPYvpdQIijFIs5VoWsON.jpg",
       "release_date": "2026-07-15",
       "softcore": false,
       "video": false,
       "vote_average": 8.017,
-      "vote_count": 3795,
+      "vote_count": 3822,
       "media_type": "movie",
       "is4K": true
     },
@@ -1077,13 +1077,13 @@
       "original_language": "ko",
       "original_title": "군체",
       "overview": "Professor Se-jeong is thrust into a bloody nightmare when a rapidly mutating virus is released during a biotech conference causing authorities to seal the facility. Trapped inside with no escape, Se-jeong along with a small group of survivors must fight to stay alive while the infected undergo horrific transformations.",
-      "popularity": 351.7051,
+      "popularity": 357.8035,
       "poster_path": "/tN799oUR0f1gUKDYdMNrDaY7I51.jpg",
       "release_date": "2026-05-21",
       "softcore": false,
       "video": false,
-      "vote_average": 8.1,
-      "vote_count": 825,
+      "vote_average": 8.091,
+      "vote_count": 834,
       "media_type": "movie",
       "is4K": true
     },
@@ -1099,7 +1099,7 @@
       "original_language": "en",
       "original_title": "The Mongoose",
       "overview": "A falsely accused war hero with nothing to lose leads police on an epic televised cross-country car chase, helped by members of his former Special Forces Army battalion and closely monitored by a fascinated public rooting for his safe getaway.",
-      "popularity": 295.5531,
+      "popularity": 248.1471,
       "poster_path": "/eSS5mvSG84UUuvtbHel5Yu3Wik4.jpg",
       "release_date": "2026-10-29",
       "softcore": false,
@@ -1121,34 +1121,13 @@
       "original_language": "en",
       "original_title": "Mutiny",
       "overview": "After witnessing his billionaire boss' murder and being framed for the crime, Cole Reed boards a cargo ship on a one-man crusade to avenge his boss' death only to discover an international conspiracy.",
-      "popularity": 254.1106,
+      "popularity": 211.6718,
       "poster_path": "/pu2VxGlpGwffOx292w18b1tv96j.jpg",
       "release_date": "2026-08-19",
       "softcore": false,
       "video": false,
-      "vote_average": 6.4,
-      "vote_count": 418,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/yjK3ardrgdS8suZG8KMU82Q7U38.jpg",
-      "genre_ids": [
-        10749
-      ],
-      "id": 1285366,
-      "title": "Shape of My Heart",
-      "original_language": "ja",
-      "original_title": "愛のぬくもり",
-      "overview": "A romance about a man and a woman who, due to an unexpected event, end up switching bodies. Despite coming from completely different backgrounds and environments, the two try to overcome the various difficulties that arise from their body swap.",
-      "popularity": 201.1101,
-      "poster_path": "/3r0O6BW9USoZ9mteCVyNKMQriRL.jpg",
-      "release_date": "2024-07-06",
-      "softcore": false,
-      "video": false,
-      "vote_average": 5.688,
-      "vote_count": 8,
+      "vote_average": 6.43,
+      "vote_count": 424,
       "media_type": "movie",
       "is4K": true
     },
@@ -1166,13 +1145,34 @@
       "original_language": "en",
       "original_title": "Moana",
       "overview": "Teenage Moana answers the Ocean's call and, for the first time, voyages beyond the reef of her island of Motunui with infamous demigod Maui on an unforgettable journey to restore prosperity to her people.",
-      "popularity": 216.803,
+      "popularity": 213.0753,
       "poster_path": "/gaet1xQ2nxrG0V1Ep9T20ZMNEIC.jpg",
       "release_date": "2026-07-08",
       "softcore": false,
       "video": false,
-      "vote_average": 7.352,
-      "vote_count": 702,
+      "vote_average": 7.385,
+      "vote_count": 714,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/yjK3ardrgdS8suZG8KMU82Q7U38.jpg",
+      "genre_ids": [
+        10749
+      ],
+      "id": 1285366,
+      "title": "Shape of My Heart",
+      "original_language": "ja",
+      "original_title": "愛のぬくもり",
+      "overview": "A romance about a man and a woman who, due to an unexpected event, end up switching bodies. Despite coming from completely different backgrounds and environments, the two try to overcome the various difficulties that arise from their body swap.",
+      "popularity": 217.7424,
+      "poster_path": "/3r0O6BW9USoZ9mteCVyNKMQriRL.jpg",
+      "release_date": "2024-07-06",
+      "softcore": false,
+      "video": false,
+      "vote_average": 5.688,
+      "vote_count": 8,
       "media_type": "movie",
       "is4K": true
     },
@@ -1188,35 +1188,13 @@
       "original_language": "en",
       "original_title": "Zip Wire",
       "overview": "When her ground-breaking pharmaceutical discovery is stolen and partner murdered, researcher Amy must face her fear of heights to escape nefarious attackers, with the only path to salvation being a treacherous aerial runway. To outsmart the mysterious hostiles, she has to summon every ounce of courage to protect the world-changing scientific discovery — and herself — before it's too late.",
-      "popularity": 200.2283,
+      "popularity": 223.0139,
       "poster_path": "/cO7J0XSVKPlAjUCMWC7DVBn1Py2.jpg",
       "release_date": "2026-08-31",
       "softcore": false,
       "video": false,
       "vote_average": 7.6,
       "vote_count": 12,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/jzBWExXacS33rMQ2zLBrqIVweyG.jpg",
-      "genre_ids": [
-        53,
-        28
-      ],
-      "id": 1386315,
-      "title": "The Runner",
-      "original_language": "en",
-      "original_title": "The Runner",
-      "overview": "Maia Marten, a brilliant London lawyer, has her life shattered by a single call on her morning run: her son has been taken. To get him back, she must keep running, obey every ruthless command, and trust no one-each second a test of how far a mother will go to save her child.",
-      "popularity": 148.4007,
-      "poster_path": "/uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg",
-      "release_date": "2026-09-03",
-      "softcore": false,
-      "video": false,
-      "vote_average": 6.762,
-      "vote_count": 522,
       "media_type": "movie",
       "is4K": true
     },
@@ -1232,13 +1210,13 @@
       "original_language": "es",
       "original_title": "Enfrentados: Marfil",
       "overview": "Marfil, daughter of a powerful Spanish businessman, sees her life in New York turned upside down when she is kidnapped and released without explanation. Her father hires Sebastian Moore as bodyguard and, forced to spend every minute together, an inevitable attraction ignites in a world where nothing is as it seems.",
-      "popularity": 167.0017,
+      "popularity": 164.1372,
       "poster_path": "/6rpvddXbaQPOi0fB2HKWbZ3uUSg.jpg",
       "release_date": "2026-09-09",
       "softcore": false,
       "video": false,
       "vote_average": 6.629,
-      "vote_count": 97,
+      "vote_count": 105,
       "media_type": "movie",
       "is4K": true
     },
@@ -1256,13 +1234,57 @@
       "original_language": "en",
       "original_title": "Toy Story 5",
       "overview": "When Bonnie receives a Lilypad tablet as a gift and becomes obsessed, Buzz, Woody, Jessie and the rest of the gang's jobs become exponentially harder when they have to go head to head with the all-new threat to playtime.",
-      "popularity": 152.0103,
+      "popularity": 159.0305,
       "poster_path": "/sfQtVlIHljToOwYjhe21KPGzZWK.jpg",
       "release_date": "2026-06-17",
       "softcore": false,
       "video": false,
-      "vote_average": 8.357,
-      "vote_count": 2199,
+      "vote_average": 8.362,
+      "vote_count": 2223,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/jzBWExXacS33rMQ2zLBrqIVweyG.jpg",
+      "genre_ids": [
+        53,
+        28
+      ],
+      "id": 1386315,
+      "title": "The Runner",
+      "original_language": "en",
+      "original_title": "The Runner",
+      "overview": "Maia Marten, a brilliant London lawyer, has her life shattered by a single call on her morning run: her son has been taken. To get him back, she must keep running, obey every ruthless command, and trust no one-each second a test of how far a mother will go to save her child.",
+      "popularity": 149.7179,
+      "poster_path": "/uxCaBoYXsDC4A0SqTm3SISj0OwK.jpg",
+      "release_date": "2026-09-03",
+      "softcore": false,
+      "video": false,
+      "vote_average": 6.768,
+      "vote_count": 534,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/rZfmzpixLKLR3Hg2u0WgC7XLFl8.jpg",
+      "genre_ids": [
+        27,
+        53
+      ],
+      "id": 1339713,
+      "title": "Obsession",
+      "original_language": "en",
+      "original_title": "Obsession",
+      "overview": "After breaking the mysterious \"One Wish Willow\" to win his crush's heart, a hopeless romantic finds himself getting exactly what he asked for but soon discovers that some desires come at a dark, sinister price.",
+      "popularity": 147.6875,
+      "poster_path": "/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg",
+      "release_date": "2026-05-13",
+      "softcore": false,
+      "video": false,
+      "vote_average": 8.193,
+      "vote_count": 5636,
       "media_type": "movie",
       "is4K": true
     },
@@ -1279,103 +1301,13 @@
       "original_language": "ta",
       "original_title": "விஸ்வநாத் & சன்ஸ்",
       "overview": "A celebrated Olympian shooter travels to America looking for a donor to help his sick child — but unexpected romance complicates his search.",
-      "popularity": 132.9726,
+      "popularity": 120.5753,
       "poster_path": "/mLsvCffzpxxDwC7yVLJSLLjgzoq.jpg",
       "release_date": "2026-08-14",
       "softcore": false,
       "video": false,
-      "vote_average": 7.2,
+      "vote_average": 7.241,
       "vote_count": 26,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/rZfmzpixLKLR3Hg2u0WgC7XLFl8.jpg",
-      "genre_ids": [
-        27,
-        53
-      ],
-      "id": 1339713,
-      "title": "Obsession",
-      "original_language": "en",
-      "original_title": "Obsession",
-      "overview": "After breaking the mysterious \"One Wish Willow\" to win his crush's heart, a hopeless romantic finds himself getting exactly what he asked for but soon discovers that some desires come at a dark, sinister price.",
-      "popularity": 142.7581,
-      "poster_path": "/bRwnj8WEKBCvmfeUNOukJPwB43K.jpg",
-      "release_date": "2026-05-13",
-      "softcore": false,
-      "video": false,
-      "vote_average": 8.192,
-      "vote_count": 5613,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/g7Ccid5kuD7A8hXWlsQiNfwOxaD.jpg",
-      "genre_ids": [
-        28,
-        35
-      ],
-      "id": 1137844,
-      "title": "Mayday",
-      "original_language": "en",
-      "original_title": "Mayday",
-      "overview": "When a U.S. Navy pilot on a top-secret mission during the Cold War gets trapped behind enemy lines, his only chance at survival is to form an alliance with an eccentric ex-KGB agent.",
-      "popularity": 119.6787,
-      "poster_path": "/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg",
-      "release_date": "2026-09-03",
-      "softcore": false,
-      "video": false,
-      "vote_average": 8.009,
-      "vote_count": 690,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/tK3QdOOrX4qEkmSlvrmc8cK7iOU.jpg",
-      "genre_ids": [
-        27,
-        35,
-        53
-      ],
-      "id": 1393326,
-      "title": "Ghost in the Cell",
-      "original_language": "id",
-      "original_title": "Ghost in the Cell",
-      "overview": "In a notorious prison, an invisible force begins killing inmates brutally, compelling enemy gangs and corrupt guards to work together as they try to survive the mounting bloodshed.",
-      "popularity": 116.013,
-      "poster_path": "/zxcMdx0w5Zmg8yZuuiS7CJ8vOea.jpg",
-      "release_date": "2026-04-16",
-      "softcore": false,
-      "video": false,
-      "vote_average": 7.201,
-      "vote_count": 67,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/z7lZgL5tzefTfhyRtouThFhsuUS.jpg",
-      "genre_ids": [
-        28,
-        878,
-        53
-      ],
-      "id": 1323244,
-      "title": "Rage of Stars",
-      "original_language": "en",
-      "original_title": "Rage of Stars",
-      "overview": "A story about a woman from the International Special Forces Unit, who has a premonition about the impending end of humanity.",
-      "popularity": 123.0926,
-      "poster_path": "/oLld47ZT1I3iecM3OWhIphohQUJ.jpg",
-      "release_date": "2026-08-06",
-      "softcore": false,
-      "video": false,
-      "vote_average": 6.628,
-      "vote_count": 156,
       "media_type": "movie",
       "is4K": true
     },
@@ -1392,13 +1324,83 @@
       "original_language": "en",
       "original_title": "Pinocchio: Unstrung",
       "overview": "Influenced by a sinister Cricket and created by Geppetto, Pinocchio launches a violent crusade to carve himself into a real boy like his brother James, one piece at a time.",
-      "popularity": 130.9433,
+      "popularity": 142.8626,
       "poster_path": "/eUJXk3bTvLBi5Zcb0BCedZU7lVL.jpg",
       "release_date": "2026-07-22",
       "softcore": false,
       "video": false,
-      "vote_average": 6.625,
-      "vote_count": 104,
+      "vote_average": 6.6,
+      "vote_count": 105,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/kkcwhgSFd81QDlXo8ytrpHPQjhy.jpg",
+      "genre_ids": [
+        12,
+        16,
+        35,
+        10751,
+        14
+      ],
+      "id": 1315772,
+      "title": "Minions & Monsters",
+      "original_language": "en",
+      "original_title": "Minions & Monsters",
+      "overview": "This is the rambunctious, ridiculous and totally true story of how the Minions conquered Hollywood, became movie stars, lost everything, unleashed monsters onto the world and then banded together to try and save the planet from the mayhem they had just created.",
+      "popularity": 132.5792,
+      "poster_path": "/4LwvU9SZc8QQzW1X1FAPhNbXnEU.jpg",
+      "release_date": "2026-06-24",
+      "softcore": false,
+      "video": false,
+      "vote_average": 7.556,
+      "vote_count": 1149,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/vP7YFt9pP8NPCg4PMBAHO5ILdrQ.jpg",
+      "genre_ids": [
+        28,
+        53
+      ],
+      "id": 44980,
+      "title": "Zero Woman 2",
+      "original_language": "ja",
+      "original_title": "Zero WOMAN ＩＩ　警視庁０課の女",
+      "overview": "When a valuable suitcase is stolen, the mob, petty criminals, and a beautiful agent from the Elite Zero division are pulled into a battle to settle the score.",
+      "popularity": 131.622,
+      "poster_path": "/sQHeDjwmBQba8E51Mkp5dvgkzeZ.jpg",
+      "release_date": "1995-09-05",
+      "softcore": false,
+      "video": false,
+      "vote_average": 5,
+      "vote_count": 8,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/z7lZgL5tzefTfhyRtouThFhsuUS.jpg",
+      "genre_ids": [
+        28,
+        878,
+        53
+      ],
+      "id": 1323244,
+      "title": "Rage of Stars",
+      "original_language": "en",
+      "original_title": "Rage of Stars",
+      "overview": "A story about a woman from the International Special Forces Unit, who has a premonition about the impending end of humanity.",
+      "popularity": 130.7482,
+      "poster_path": "/oLld47ZT1I3iecM3OWhIphohQUJ.jpg",
+      "release_date": "2026-08-06",
+      "softcore": false,
+      "video": false,
+      "vote_average": 6.611,
+      "vote_count": 157,
       "media_type": "movie",
       "is4K": true
     }
@@ -1417,13 +1419,83 @@
       "original_language": "ko",
       "original_name": "스캔들",
       "overview": "In Joseon, a secret proposal ignites hidden desires in a gifted noblewoman, a famed lover and an unsuspecting lady caught in their dangerous game.",
-      "popularity": 4764.8935,
-      "poster_path": "/pJsIzlTjmx07ilwEkl0cglrMVa1.jpg",
+      "popularity": 3427.0312,
+      "poster_path": "/4TU0PcHBIl0wPW5B6aVRGExOnHE.jpg",
       "first_air_date": "2026-09-18",
       "softcore": false,
       "name": "The Scandal",
-      "vote_average": 6.6,
-      "vote_count": 5,
+      "vote_average": 6.5,
+      "vote_count": 8,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/qFfWFwfaEHzDLWLuttWiYq7Poy2.jpg",
+      "genre_ids": [
+        10767
+      ],
+      "id": 2261,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Tonight Show Starring Johnny Carson",
+      "overview": "The Tonight Show Starring Johnny Carson is a talk show hosted by Johnny Carson under The Tonight Show franchise from 1962 to 1992. It originally aired during late-night. For its first ten years, Carson's Tonight Show was based in New York City with occasional trips to Burbank, California; in May 1972, the show moved permanently to Burbank, California. In 2002, The Tonight Show Starring Johnny Carson was ranked #12 on TV Guide's 50 Greatest TV Shows of All Time.",
+      "popularity": 785.0571,
+      "poster_path": "/uSvET5YUvHNDIeoCpErrbSmasFb.jpg",
+      "first_air_date": "1962-10-01",
+      "softcore": false,
+      "name": "The Tonight Show Starring Johnny Carson",
+      "vote_average": 7.536,
+      "vote_count": 96,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/gMMnf8VRg3Z98WaFmOLr9Jk8pIs.jpg",
+      "genre_ids": [
+        35,
+        10767
+      ],
+      "id": 63770,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Late Show with Stephen Colbert",
+      "overview": "Stephen Colbert brings his signature satire and comedy to The Late Show with Stephen Colbert, the #1 show in late night, where he talks with an eclectic mix of guests about what is new and relevant in the worlds of politics, entertainment, business, music, technology, and more. Featuring bandleader Jon Batiste with his band Stay Human, the Emmy Award-nominated show is broadcast from the historic Ed Sullivan Theater.",
+      "popularity": 693.6072,
+      "poster_path": "/9jkThAGYj2yp8jsS6Nriy5mzKFT.jpg",
+      "first_air_date": "2015-09-08",
+      "softcore": false,
+      "name": "The Late Show with Stephen Colbert",
+      "vote_average": 6.082,
+      "vote_count": 364,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/amtOltTVcK9vQtL1iQS6p3LBi05.jpg",
+      "genre_ids": [
+        10767
+      ],
+      "id": 62223,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Late Late Show with James Corden",
+      "overview": "Once Craig Ferguson retires, James Corden will be taking over The Late Late Show. The show is a late night talk show that interviews celebrities and has its own bits. And of course, it's all hosted by James Corden.",
+      "popularity": 467.882,
+      "poster_path": "/qPmVoG8G9tc1nN8ZwGV2zYcknit.jpg",
+      "first_air_date": "2015-03-23",
+      "softcore": false,
+      "name": "The Late Late Show with James Corden",
+      "vote_average": 5.149,
+      "vote_count": 148,
       "media_type": "tv",
       "is4K": true
     },
@@ -1441,13 +1513,132 @@
       "original_language": "en",
       "original_name": "Reacher",
       "overview": "Jack Reacher, a veteran military police investigator, has just recently entered civilian life. Reacher is a drifter, carrying no phone and the barest of essentials as he travels the country and explores the nation he once served.",
-      "popularity": 924.8967,
+      "popularity": 918.352,
       "poster_path": "/f1VCQIG2iCyOookdgOzwtUpwWC0.jpg",
       "first_air_date": "2022-02-03",
       "softcore": false,
       "name": "Reacher",
-      "vote_average": 8.125,
-      "vote_count": 3363,
+      "vote_average": 8.127,
+      "vote_count": 3371,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/tc7canPSAn2X14hYi6Rl3gZm1o4.jpg",
+      "genre_ids": [
+        80,
+        18
+      ],
+      "id": 549,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Law & Order",
+      "overview": "In cases ripped from the headlines, police investigate serious and often deadly crimes, weighing the evidence and questioning the suspects until someone is taken into custody. The district attorney's office then builds a case to convict the perpetrator by proving the person guilty beyond a reasonable doubt. Working together, these expert teams navigate all sides of the complex criminal justice system to make New York a safer place.",
+      "popularity": 524.6687,
+      "poster_path": "/haJ9eHytVO3H3JooMJG1DiWwDNm.jpg",
+      "first_air_date": "1990-09-13",
+      "softcore": false,
+      "name": "Law & Order",
+      "vote_average": 7.278,
+      "vote_count": 724,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/hINekSpbcBxjnjGqmIm6I4bz2ab.jpg",
+      "genre_ids": [
+        10767,
+        35
+      ],
+      "id": 22980,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Watch What Happens Live with Andy Cohen",
+      "overview": "Bravo network executive Andy Cohen discusses pop culture topics with celebrities and reality show personalities.",
+      "popularity": 682.0594,
+      "poster_path": "/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg",
+      "first_air_date": "2009-07-16",
+      "softcore": false,
+      "name": "Watch What Happens Live with Andy Cohen",
+      "vote_average": 4.916,
+      "vote_count": 95,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/m0bV3qBiJBBlpFaaKjwHo13MVjm.jpg",
+      "genre_ids": [
+        35,
+        10767
+      ],
+      "id": 14981,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Late Late Show with Craig Ferguson",
+      "overview": "The Late Late Show with Craig Ferguson is an American late-night talk show hosted by Scottish American comedian Craig Ferguson, who is the third regular host of the Late Late Show franchise. It follows Late Show with David Letterman in the CBS late-night lineup, airing weekdays in the US at 12:37 a.m. It is taped in front of a live studio audience from Monday to Friday at CBS Television City in Los Angeles, California, directly above the Bob Barker Studio. It is produced by David Letterman's production company Worldwide Pants Incorporated and CBS Television Studios.\n\nSince becoming host on January 3, 2005, after Craig Kilborn and Tom Snyder, Ferguson has achieved the highest ratings since the show's inception in 1995. While the majority of the episodes focus on comedy, Ferguson has also addressed difficult subject matter, such as the deaths of his parents, and undertaken serious interviews, such as one with Desmond Tutu, which earned the show a 2009 Peabody Award.",
+      "popularity": 300.3556,
+      "poster_path": "/gGC7zSDgG0FY0MbM1pjfhTCWQBI.jpg",
+      "first_air_date": "2005-01-03",
+      "softcore": false,
+      "name": "The Late Late Show with Craig Ferguson",
+      "vote_average": 6.835,
+      "vote_count": 121,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/iixxhk3ycXmFqBn616pAsC3lu53.jpg",
+      "genre_ids": [
+        16,
+        35
+      ],
+      "id": 1433,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "American Dad!",
+      "overview": "The series focuses on an eccentric motley crew that is the Smith family and their three housemates: Father, husband, and breadwinner Stan Smith; his better half housewife, Francine Smith; their college-aged daughter, Hayley Smith; and their high-school-aged son, Steve Smith. Outside of the Smith family, there are three additional main characters, including Hayley's boyfriend turned husband, Jeff Fischer; the family's man-in-a-goldfish-body pet, Klaus; and most notably the family's zany alien, Roger, who is \"full of masquerades, brazenness, and shocking antics.\"",
+      "popularity": 404.975,
+      "poster_path": "/eb9sH2am9IUSQ8GhXTNAVoujk8W.jpg",
+      "first_air_date": "2005-02-06",
+      "softcore": false,
+      "name": "American Dad!",
+      "vote_average": 7.018,
+      "vote_count": 2446,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/jWXrQstj7p3Wl5MfYWY6IHqRpDb.jpg",
+      "genre_ids": [
+        10763
+      ],
+      "id": 94722,
+      "origin_country": [
+        "DE"
+      ],
+      "original_language": "de",
+      "original_name": "Tagesschau",
+      "overview": "German daily news program, the oldest still existing program on German television.",
+      "popularity": 450.7828,
+      "poster_path": "/7dFZJ2ZJJdcmkp05B9NWlqTJ5tq.jpg",
+      "first_air_date": "1952-12-26",
+      "softcore": false,
+      "name": "Tagesschau",
+      "vote_average": 6.768,
+      "vote_count": 256,
       "media_type": "tv",
       "is4K": true
     },
@@ -1466,37 +1657,13 @@
       "original_language": "cn",
       "original_name": "愛·回家之開心速遞",
       "overview": "Hung Sue Gan starting from the bottom, established his own logistics company, which is now running smoothly. His only concern now are his three daughters. His eldest daughter has immigrated overseas. His second daughter Hung Yeuk Shui has reached the marriageable age, but has no hopes for marriage anytime soon. She is constantly bickering with her younger sister Hung Sum Yue, who is an honour student, over trivial matters, causing their father to not know whether to laugh or cry. Hung Sue Yan, Hung Sue Gan's brother, moves in with the family, temporarily ending his life as a nomadic photographer. He joins Hung Yeuk Shui's company and encounters Ko Pak Fei, the director of an online shop. The two appear to be former lovers, making for lots of laughter. Since Hung Sue Yan moved in, a series of strange events have occurred in the family. Upon investigation, the source is traced to Lung Ging Fung, a promising young man who is the son of department store mogul Lung Gam Wai.",
-      "popularity": 559.6888,
+      "popularity": 441.8389,
       "poster_path": "/lgD4j9gUGmMckZpWWRJjorWqGVT.jpg",
       "first_air_date": "2017-02-20",
       "softcore": false,
       "name": "Come Home Love: Lo and Behold",
       "vote_average": 5.435,
       "vote_count": 46,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/hINekSpbcBxjnjGqmIm6I4bz2ab.jpg",
-      "genre_ids": [
-        10767,
-        35
-      ],
-      "id": 22980,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Watch What Happens Live with Andy Cohen",
-      "overview": "Bravo network executive Andy Cohen discusses pop culture topics with celebrities and reality show personalities.",
-      "popularity": 639.8308,
-      "poster_path": "/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg",
-      "first_air_date": "2009-07-16",
-      "softcore": false,
-      "name": "Watch What Happens Live with Andy Cohen",
-      "vote_average": 4.916,
-      "vote_count": 95,
       "media_type": "tv",
       "is4K": true
     },
@@ -1514,13 +1681,109 @@
       "original_language": "en",
       "original_name": "The Tonight Show Starring Jimmy Fallon",
       "overview": "After Jay Leno's second retirement from the program, Jimmy Fallon stepped in as his permanent replacement. After 42 years in Los Angeles the program was brought back to New York.",
-      "popularity": 519.7983,
+      "popularity": 458.2957,
       "poster_path": "/1N4o5PmmqhlVDrcdJ2RlCFWbLGX.jpg",
       "first_air_date": "2014-02-17",
       "softcore": false,
       "name": "The Tonight Show Starring Jimmy Fallon",
       "vote_average": 5.8,
       "vote_count": 389,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/4NBYDOnEjAzyuP7CMkD5s7fs44K.jpg",
+      "genre_ids": [
+        18,
+        10768
+      ],
+      "id": 113962,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Lioness",
+      "overview": "Cruz Manuelos, a rough-around-the-edges but passionate young Marine, is recruited to join the CIA's Lioness Engagement Team to help bring down a terrorist organization from within. Joe, the station chief of the Lioness program, is tasked with training, managing and leading her female undercover operatives.",
+      "popularity": 497.8167,
+      "poster_path": "/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
+      "first_air_date": "2023-07-23",
+      "softcore": false,
+      "name": "Lioness",
+      "vote_average": 8.216,
+      "vote_count": 1579,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/ncQ8D4j8GSuL9CzncLEXnhHDxHy.jpg",
+      "genre_ids": [
+        16,
+        35
+      ],
+      "id": 456,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Simpsons",
+      "overview": "Set in Springfield, the average American town, the show focuses on the antics and everyday adventures of the Simpson family; Homer, Marge, Bart, Lisa and Maggie, as well as a virtual cast of thousands. Since the beginning, the series has been a pop culture icon, attracting hundreds of celebrities to guest star. The show has also made name for itself in its fearless satirical take on politics, media and American life in general.",
+      "popularity": 396.9325,
+      "poster_path": "/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg",
+      "first_air_date": "1989-12-17",
+      "softcore": false,
+      "name": "The Simpsons",
+      "vote_average": 8.022,
+      "vote_count": 11020,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/dfX2UaHVE5c7kLBFbgmEZJuy4Ev.jpg",
+      "genre_ids": [
+        10767,
+        35
+      ],
+      "id": 61818,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Late Night with Seth Meyers",
+      "overview": "Seth Meyers, who is \"Saturday Night Live's\" longest serving anchor on the show's wildly popular \"Weekend Update,\" takes over as host of NBC's \"Late Night\" — home to A-list celebrity guests, memorable comedy and the best in musical talent. As the Emmy Award-winning head writer for \"SNL,\" Meyers has established a reputation for sharp wit and perfectly timed comedy, and has gained fame for his spot-on jokes and satire. Meyers takes his departure from \"SNL\" to his new post at \"Late Night,\" as Jimmy Fallon moves to \"The Tonight Show\".",
+      "popularity": 420.5538,
+      "poster_path": "/u8VruEGv7mtyJihVn2CSA1u90pk.jpg",
+      "first_air_date": "2014-02-25",
+      "softcore": false,
+      "name": "Late Night with Seth Meyers",
+      "vote_average": 5.112,
+      "vote_count": 134,
+      "media_type": "tv",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/kuxGPrAiyvIRjysEK97Bzr9248j.jpg",
+      "genre_ids": [
+        10751,
+        35
+      ],
+      "id": 26663,
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "What's My Line?",
+      "overview": "Four panelists must determine guests' occupations - and, in the case of famous guests, while blindfolded, their identity - by asking only \"yes\" or \"no\" questions.",
+      "popularity": 206.4736,
+      "poster_path": "/A9T7xSQFnlxFgZkqC4lmHYPXhq4.jpg",
+      "first_air_date": "1950-02-02",
+      "softcore": false,
+      "name": "What's My Line?",
+      "vote_average": 7,
+      "vote_count": 29,
       "media_type": "tv",
       "is4K": true
     },
@@ -1539,180 +1802,61 @@
       "original_language": "en",
       "original_name": "The Mentalist",
       "overview": "Patrick Jane, a former celebrity psychic medium, uses his razor sharp skills of observation and expertise at \"reading\" people to solve serious crimes with the California Bureau of Investigation.",
-      "popularity": 434.3973,
+      "popularity": 431.5094,
       "poster_path": "/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg",
       "first_air_date": "2008-09-23",
       "softcore": false,
       "name": "The Mentalist",
       "vote_average": 8.4,
-      "vote_count": 4741,
+      "vote_count": 4742,
       "media_type": "tv",
       "is4K": true
     },
     {
       "adult": false,
-      "backdrop_path": "/kCd0rmnNwCd3sgupO9DqSi9aHa0.jpg",
+      "backdrop_path": "/bk7QdAIUqkGpZO5GUX4AMB2AZIB.jpg",
       "genre_ids": [
         10767
       ],
-      "id": 65270,
-      "origin_country": [
-        "KR"
-      ],
-      "original_language": "ko",
-      "original_name": "라디오스타",
-      "overview": "“Radio Star” is a South Korean music talk show where the guests and hosts talk openly and intimately about their lives, their pasts and their work. It is part of Munhwa Broadcasting Corporation's \"Golden Fishery\" programming block.",
-      "popularity": 357.0953,
-      "poster_path": "/uRUZDsvUfIP3JUEgOC8ReBlQQUU.jpg",
-      "first_air_date": "2007-05-30",
-      "softcore": false,
-      "name": "Radio Star",
-      "vote_average": 5.5,
-      "vote_count": 6,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/tNi2aJPdCKfielGYzIi3IKxStz9.jpg",
-      "genre_ids": [
-        10762,
-        35
-      ],
-      "id": 502,
+      "id": 82873,
       "origin_country": [
         "US"
       ],
       "original_language": "en",
-      "original_name": "Sesame Street",
-      "overview": "On a special inner city street, the inhabitants—human and muppet—teach preschoolers basic educational and social concepts using comedy, cartoons, games, and songs.",
-      "popularity": 327.7646,
-      "poster_path": "/14k9BfZ2p4rQBMeJ5crKTfUZVwD.jpg",
-      "first_air_date": "1969-11-10",
+      "original_name": "The Kelly Clarkson Show",
+      "overview": "Kelly Clarkson presents the biggest newsmakers and names in film, television and music; as well as emerging new talent and everyday people who are beacons of hope in their communities.",
+      "popularity": 327.8772,
+      "poster_path": "/sBix25bie9UQFzbarN51DpFO5ky.jpg",
+      "first_air_date": "2019-09-09",
       "softcore": false,
-      "name": "Sesame Street",
-      "vote_average": 7.1,
-      "vote_count": 293,
+      "name": "The Kelly Clarkson Show",
+      "vote_average": 6.3,
+      "vote_count": 72,
       "media_type": "tv",
       "is4K": true
     },
     {
       "adult": false,
-      "backdrop_path": "/tc7canPSAn2X14hYi6Rl3gZm1o4.jpg",
+      "backdrop_path": "/tUtXfyVy54BY7eJnRtI8Xnmr1ZL.jpg",
       "genre_ids": [
         80,
-        18
-      ],
-      "id": 549,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Law & Order",
-      "overview": "In cases ripped from the headlines, police investigate serious and often deadly crimes, weighing the evidence and questioning the suspects until someone is taken into custody. The district attorney's office then builds a case to convict the perpetrator by proving the person guilty beyond a reasonable doubt. Working together, these expert teams navigate all sides of the complex criminal justice system to make New York a safer place.",
-      "popularity": 692.9698,
-      "poster_path": "/haJ9eHytVO3H3JooMJG1DiWwDNm.jpg",
-      "first_air_date": "1990-09-13",
-      "softcore": false,
-      "name": "Law & Order",
-      "vote_average": 7.3,
-      "vote_count": 722,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": null,
-      "genre_ids": [
-        10764
-      ],
-      "id": 31472,
-      "origin_country": [
-        "CL"
-      ],
-      "original_language": "es",
-      "original_name": "Pelotón",
-      "overview": "Pelotón is a Chilean reality show on National Television of Chile in which the participants undergo an intense regime of military training. The winner receives 50 million pesos. The first season aired January 2 — May 5, 2007, and the second season ran from October 2, 2007 to March 11, 2008. The third season were premiere in July 2009 and the contestants were Chilean celebrities. The third and 4th season were shooting back to back, and like last season the majority of participants were celebrities.",
-      "popularity": 364.7425,
-      "poster_path": "/2rTGn2CBavgioMVorVdZHgmdA2n.jpg",
-      "first_air_date": "2007-01-02",
-      "softcore": false,
-      "name": "Pelotón",
-      "vote_average": 9,
-      "vote_count": 1,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/4NBYDOnEjAzyuP7CMkD5s7fs44K.jpg",
-      "genre_ids": [
         18,
-        10768
+        9648
       ],
-      "id": 113962,
+      "id": 4057,
       "origin_country": [
         "US"
       ],
       "original_language": "en",
-      "original_name": "Lioness",
-      "overview": "Cruz Manuelos, a rough-around-the-edges but passionate young Marine, is recruited to join the CIA's Lioness Engagement Team to help bring down a terrorist organization from within. Joe, the station chief of the Lioness program, is tasked with training, managing and leading her female undercover operatives.",
-      "popularity": 385.7829,
-      "poster_path": "/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
-      "first_air_date": "2023-07-23",
+      "original_name": "Criminal Minds",
+      "overview": "An elite team of FBI profilers analyze the country's most twisted criminal minds, anticipating their next moves before they strike again. The Behavioral Analysis Unit's most experienced agent is David Rossi, a founding member of the BAU who returns to help the team solve new cases.",
+      "popularity": 313.6539,
+      "poster_path": "/hWSb4UnIjlTvnvrP98NbFSO60HA.jpg",
+      "first_air_date": "2005-09-22",
       "softcore": false,
-      "name": "Lioness",
-      "vote_average": 8.2,
-      "vote_count": 1570,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/a8a8z4aJr40zYgRMfmSESppX2eO.jpg",
-      "genre_ids": [
-        10764,
-        35
-      ],
-      "id": 70672,
-      "origin_country": [
-        "KR"
-      ],
-      "original_language": "ko",
-      "original_name": "아는 형님",
-      "overview": "Male celebs play make-believe as high schoolers, welcoming star transfer students every week and engaging in battles of witty humor and slapstick.",
-      "popularity": 322.2193,
-      "poster_path": "/2jIi55JtYKJTL1km8qHMuUilOWo.jpg",
-      "first_air_date": "2015-12-05",
-      "softcore": false,
-      "name": "Men on a Mission",
-      "vote_average": 7.4,
-      "vote_count": 42,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/usLRh1bcbL0Q9X8zf6rL4OV1qrA.jpg",
-      "genre_ids": [
-        10759,
-        10765,
-        18
-      ],
-      "id": 2661,
-      "origin_country": [
-        "JP"
-      ],
-      "original_language": "ja",
-      "original_name": "仮面ライダー",
-      "overview": "Takeshi Hongo is a promising young man with a passion for motorcycle racing. However, his dreams are suddenly ruined when he gets kidnapped by Shocker, the evil secret organization planning to dominate the world. After being remodeled into a cyborg, Takeshi escapes and swears to protect the world from the inhuman monsters.",
-      "popularity": 316.5316,
-      "poster_path": "/2DIBDFHiKQawz4WPsYekl9DHwyA.jpg",
-      "first_air_date": "1971-04-03",
-      "softcore": false,
-      "name": "Kamen Rider",
-      "vote_average": 6.389,
-      "vote_count": 108,
+      "name": "Criminal Minds",
+      "vote_average": 8.296,
+      "vote_count": 4174,
       "media_type": "tv",
       "is4K": true
     },
@@ -1731,157 +1875,13 @@
       "original_language": "en",
       "original_name": "Law & Order: Special Victims Unit",
       "overview": "In the criminal justice system, sexually-based offenses are considered especially heinous. In New York City, the dedicated detectives who investigate these vicious felonies are members of an elite squad known as the Special Victims Unit. These are their stories.",
-      "popularity": 406.2267,
+      "popularity": 429.2562,
       "poster_path": "/iofokHZoUB4Qhik4PflvJl8TT6a.jpg",
       "first_air_date": "1999-09-20",
       "softcore": false,
       "name": "Law & Order: Special Victims Unit",
       "vote_average": 7.959,
       "vote_count": 4355,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/l7wShoIdIUwaDIbsHno9pO5MZXT.jpg",
-      "genre_ids": [
-        16,
-        35
-      ],
-      "id": 1434,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Family Guy",
-      "overview": "Sick, twisted, politically incorrect and Freakin' Sweet animated series featuring the adventures of the dysfunctional Griffin family. Bumbling Peter and long-suffering Lois have three kids. Stewie (a brilliant but sadistic baby bent on killing his mother and taking over the world), Meg (the oldest, and is the most unpopular girl in town) and Chris (the middle kid, he's not very bright but has a passion for movies). The final member of the family is Brian - a talking dog and much more than a pet, he keeps Stewie in check whilst sipping Martinis and sorting through his own life issues.",
-      "popularity": 399.222,
-      "poster_path": "/3PFsEuAiyLkWsP4GG6dIV37Q6gu.jpg",
-      "first_air_date": "1999-01-31",
-      "softcore": false,
-      "name": "Family Guy",
-      "vote_average": 7.41,
-      "vote_count": 5116,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/c1aBrG5s5xFa6Tbnihu2Hhj4t2q.jpg",
-      "genre_ids": [
-        80,
-        18,
-        10759
-      ],
-      "id": 4614,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "NCIS",
-      "overview": "From murder and espionage to terrorism and stolen submarines, a team of special agents investigates any crime that has any connection to Navy and Marine Corps personnel, regardless of rank or position.",
-      "popularity": 304.8737,
-      "poster_path": "/mBcu8d6x6zB1el3MPNl7cZQEQ31.jpg",
-      "first_air_date": "2003-09-23",
-      "softcore": false,
-      "name": "NCIS",
-      "vote_average": 7.6,
-      "vote_count": 2572,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/ncQ8D4j8GSuL9CzncLEXnhHDxHy.jpg",
-      "genre_ids": [
-        16,
-        35
-      ],
-      "id": 456,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "The Simpsons",
-      "overview": "Set in Springfield, the average American town, the show focuses on the antics and everyday adventures of the Simpson family; Homer, Marge, Bart, Lisa and Maggie, as well as a virtual cast of thousands. Since the beginning, the series has been a pop culture icon, attracting hundreds of celebrities to guest star. The show has also made name for itself in its fearless satirical take on politics, media and American life in general.",
-      "popularity": 457.0739,
-      "poster_path": "/uWpG7GqfKGQqX4YMAo3nv5OrglV.jpg",
-      "first_air_date": "1989-12-17",
-      "softcore": false,
-      "name": "The Simpsons",
-      "vote_average": 8.023,
-      "vote_count": 11016,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/kGxPVyra9Lvf5tPmTXnMEBpwOip.jpg",
-      "genre_ids": [
-        18,
-        10766
-      ],
-      "id": 45789,
-      "origin_country": [
-        "DE"
-      ],
-      "original_language": "de",
-      "original_name": "Sturm der Liebe",
-      "overview": "These are the stories of relationships taking place in the fictional five-star hotel Fürstenhof, located in Feldkirchen-Westerham near Rosenheim with the plot revolving around members of the family room area, the hotel owners, and employees.",
-      "popularity": 310.7683,
-      "poster_path": "/jfFNydakwvbeACEwSd2Gh8UWtba.jpg",
-      "first_air_date": "2005-09-26",
-      "softcore": false,
-      "name": "Storm of Love",
-      "vote_average": 6,
-      "vote_count": 39,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/qFfWFwfaEHzDLWLuttWiYq7Poy2.jpg",
-      "genre_ids": [
-        10767
-      ],
-      "id": 2261,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "The Tonight Show Starring Johnny Carson",
-      "overview": "The Tonight Show Starring Johnny Carson is a talk show hosted by Johnny Carson under The Tonight Show franchise from 1962 to 1992. It originally aired during late-night. For its first ten years, Carson's Tonight Show was based in New York City with occasional trips to Burbank, California; in May 1972, the show moved permanently to Burbank, California. In 2002, The Tonight Show Starring Johnny Carson was ranked #12 on TV Guide's 50 Greatest TV Shows of All Time.",
-      "popularity": 1518.53,
-      "poster_path": "/uSvET5YUvHNDIeoCpErrbSmasFb.jpg",
-      "first_air_date": "1962-10-01",
-      "softcore": false,
-      "name": "The Tonight Show Starring Johnny Carson",
-      "vote_average": 7.536,
-      "vote_count": 96,
-      "media_type": "tv",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
-      "genre_ids": [
-        18,
-        80
-      ],
-      "id": 1396,
-      "origin_country": [
-        "US"
-      ],
-      "original_language": "en",
-      "original_name": "Breaking Bad",
-      "overview": "Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
-      "popularity": 249.9091,
-      "poster_path": "/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg",
-      "first_air_date": "2008-01-20",
-      "softcore": false,
-      "name": "Breaking Bad",
-      "vote_average": 8.951,
-      "vote_count": 18656,
       "media_type": "tv",
       "is4K": true
     }
@@ -1901,13 +1901,13 @@
       "original_language": "en",
       "original_title": "Batman: Knightfall Part 1: Knightfall",
       "overview": "Arkham Asylum has been destroyed, and all its inmates have been unleashed upon Gotham City. As Batman races to round up some of his greatest enemies, he is pushed to his physical and mental limits and into a final confrontation with a new threat: the man called Bane!",
-      "popularity": 76.4791,
+      "popularity": 64.4233,
       "poster_path": "/360qdtu2hLnqMu8SVHMywn420w1.jpg",
       "release_date": "2026-06-23",
       "softcore": false,
       "video": false,
-      "vote_average": 9.191,
-      "vote_count": 345,
+      "vote_average": 9.201,
+      "vote_count": 349,
       "media_type": "movie",
       "is4K": true
     },
@@ -1925,13 +1925,13 @@
       "original_language": "en",
       "original_title": "Avatar Aang: The Last Airbender",
       "overview": "Avatar Aang, the world's last Airbender, learns of an ancient power that could save his culture from extinction. With the help of his friends, he embarks on a global quest to find it before it falls into the wrong hands and threatens to upend the peace they sacrificed everything to achieve.",
-      "popularity": 91.0249,
+      "popularity": 90.2397,
       "poster_path": "/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg",
       "release_date": "2026-07-24",
       "softcore": false,
       "video": false,
-      "vote_average": 9.144,
-      "vote_count": 1160,
+      "vote_average": 9.1,
+      "vote_count": 1166,
       "media_type": "movie",
       "is4K": true
     },
@@ -1949,13 +1949,13 @@
       "original_language": "en",
       "original_title": "Swapped",
       "overview": "A small woodland creature and a majestic bird, two natural sworn enemies of the Valley, magically trade places and set off on an adventure of a lifetime to switch back. Their journey soon uncovers a greater threat—one that could endanger not only their species, but the entire valley they call home.",
-      "popularity": 48.9449,
+      "popularity": 49.0313,
       "poster_path": "/tHhxWxge06goXU6ZQH1hj7vK8Hd.jpg",
       "release_date": "2026-05-01",
       "softcore": false,
       "video": false,
-      "vote_average": 8.868,
-      "vote_count": 2189,
+      "vote_average": 8.867,
+      "vote_count": 2190,
       "media_type": "movie",
       "is4K": true
     },
@@ -1971,36 +1971,13 @@
       "original_language": "es",
       "original_title": "Socias por accidente",
       "overview": "Two women discover they were both scammed by the same man (who also got them pregnant). They form an alliance to take revenge.",
-      "popularity": 17.3076,
+      "popularity": 17.4864,
       "poster_path": "/j0CIVzeR7hRAPBPGR54qDZoOQpp.jpg",
       "release_date": "2026-03-12",
       "softcore": false,
       "video": false,
-      "vote_average": 8.853,
-      "vote_count": 382,
-      "media_type": "movie",
-      "is4K": true
-    },
-    {
-      "adult": false,
-      "backdrop_path": "/c4U96GrPRfnNrS01mBtqnocvlLJ.jpg",
-      "genre_ids": [
-        80,
-        28,
-        53
-      ],
-      "id": 1621552,
-      "title": "Facing El Chapo",
-      "original_language": "es",
-      "original_title": "La captura",
-      "overview": "Two Mexican officers must survive the final hours of their shift after crossing a ruthless cartel boss.",
-      "popularity": 100.3001,
-      "poster_path": "/alpf5v4UqSFawPmG9RX03Or4BDk.jpg",
-      "release_date": "2026-08-21",
-      "softcore": false,
-      "video": false,
-      "vote_average": 8.772,
-      "vote_count": 748,
+      "vote_average": 8.836,
+      "vote_count": 383,
       "media_type": "movie",
       "is4K": true
     },
@@ -2017,13 +1994,36 @@
       "original_language": "ja",
       "original_title": "劇場版「鬼滅の刃」無限城編 第一章 猗窩座再来",
       "overview": "The Demon Slayer Corps are drawn into the Infinity Castle, where Tanjiro, Nezuko, and the Hashira face terrifying Upper Rank demons in a desperate fight as the final battle against Muzan Kibutsuji begins.",
-      "popularity": 68.9932,
+      "popularity": 58.5856,
       "poster_path": "/fWVSwgjpT2D78VUh6X8UBd2rorW.jpg",
       "release_date": "2025-07-18",
       "softcore": false,
       "video": false,
-      "vote_average": 8.799,
-      "vote_count": 2156,
+      "vote_average": 8.8,
+      "vote_count": 2160,
+      "media_type": "movie",
+      "is4K": true
+    },
+    {
+      "adult": false,
+      "backdrop_path": "/c4U96GrPRfnNrS01mBtqnocvlLJ.jpg",
+      "genre_ids": [
+        80,
+        28,
+        53
+      ],
+      "id": 1621552,
+      "title": "Facing El Chapo",
+      "original_language": "es",
+      "original_title": "La captura",
+      "overview": "Two Mexican officers must survive the final hours of their shift after crossing a ruthless cartel boss.",
+      "popularity": 106.0866,
+      "poster_path": "/alpf5v4UqSFawPmG9RX03Or4BDk.jpg",
+      "release_date": "2026-08-21",
+      "softcore": false,
+      "video": false,
+      "vote_average": 8.779,
+      "vote_count": 764,
       "media_type": "movie",
       "is4K": true
     },
@@ -2039,13 +2039,13 @@
       "original_language": "en",
       "original_title": "The Shawshank Redemption",
       "overview": "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
-      "popularity": 78.5478,
+      "popularity": 78.69,
       "poster_path": "/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
       "release_date": "1994-09-23",
       "softcore": false,
       "video": false,
       "vote_average": 8.731,
-      "vote_count": 31359,
+      "vote_count": 31366,
       "media_type": "movie",
       "is4K": true
     },
@@ -2061,13 +2061,13 @@
       "original_language": "en",
       "original_title": "The Godfather",
       "overview": "Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch, Vito Corleone barely survives an attempt on his life, his youngest son, Michael steps in to take care of the would-be killers, launching a campaign of bloody revenge.",
-      "popularity": 68.8591,
+      "popularity": 69.1893,
       "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
       "release_date": "1972-03-14",
       "softcore": false,
       "video": false,
       "vote_average": 8.687,
-      "vote_count": 23593,
+      "vote_count": 23601,
       "media_type": "movie",
       "is4K": true
     },
@@ -2083,13 +2083,13 @@
       "original_language": "en",
       "original_title": "Project Hail Mary",
       "overview": "Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction.",
-      "popularity": 99.5429,
+      "popularity": 101.1844,
       "poster_path": "/yihdXomYb5kTeSivtFndMy5iDmf.jpg",
       "release_date": "2026-03-15",
       "softcore": false,
       "video": false,
       "vote_average": 8.639,
-      "vote_count": 7847,
+      "vote_count": 7867,
       "media_type": "movie",
       "is4K": true
     },
@@ -2105,13 +2105,13 @@
       "original_language": "en",
       "original_title": "Michael",
       "overview": "The story of Michael Jackson, one of the most influential artists the world has ever known, and his life beyond the music. His journey from the discovery of his extraordinary talent as the lead of the Jackson Five, to the visionary artist whose creative ambition fueled a relentless pursuit to become the biggest entertainer in the world, highlighting both his life off-stage and some of the most iconic performances from his early solo career.",
-      "popularity": 60.2833,
+      "popularity": 62.9,
       "poster_path": "/dueFqKLvjftnELZaGYwY7xinfaI.jpg",
       "release_date": "2026-04-22",
       "softcore": false,
       "video": false,
-      "vote_average": 8.634,
-      "vote_count": 4370,
+      "vote_average": 8.633,
+      "vote_count": 4380,
       "media_type": "movie",
       "is4K": true
     },
@@ -2130,13 +2130,13 @@
       "original_language": "ko",
       "original_name": "참교육",
       "overview": "An inspector from the Educational Rights Protection Bureau (ERPB) who is authorized by the government to use physical intervention and unconventional methods to discipline delinquent students and reform the educational system.",
-      "popularity": 53.6477,
+      "popularity": 55.5532,
       "poster_path": "/fMECSPrTmRClSViMsXFYmiYIcWP.jpg",
       "first_air_date": "2026-06-05",
       "softcore": false,
       "name": "Teach You a Lesson",
-      "vote_average": 9.394,
-      "vote_count": 912,
+      "vote_average": 9.391,
+      "vote_count": 917,
       "media_type": "tv",
       "is4K": true
     },
@@ -2154,13 +2154,13 @@
       "original_language": "en",
       "original_name": "Dutton Ranch",
       "overview": "Rip Wheeler and Beth Dutton gamble everything on a new life in South Texas, but the promise of building a future far from the ghosts of Yellowstone quickly collides with brutal new realities and a rival ranch that will stop at nothing to protect its empire.",
-      "popularity": 46.3673,
+      "popularity": 45.5748,
       "poster_path": "/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
       "first_air_date": "2026-05-15",
       "softcore": false,
       "name": "Dutton Ranch",
-      "vote_average": 9.162,
-      "vote_count": 594,
+      "vote_average": 9.164,
+      "vote_count": 596,
       "media_type": "tv",
       "is4K": true
     },
@@ -2178,7 +2178,7 @@
       "original_language": "ko",
       "original_name": "21세기 대군부인",
       "overview": "In 21st-century Korea under a constitutional monarchy, a chaebol heiress with everything but status tries to take control of her future after crossing paths with a lonely prince with nothing but his title. Together, bound by a contract marriage, they begin a class-defying romance to rewrite destiny.",
-      "popularity": 25.8873,
+      "popularity": 25.4596,
       "poster_path": "/ocXkHSslrSWMz2ZJGl5MjF6dQr3.jpg",
       "first_air_date": "2026-04-10",
       "softcore": false,
@@ -2202,13 +2202,13 @@
       "original_language": "en",
       "original_name": "Breaking Bad",
       "overview": "Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
-      "popularity": 249.9091,
+      "popularity": 227.4384,
       "poster_path": "/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg",
       "first_air_date": "2008-01-20",
       "softcore": false,
       "name": "Breaking Bad",
-      "vote_average": 8.951,
-      "vote_count": 18655,
+      "vote_average": 8.952,
+      "vote_count": 18664,
       "media_type": "tv",
       "is4K": true
     },
@@ -2225,13 +2225,13 @@
       "original_language": "en",
       "original_name": "Off Campus",
       "overview": "Hannah Wells tutors hockey captain Garrett Graham to win over her crush. Their deal becomes real connection as they face their pasts. Friends Logan, Dean, Tucker, and Allie navigate college life and love.",
-      "popularity": 66.4806,
+      "popularity": 67.9747,
       "poster_path": "/tcPc5ZMBO4y2BtCJMe3o2nwZb2B.jpg",
       "first_air_date": "2026-05-13",
       "softcore": false,
       "name": "Off Campus",
       "vote_average": 8.905,
-      "vote_count": 852,
+      "vote_count": 855,
       "media_type": "tv",
       "is4K": true
     },
@@ -2249,7 +2249,7 @@
       "original_language": "zu",
       "original_name": "The Polygamist",
       "overview": "Social media darling, Joyce, is the picture of marital perfection — until her cheating husband's conquests ignite a scandalous emotional meltdown.",
-      "popularity": 22.9684,
+      "popularity": 22.5209,
       "poster_path": "/vamznpYBCI9n7VhrI3mxuzff7XP.jpg",
       "first_air_date": "2026-06-12",
       "softcore": false,
@@ -2275,13 +2275,13 @@
       "original_language": "ko",
       "original_name": "원더풀스",
       "overview": "A goofy group of townies stumbles into superpowers and fights rising evil as doomsday panic grows in this wild, turn-of-the-century action comedy.",
-      "popularity": 22.2796,
+      "popularity": 20.2384,
       "poster_path": "/jj7AYkz2OLRDL1wfJmjTXyWQ5I4.jpg",
       "first_air_date": "2026-05-15",
       "softcore": false,
       "name": "The WONDERfools",
-      "vote_average": 8.867,
-      "vote_count": 266,
+      "vote_average": 8.863,
+      "vote_count": 267,
       "media_type": "tv",
       "is4K": true
     },
@@ -2300,7 +2300,7 @@
       "original_language": "en",
       "original_name": "Wizards Beyond Waverly Place",
       "overview": "Justin Russo has chosen to lead a normal, mortal life with his family, Giada, Roman and Milo. But when Justin's sister Alex brings Billie to his home seeking help, Justin realizes he must dust off his magical skills to mentor the wizard-in-training while also juggling his everyday responsibilities — and safeguarding the future of the Wizard World.",
-      "popularity": 28.5347,
+      "popularity": 29.3053,
       "poster_path": "/5hrBpjFzIqmN9k7QxEC610gwZGw.jpg",
       "first_air_date": "2024-10-29",
       "softcore": false,
@@ -2325,13 +2325,13 @@
       "original_language": "ja",
       "original_name": "タコピーの原罪",
       "overview": "A Happy alien, Takopi, lands on Earth with one mission: to spread happiness! When he meets Shizuka, a lonely fourth grader, he vows to bring back her smile using his magical Happy Gadgets. But as he uncovers the pain in her life, Takopi learns that true happiness may require more than gadgets.",
-      "popularity": 14.9909,
+      "popularity": 15.3176,
       "poster_path": "/xPXDVhVKt0XM34ihoUVMHtLYTw8.jpg",
       "first_air_date": "2025-06-28",
       "softcore": false,
       "name": "Takopi's Original Sin",
-      "vote_average": 8.812,
-      "vote_count": 202,
+      "vote_average": 8.803,
+      "vote_count": 203,
       "media_type": "tv",
       "is4K": true
     },
@@ -2351,13 +2351,13 @@
       "original_language": "ja",
       "original_name": "葬送のフリーレン",
       "overview": "After the party of heroes defeated the Demon King, they restored peace to the land and returned to lives of solitude. Generations pass, and the elven mage Frieren comes face to face with humanity's mortality. She takes on a new apprentice and promises to fulfill old friends' dying wishes. Can an elven mind make peace with the nature of life and death? Frieren embarks on her quest to find out.",
-      "popularity": 85.4733,
+      "popularity": 90.1957,
       "poster_path": "/dqZENchTd7lp5zht7BdlqM7RBhD.jpg",
       "first_air_date": "2023-09-29",
       "softcore": false,
       "name": "Frieren: Beyond Journey's End",
-      "vote_average": 8.808,
-      "vote_count": 967,
+      "vote_average": 8.8,
+      "vote_count": 969,
       "media_type": "tv",
       "is4K": true
     }
