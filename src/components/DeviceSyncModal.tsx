@@ -89,8 +89,8 @@ export const DeviceSyncModal: React.FC<DeviceSyncModalProps> = ({
     setPinError(null);
     try {
       const data = await redeemTvPairingPin(clean);
-      if (data && (data.watchlist.length > 0 || data.history.length > 0)) {
-        onImportData(data.watchlist, data.history);
+      if (data) {
+        onImportData(data.watchlist || [], data.history || []);
         setImportSuccess(true);
         playSelectSound();
         setTimeout(() => {

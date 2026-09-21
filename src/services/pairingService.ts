@@ -38,8 +38,13 @@ export async function generateTvPairingPin(
     })),
   };
 
+  const pairingEndpoint =
+    typeof window !== 'undefined' && window.location.hostname.endsWith('pages.dev')
+      ? '/api/pair'
+      : 'https://lumia-4k.pages.dev/api/pair';
+
   try {
-    const res = await fetch('/api/pair', {
+    const res = await fetch(pairingEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(syncPayload),
@@ -70,8 +75,13 @@ export async function redeemTvPairingPin(pin: string): Promise<PairingData | nul
   const cleanPin = pin.replace(/\D/g, '');
   if (cleanPin.length !== 6) return null;
 
+  const pairingEndpoint =
+    typeof window !== 'undefined' && window.location.hostname.endsWith('pages.dev')
+      ? '/api/pair'
+      : 'https://lumia-4k.pages.dev/api/pair';
+
   try {
-    const res = await fetch(`/api/pair?pin=${cleanPin}`);
+    const res = await fetch(`${pairingEndpoint}?pin=${cleanPin}`);
     if (res.ok) {
       const data = await res.json();
       return {

@@ -81,7 +81,7 @@ class WatchPartyManager {
     this.isHost = true;
 
     return new Promise((resolve, reject) => {
-      const generatedId = `lumia-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      const generatedId = `lumia-${Math.random().toString(36).substring(2, 8).toLowerCase()}`;
       
       const peer = new Peer(generatedId, {
         debug: 1,
@@ -124,7 +124,7 @@ class WatchPartyManager {
     this.leaveRoom();
     this.isHost = false;
 
-    const cleanRoomId = targetRoomId.trim().toUpperCase();
+    const cleanRoomId = targetRoomId.trim().toLowerCase();
 
     return new Promise((resolve, reject) => {
       const peer = new Peer({ debug: 1 });
