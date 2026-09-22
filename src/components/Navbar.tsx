@@ -13,6 +13,7 @@ import {
   Dices,
   QrCode,
   Users,
+  Smartphone,
 } from 'lucide-react';
 import type { ActiveTab, MediaItem } from '../types';
 import { searchMedia, getImageUrl } from '../services/tmdb';
@@ -29,6 +30,8 @@ interface NavbarProps {
   onOpenSurpriseMe?: () => void;
   onOpenSync?: () => void;
   onOpenWatchParty?: () => void;
+  onOpenAirRemote?: () => void;
+  onOpenVibeSearch?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -43,6 +46,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSurpriseMe,
   onOpenSync,
   onOpenWatchParty,
+  onOpenAirRemote,
+  onOpenVibeSearch,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [suggestions, setSuggestions] = useState<MediaItem[]>([]);
@@ -208,6 +213,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
+          {/* AI Vibe Search Concierge */}
+          {onOpenVibeSearch && (
+            <button
+              data-tv-focus="true"
+              onClick={onOpenVibeSearch}
+              className="p-2 rounded-xl bg-gradient-to-r from-pink-500/20 to-indigo-500/20 hover:from-pink-500/30 hover:to-indigo-500/30 text-pink-300 border border-pink-500/30 transition-all flex items-center gap-1.5"
+              title="AI Vibe Search & Cinema Concierge"
+            >
+              <Sparkles className="w-4 h-4 text-pink-400 animate-pulse" />
+              <span className="hidden lg:inline text-xs font-bold">Vibe Search</span>
+            </button>
+          )}
+
           {/* Surprise Me (Cinema Roulette) */}
           {onOpenSurpriseMe && (
             <button
@@ -231,6 +249,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <Users className="w-4 h-4 text-purple-400" />
               <span className="hidden lg:inline text-xs font-bold">Party</span>
+            </button>
+          )}
+
+          {/* Phone Air Remote Trigger */}
+          {onOpenAirRemote && (
+            <button
+              data-tv-focus="true"
+              onClick={onOpenAirRemote}
+              className="p-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 transition-all flex items-center gap-1.5"
+              title="Phone Air-Remote (Control TV with your Phone)"
+            >
+              <Smartphone className="w-4 h-4 text-indigo-400" />
+              <span className="hidden lg:inline text-xs font-bold">Remote</span>
             </button>
           )}
 

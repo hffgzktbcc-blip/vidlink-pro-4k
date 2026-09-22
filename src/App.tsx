@@ -37,7 +37,11 @@ import { SurpriseMeModal } from './components/SurpriseMeModal';
 import { ActorFilmographyModal } from './components/ActorFilmographyModal';
 import { DeviceSyncModal, decodeSyncPayload } from './components/DeviceSyncModal';
 import { WatchPartyModal } from './components/WatchPartyModal';
+import { AirRemoteModal } from './components/AirRemoteModal';
+import { AirRemoteView } from './components/AirRemoteView';
+import { VibeSearchModal } from './components/VibeSearchModal';
 import { watchPartyManager } from './services/watchParty';
+import { airRemoteManager } from './services/airRemote';
 import { checkForAppUpdate, type AppReleaseInfo } from './services/updateChecker';
 import { ToastContainer, type ToastMessage } from './components/Toast';
 import {
@@ -77,6 +81,9 @@ export const App: React.FC = () => {
   const [isSurpriseMeOpen, setIsSurpriseMeOpen] = useState(false);
   const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
   const [isWatchPartyOpen, setIsWatchPartyOpen] = useState(false);
+  const [isAirRemoteModalOpen, setIsAirRemoteModalOpen] = useState(false);
+  const [isVibeSearchOpen, setIsVibeSearchOpen] = useState(false);
+  const [mobileRemoteHostId, setMobileRemoteHostId] = useState<string | null>(null);
   const [selectedActor, setSelectedActor] = useState<{ id: number; name: string; profile_path: string | null } | null>(null);
   const [recommendedForYou, setRecommendedForYou] = useState<MediaItem[]>([]);
   const [updateRelease, setUpdateRelease] = useState<AppReleaseInfo | null>(null);
@@ -151,6 +158,10 @@ export const App: React.FC = () => {
   const handleBackNavigation = useCallback(() => {
     if (updateRelease) {
       setUpdateRelease(null);
+    } else if (isAirRemoteModalOpen) {
+      setIsAirRemoteModalOpen(false);
+    } else if (isVibeSearchOpen) {
+      setIsVibeSearchOpen(false);
     } else if (isWatchPartyOpen) {
       setIsWatchPartyOpen(false);
     } else if (isSyncModalOpen) {
@@ -172,10 +183,10 @@ export const App: React.FC = () => {
     } else if (activeTab !== 'home') {
       setActiveTab('home');
     }
-  }, [updateRelease, isWatchPartyOpen, isSyncModalOpen, isSurpriseMeOpen, selectedActor, playingMedia, isPiP, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
+  }, [updateRelease, isAirRemoteModalOpen, isVibeSearchOpen, isWatchPartyOpen, isSyncModalOpen, isSurpriseMeOpen, selectedActor, playingMedia, isPiP, trailerMedia, selectedMedia, isSettingsOpen, searchQuery, activeTab]);
 
   const { isTvMode, toggleTvMode } = useSpatialNav({
-    activeModalOpen: Boolean(updateRelease || isWatchPartyOpen || (playingMedia && !isPiP) || trailerMedia || selectedMedia || isSettingsOpen || isSurpriseMeOpen || isSyncModalOpen || selectedActor),
+    activeModalOpen: Boolean(updateRelease || isAirRemoteModalOpen || isVibeSearchOpen || isWatchPartyOpen || (playingMedia && !isPiP) || trailerMedia || selectedMedia || isSettingsOpen || isSurpriseMeOpen || isSyncModalOpen || selectedActor),
     onBack: handleBackNavigation,
   });
 
@@ -252,6 +263,12 @@ export const App: React.FC = () => {
         }
       }
 
+      // Check for Phone Air Remote URL (?remote=lumia-air-XXXXXX)
+      const remoteId = params.get('remote');
+      if (remoteId) {
+        setMobileRemoteHostId(remoteId);
+      }
+
       // Check for Watch Party Invite in URL (?party=lumia-XXXXXX)
       const partyId = params.get('party');
       if (partyId) {
@@ -291,6 +308,64 @@ export const App: React.FC = () => {
     window.addEventListener('popstate', handleUrlState);
     return () => window.removeEventListener('popstate', handleUrlState);
   }, []); // Run once on mount and listen to popstate navigation only
+
+  // Listen for WebRTC Air Remote incoming commands on TV host
+  useEffect(() => {
+    const unsub = airRemoteManager.subscribe(
+      cmd => {
+        if (cmd.type === 'KEY' && cmd.key) {
+          // Dispatch simulated keyboard event for spatial navigation and D-pad
+          const event = new KeyboardEvent('keydown', {
+            key: cmd.key,
+            code: cmd.key,
+            bubbles: true,
+            cancelable: true,
+          });
+          window.dispatchEvent(event);
+
+          // If Enter, also simulate click on active focused element
+          if (cmd.key === 'Enter') {
+            const active = document.activeElement as HTMLElement | null;
+            if (active && typeof active.click === 'function') {
+              active.click();
+            }
+          }
+        } else if (cmd.type === 'SEARCH') {
+          setSearchQuery(cmd.text || '');
+        } else if (cmd.type === 'NAVIGATE' && cmd.tab) {
+          setActiveTab(cmd.tab as ActiveTab);
+          setSearchQuery('');
+        } else if (cmd.type === 'SURPRISE_ME') {
+          setIsSurpriseMeOpen(true);
+        } else if (cmd.type === 'ACTION') {
+          if (cmd.action === 'PLAY_PAUSE') {
+            const spaceEvent = new KeyboardEvent('keydown', {
+              key: ' ',
+              code: 'Space',
+              bubbles: true,
+            });
+            window.dispatchEvent(spaceEvent);
+          } else if (cmd.action === 'FULLSCREEN') {
+            const fEvent = new KeyboardEvent('keydown', {
+              key: 'f',
+              code: 'KeyF',
+              bubbles: true,
+            });
+            window.dispatchEvent(fEvent);
+          } else if (cmd.action === 'CLOSE_MODAL') {
+            handleBackNavigation();
+          }
+        } else if (cmd.type === 'CURSOR_CLICK') {
+          const active = document.activeElement as HTMLElement | null;
+          if (active && typeof active.click === 'function') {
+            active.click();
+          }
+        }
+      },
+      () => {}
+    );
+    return unsub;
+  }, [handleBackNavigation]);
 
   // Listen for Watch Party remote media/episode changes
   useEffect(() => {
@@ -417,6 +492,21 @@ export const App: React.FC = () => {
   // Hero Featured list
   const heroItems = trendingMovies.length ? trendingMovies.slice(0, 5) : [];
 
+  // If user opened the URL as an Air Remote controller on their smartphone
+  if (mobileRemoteHostId) {
+    return (
+      <AirRemoteView
+        hostId={mobileRemoteHostId}
+        onExit={() => {
+          setMobileRemoteHostId(null);
+          try {
+            window.history.pushState({}, '', window.location.pathname);
+          } catch {}
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#07080d] text-gray-100 flex flex-col selection:bg-indigo-600 selection:text-white">
       {/* Top Navbar */}
@@ -432,6 +522,8 @@ export const App: React.FC = () => {
         onOpenSurpriseMe={() => setIsSurpriseMeOpen(true)}
         onOpenSync={() => setIsSyncModalOpen(true)}
         onOpenWatchParty={() => setIsWatchPartyOpen(true)}
+        onOpenAirRemote={() => setIsAirRemoteModalOpen(true)}
+        onOpenVibeSearch={() => setIsVibeSearchOpen(true)}
       />
 
       {/* Main Content Area with Mobile Safe Bottom Padding */}
@@ -878,6 +970,22 @@ export const App: React.FC = () => {
         isOpen={isWatchPartyOpen}
         onClose={() => setIsWatchPartyOpen(false)}
         onNotifyToast={addToast}
+      />
+
+      {/* Phone-to-TV Air Remote Modal */}
+      <AirRemoteModal
+        isOpen={isAirRemoteModalOpen}
+        onClose={() => setIsAirRemoteModalOpen(false)}
+        onNotifyToast={addToast}
+      />
+
+      {/* Semantic AI Vibe Search & Cinema Concierge */}
+      <VibeSearchModal
+        isOpen={isVibeSearchOpen}
+        onClose={() => setIsVibeSearchOpen(false)}
+        onSelectMedia={setSelectedMedia}
+        onPlayMedia={handleStartPlaying}
+        catalogItems={[...trendingMovies, ...trendingTV, ...popularMovies, ...popularTV, ...top4KList]}
       />
 
       {/* Settings Modal */}

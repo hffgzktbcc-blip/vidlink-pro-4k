@@ -111,13 +111,24 @@ export interface ServerOption {
   ) => string;
 }
 
+export type UniverseCategory = 'franchise' | 'director' | 'auteur' | 'world';
+
+export interface UniverseItem extends MediaItem {
+  timelineLabel?: string;
+  releaseYear?: number;
+}
+
 export interface UniverseCollection {
   id: string;
   name: string;
   tagline: string;
   bannerUrl: string;
   accentColor: string;
-  items: MediaItem[];
+  category: UniverseCategory;
+  description?: string;
+  hasChronologicalOrder?: boolean;
+  items: UniverseItem[];
+  chronologicalItems?: UniverseItem[];
 }
 
 export type ActiveTab = 'home' | 'movies' | 'tv' | '4k' | 'universes' | 'trending' | 'watchlist';
