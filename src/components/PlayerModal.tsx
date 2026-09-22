@@ -28,6 +28,7 @@ import { STREAM_SERVERS, measureServerLatency } from '../services/streaming';
 import { fetchSeasonDetails } from '../services/tmdb';
 import { VirtualCursor } from './VirtualCursor';
 import { TVNativePlayer } from './TVNativePlayer';
+import { DebridStreamModal } from './DebridStreamModal';
 import { resolveStreamSources, openInExternalPlayer, type DirectStream } from '../services/streamResolver';
 import { WatchPartyReactions } from './WatchPartyReactions';
 
@@ -35,6 +36,7 @@ interface PlayerModalProps {
   media: MediaItem | null;
   initialSeason?: number;
   initialEpisode?: number;
+  initialDirectStream?: DirectStream | null;
   onClose: () => void;
   accentColor?: string;
   subLang?: string;
@@ -50,6 +52,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   media,
   initialSeason = 1,
   initialEpisode = 1,
+  initialDirectStream = null,
   onClose,
   accentColor = '6366f1',
   subLang = 'en',
@@ -63,6 +66,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   const [episode, setEpisode] = useState(initialEpisode);
   const [seasonData, setSeasonData] = useState<Season | null>(null);
   const [isLoadingSeason, setIsLoadingSeason] = useState(false);
+  const [availableDebridStreams, setAvailableDebridStreams] = useState<DirectStream[]>([]);
+  const [isDebridModalOpen, setIsDebridModalOpen] = useState(false);
   const [playerKey, setPlayerKey] = useState(0);
   const [playerMode, setPlayerMode] = useState<'native' | 'embed'>('native');
   const [directStream, setDirectStream] = useState<DirectStream | null>(null);
@@ -94,7 +99,11 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     resolveStreamSources(media.id, mType, season, episode)
       .then(res => {
         if (!isMounted) return;
-        if (res.defaultStream) {
+        setAvailableDebridStreams(res.directStreams);
+        if (initialDirectStream) {
+          setDirectStream(initialDirectStream);
+          setPlayerMode('native');
+        } else if (res.defaultStream) {
           setDirectStream(res.defaultStream);
           setPlayerMode('native');
         } else {
@@ -108,7 +117,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [media?.id, season, episode]);
+  }, [media?.id, season, episode, initialDirectStream]);
 
   // Automatically focus video iframe on load so TV remote / Enter keys can trigger playback directly
   useEffect(() => {
@@ -319,23 +328,39 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
     subLang
   );
 
-  // 1. Native TV Player Mode (Direct HLS Stream with 100% remote D-Pad controls and zero iframes!)
+  // 1. Native TV Player Mode (Direct HLS / Debrid Stream with 100% remote D-Pad controls and zero iframes!)
   if (playerMode === 'native' && directStream) {
     return (
-      <TVNativePlayer
-        media={media}
-        stream={directStream}
-        season={season}
-        episode={episode}
-        episodeName={seasonData?.episodes?.[episode - 1]?.name}
-        onClose={onClose}
-        onPrevEpisode={handlePrevEpisode}
-        onNextEpisode={handleNextEpisode}
-        hasPrevEpisode={season > 1 || episode > 1}
-        hasNextEpisode={season < totalSeasons || episode < currentEpisodesCount}
-        onSwitchToEmbed={() => setPlayerMode('embed')}
-        onOpenPartyModal={onOpenWatchParty}
-      />
+      <>
+        <TVNativePlayer
+          media={media}
+          stream={directStream}
+          season={season}
+          episode={episode}
+          episodeName={seasonData?.episodes?.[episode - 1]?.name}
+          onClose={onClose}
+          onPrevEpisode={handlePrevEpisode}
+          onNextEpisode={handleNextEpisode}
+          hasPrevEpisode={season > 1 || episode > 1}
+          hasNextEpisode={season < totalSeasons || episode < currentEpisodesCount}
+          onSwitchToEmbed={() => setPlayerMode('embed')}
+          onOpenPartyModal={onOpenWatchParty}
+          allStreams={availableDebridStreams}
+          onOpenStreamSelector={() => setIsDebridModalOpen(true)}
+        />
+        <DebridStreamModal
+          isOpen={isDebridModalOpen}
+          onClose={() => setIsDebridModalOpen(false)}
+          title={title}
+          streams={availableDebridStreams}
+          currentStreamUrl={directStream.url}
+          onSelectStream={s => {
+            setDirectStream(s);
+            setPlayerMode('native');
+          }}
+          onSwitchToEmbed={() => setPlayerMode('embed')}
+        />
+      </>
     );
   }
 
@@ -487,6 +512,20 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
               <MousePointer2 className="w-4 h-4 text-amber-400" />
               <span>Cursor: {isCursorActive ? 'ON' : 'OFF'}</span>
             </button>
+
+            {/* Real-Debrid Streams Quick Switcher */}
+            {availableDebridStreams.length > 0 && (
+              <button
+                data-tv-focus="true"
+                onClick={() => setIsDebridModalOpen(true)}
+                className="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 text-xs font-bold border border-amber-500/30 flex items-center gap-1.5 transition-all"
+                title="Select Real-Debrid 4K Stream"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span className="hidden sm:inline">Debrid ({availableDebridStreams.length})</span>
+                <span className="sm:hidden">RD</span>
+              </button>
+            )}
 
             {/* Server Quick Switcher (Cycle S) */}
             <button
@@ -846,6 +885,20 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
             <Sun className="w-4 h-4" />
           </button>
 
+          {/* Real-Debrid Streams Switcher */}
+          {availableDebridStreams.length > 0 && (
+            <button
+              data-tv-focus="true"
+              onClick={() => setIsDebridModalOpen(true)}
+              className="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 text-xs font-bold border border-amber-500/30 flex items-center gap-1.5 transition-all"
+              title="Select Real-Debrid Stream / Quality"
+            >
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span className="hidden sm:inline">Debrid ({availableDebridStreams.length})</span>
+              <span className="sm:hidden">RD</span>
+            </button>
+          )}
+
           {/* Open in External Player (VLC / Infuse / Nova) */}
           <button
             data-tv-focus="true"
@@ -1109,6 +1162,20 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           </div>
         )}
       </div>
+
+      {/* Real-Debrid Stream Selector Modal */}
+      <DebridStreamModal
+        isOpen={isDebridModalOpen}
+        onClose={() => setIsDebridModalOpen(false)}
+        title={title}
+        streams={availableDebridStreams}
+        currentStreamUrl={directStream?.url}
+        onSelectStream={s => {
+          setDirectStream(s);
+          setPlayerMode('native');
+        }}
+        onSwitchToEmbed={() => setPlayerMode('embed')}
+      />
 
       {/* Floating Watch Party Emoji Reactions & Reaction Bar */}
       <WatchPartyReactions

@@ -36,28 +36,117 @@ export function setStoredRealDebridKey(key: string): void {
   }
 }
 
+export function isRealDebridConfigured(): boolean {
+  return Boolean(getStoredRealDebridKey());
+}
+
+export function isStremioEngineConfigured(): boolean {
+  return Boolean(getStoredStremioAddonUrl() || getStoredRealDebridKey());
+}
+
 export interface RealDebridAccountInfo {
   valid: boolean;
   username?: string;
   email?: string;
   premiumDaysRemaining?: number;
   type?: string;
+  expirationDate?: string;
+  avatar?: string;
   error?: string;
+}
+
+export interface RealDebridDeviceCodeResponse {
+  device_code: string;
+  user_code: string;
+  interval: number;
+  expires_in: number;
+  verification_url: string;
+  direct_verification_url: string;
+}
+
+const RD_CLIENT_ID = 'X245A4XAIBGVM';
+
+/**
+ * Universal CORS-safe API caller for Real-Debrid
+ * Tier 1: Relative /api/debrid (Cloudflare Pages Functions / Vercel Edge / Vite Dev Proxy)
+ * Tier 2: Public CORS proxy fallback (corsproxy.io)
+ * Tier 3: Direct API call
+ */
+async function callDebridApi<T = any>(
+  endpoint: string,
+  token?: string,
+  method: 'GET' | 'POST' = 'GET',
+  data?: any,
+  params?: Record<string, string>
+): Promise<T> {
+  const cleanToken = (token || getStoredRealDebridKey()).trim();
+  const headers: Record<string, string> = {};
+  if (cleanToken) {
+    headers['Authorization'] = `Bearer ${cleanToken}`;
+  }
+
+  // Tier 1: Try edge proxy /api/debrid
+  try {
+    const queryParams = new URLSearchParams({ endpoint, ...(params || {}) });
+    const edgeUrl = `/api/debrid?${queryParams.toString()}`;
+    const res = await axios({
+      url: edgeUrl,
+      method,
+      data,
+      headers,
+      timeout: 8000,
+    });
+    return res.data;
+  } catch (edgeErr: any) {
+    // If not a 401/403 auth error, try fallback tiers
+    if (edgeErr.response && (edgeErr.response.status === 401 || edgeErr.response.status === 403)) {
+      throw edgeErr;
+    }
+  }
+
+  // Tier 2: Public CORS proxy fallback
+  const isOauth = endpoint.startsWith('oauth/');
+  const targetBase = isOauth ? 'https://api.real-debrid.com/' : 'https://api.real-debrid.com/rest/1.0/';
+  const queryStr = params ? new URLSearchParams(params).toString() : '';
+  const directTarget = `${targetBase}${endpoint}${queryStr ? `?${queryStr}` : ''}`;
+
+  try {
+    const corsProxyUrl = `https://corsproxy.io/?${encodeURIComponent(directTarget)}`;
+    const res = await axios({
+      url: corsProxyUrl,
+      method,
+      data,
+      headers,
+      timeout: 8000,
+    });
+    return res.data;
+  } catch (proxyErr: any) {
+    if (proxyErr.response && (proxyErr.response.status === 401 || proxyErr.response.status === 403)) {
+      throw proxyErr;
+    }
+  }
+
+  // Tier 3: Direct API call
+  const res = await axios({
+    url: directTarget,
+    method,
+    data,
+    headers,
+    timeout: 8000,
+  });
+  return res.data;
 }
 
 /**
  * Validates a Real-Debrid API token against official REST API
  */
 export async function validateRealDebridToken(token: string): Promise<RealDebridAccountInfo> {
-  if (!token) return { valid: false, error: 'Token is empty' };
+  if (!token || !token.trim()) {
+    return { valid: false, error: 'Token cannot be empty' };
+  }
+
   try {
-    const res = await axios.get('https://api.real-debrid.com/rest/1.0/user', {
-      headers: {
-        Authorization: `Bearer ${token.trim()}`,
-      },
-      timeout: 7000,
-    });
-    const data = res.data;
+    const data = await callDebridApi('user', token.trim());
     const expiration = data.expiration ? new Date(data.expiration).getTime() : 0;
     const now = Date.now();
     const daysLeft = Math.max(0, Math.round((expiration - now) / (1000 * 60 * 60 * 24)));
@@ -67,21 +156,89 @@ export async function validateRealDebridToken(token: string): Promise<RealDebrid
       username: data.username,
       email: data.email,
       type: data.type,
+      expirationDate: data.expiration,
       premiumDaysRemaining: daysLeft,
+      avatar: data.avatar,
     };
   } catch (err: any) {
+    const msg =
+      err.response?.data?.message ||
+      err.response?.data?.error ||
+      (err.response?.status === 401 ? 'Invalid or expired API token' : 'Could not reach Real-Debrid servers');
     return {
       valid: false,
-      error: err.response?.data?.message || 'Invalid or expired token',
+      error: msg,
     };
   }
 }
 
 /**
- * Determines whether Stremio Remux engine is active
+ * Initiates Real-Debrid OAuth Device Flow (Zero typing on TV/mobile)
  */
-export function isStremioEngineConfigured(): boolean {
-  return !!(getStoredStremioAddonUrl() || getStoredRealDebridKey());
+export async function startDebridDeviceAuth(): Promise<RealDebridDeviceCodeResponse> {
+  const data = await callDebridApi<RealDebridDeviceCodeResponse>(
+    'oauth/v2/device/code',
+    undefined,
+    'GET',
+    undefined,
+    {
+      client_id: RD_CLIENT_ID,
+      new_credentials: 'yes',
+    }
+  );
+  return data;
+}
+
+/**
+ * Polls for user authorization on real-debrid.com/device
+ */
+export async function pollDebridDeviceCredentials(
+  deviceCode: string
+): Promise<{ client_id: string; client_secret: string } | null> {
+  try {
+    const data = await callDebridApi(
+      'oauth/v2/device/credentials',
+      undefined,
+      'GET',
+      undefined,
+      {
+        client_id: RD_CLIENT_ID,
+        code: deviceCode,
+      }
+    );
+    if (data && data.client_id && data.client_secret) {
+      return { client_id: data.client_id, client_secret: data.client_secret };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Exchanges client credentials & device code for an official access token
+ */
+export async function exchangeDebridToken(
+  clientId: string,
+  clientSecret: string,
+  deviceCode: string
+): Promise<string> {
+  const params = new URLSearchParams();
+  params.append('client_id', clientId);
+  params.append('client_secret', clientSecret);
+  params.append('code', deviceCode);
+  params.append('grant_type', 'http://oauth.net/grant_type/device/1.0');
+
+  const data = await callDebridApi(
+    'oauth/v2/token',
+    undefined,
+    'POST',
+    params.toString()
+  );
+  if (!data?.access_token) {
+    throw new Error('No access_token returned by Real-Debrid');
+  }
+  return data.access_token;
 }
 
 interface RawStremioStream {
@@ -99,7 +256,7 @@ interface RawStremioStream {
 
 /**
  * Resolves direct uncompressed 4K Blu-ray Remux streams using Stremio Addon protocol
- * (Torrentio, Comet, MediaFusion, or Real-Debrid auto-configured bridge)
+ * (Torrentio + Real-Debrid auto-configured bridge)
  */
 export async function resolveStremioStreams(
   tmdbId: number,
@@ -138,7 +295,7 @@ export async function resolveStremioStreams(
 
   try {
     const res = await axios.get<{ streams?: RawStremioStream[] }>(streamEndpoint, {
-      timeout: 10000,
+      timeout: 12000,
     });
 
     const rawStreams = res.data?.streams || [];
@@ -148,26 +305,76 @@ export async function resolveStremioStreams(
       // Must have direct HTTP(S) URL (Real-Debrid / debrid-cached uncompressed stream)
       if (!s.url || !s.url.startsWith('http')) continue;
 
+      // Filter out Torrentio error videos (e.g. "RD error" or "Invalid RealDebrid ApiKey/Token!")
+      if (
+        s.name?.includes('RD error') ||
+        s.title?.includes('Invalid') ||
+        s.url?.includes('failed_access')
+      ) {
+        continue;
+      }
+
       const rawText = `${s.name || ''} ${s.title || ''}`;
+
+      // Detect resolution & quality
       let quality: '4K Ultra HD' | '1080p Ultra' | '720p HD' | 'Auto HD' = '1080p Ultra';
+      let resolution = '1080p';
 
       if (/4k|2160p|uhd|remux/i.test(rawText)) {
         quality = '4K Ultra HD';
+        resolution = '4K';
       } else if (/1080p|fhd/i.test(rawText)) {
         quality = '1080p Ultra';
+        resolution = '1080p';
       } else if (/720p|hd/i.test(rawText)) {
         quality = '720p HD';
+        resolution = '720p';
       }
 
+      // Extract file size (e.g. 💾 48.2 GB)
+      const sizeMatch = s.title?.match(/💾\s*([\d\.]+\s*[GM]B)/i);
+      const fileSize = sizeMatch ? sizeMatch[1] : undefined;
+
+      // Extract audio codec tags
+      let audioChannels: string | undefined;
+      const audioMatch = s.title?.match(/Atmos|TrueHD|DTS-HD|DTS|5\.1|7\.1|AAC/i);
+      if (audioMatch) {
+        audioChannels = audioMatch[0];
+      }
+
+      // Extract video codec
+      let videoCodec: string | undefined;
+      if (/hevc|x265|h\.265|2160p/i.test(rawText)) {
+        videoCodec = 'HEVC / H.265';
+      } else if (/av1/i.test(rawText)) {
+        videoCodec = 'AV1';
+      } else if (/x264|h\.264|avc/i.test(rawText)) {
+        videoCodec = 'AVC / H.264';
+      }
+
+      // Detect container
+      let container: 'mp4' | 'mkv' | 'webm' | 'm3u8' = 'mkv';
+      const cleanUrl = s.url.split('?')[0].toLowerCase();
+      if (cleanUrl.endsWith('.mp4') || s.title?.toLowerCase().includes('.mp4')) {
+        container = 'mp4';
+      } else if (cleanUrl.endsWith('.m3u8')) {
+        container = 'm3u8';
+      } else if (cleanUrl.endsWith('.webm')) {
+        container = 'webm';
+      }
+
+      // Browser compatibility check:
+      // MKV with DTS/TrueHD is not native in Chrome/Safari/Firefox (needs VLC / Just Player)
+      // MP4, WebM, and HLS are browser ready
+      const isBrowserCompatible = container === 'mp4' || container === 'm3u8' || container === 'webm';
+
       // Format clean provider name for the UI
-      let provider = s.name || 'Remux 4K Direct';
+      let provider = s.name || 'Real-Debrid 4K';
       if (s.title) {
-        // Extract file size or audio tags if available (e.g., "💾 48.2 GB • Atmos")
-        const sizeMatch = s.title.match(/💾\s*([\d\.]+\s*[GM]B)/i);
-        const audioMatch = s.title.match(/Atmos|TrueHD|DTS-HD|5\.1|7\.1/i);
         const details = [
-          sizeMatch ? sizeMatch[1] : null,
-          audioMatch ? audioMatch[0] : null,
+          fileSize,
+          audioChannels,
+          videoCodec,
         ].filter(Boolean).join(' • ');
 
         if (details) {
@@ -178,13 +385,34 @@ export async function resolveStremioStreams(
       directStreams.push({
         url: s.url,
         quality,
-        isM3U8: s.url.includes('.m3u8'),
+        resolution,
+        fileSize,
+        rawTitle: s.title || s.name || 'Untitled Stream',
+        audioChannels,
+        videoCodec,
+        container,
+        isBrowserCompatible,
+        isCached: true,
+        isM3U8: container === 'm3u8' || s.url.includes('.m3u8'),
         provider,
         headers: s.behaviorHints?.proxyHeaders,
       });
     }
 
-    return directStreams;
+    // Sort: 4K Ultra HD first, then 1080p; within same quality, sort by file size descending
+    return directStreams.sort((a, b) => {
+      const qScore = (q: string) => (q === '4K Ultra HD' ? 3 : q === '1080p Ultra' ? 2 : 1);
+      const scoreDiff = qScore(b.quality) - qScore(a.quality);
+      if (scoreDiff !== 0) return scoreDiff;
+
+      const parseBytes = (s?: string) => {
+        if (!s) return 0;
+        const num = parseFloat(s);
+        if (s.includes('GB')) return num * 1024;
+        return num;
+      };
+      return parseBytes(b.fileSize) - parseBytes(a.fileSize);
+    });
   } catch (err) {
     console.warn('⚠️ Lumia Stremio Engine: Failed to query addon streams:', err);
     return [];

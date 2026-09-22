@@ -14,6 +14,9 @@ import {
   ChevronRight,
   ArrowLeft,
   Users,
+  Sparkles,
+  Copy,
+  Check,
 } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { openInExternalPlayer, type DirectStream } from '../services/streamResolver';
@@ -33,6 +36,8 @@ interface TVNativePlayerProps {
   hasNextEpisode?: boolean;
   onSwitchToEmbed?: () => void;
   onOpenPartyModal?: () => void;
+  allStreams?: DirectStream[];
+  onOpenStreamSelector?: () => void;
 }
 
 export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
@@ -48,11 +53,15 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   hasNextEpisode = false,
   onSwitchToEmbed,
   onOpenPartyModal,
+  allStreams = [],
+  onOpenStreamSelector,
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const hlsRef = useRef<Hls | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(true);
+  const [videoError, setVideoError] = useState<string | null>(null);
+  const [copiedLink, setCopiedLink] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [buffered, setBuffered] = useState(0);
@@ -225,6 +234,22 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
+    setVideoError(null);
+
+    const onNativeVideoError = () => {
+      const isMkv = stream.container === 'mkv' || stream.url.includes('.mkv');
+      if (isMkv) {
+        setVideoError(
+          'This 4K Blu-ray Remux uses an uncompressed MKV / Dolby Atmos container. Standard web browsers cannot decode MKV/TrueHD natively. Click below to launch in VLC or Just Player on your TV!'
+        );
+      } else {
+        setVideoError('Video stream could not be decoded by the browser. Launch in external player or select an alternative stream.');
+      }
+      setIsPlaying(false);
+    };
+
+    video.addEventListener('error', onNativeVideoError);
+
     if (stream.isM3U8 && Hls.isSupported()) {
       const hls = new Hls({
         enableWorker: true,
@@ -253,22 +278,26 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
               break;
             default:
               hls.destroy();
-              if (onSwitchToEmbed) {
-                onSwitchToEmbed();
-              }
+              setVideoError('HLS stream encountered a playback error. Switch to another stream or free mirrors.');
               break;
           }
         }
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl') || !stream.isM3U8) {
-      // Native Safari / Android HLS or direct MP4
+      // Native Safari / Android HLS or direct MP4 / MKV
       video.src = stream.url;
       video.play().catch(() => {
         setIsPlaying(false);
+        if (stream.container === 'mkv' || stream.url.includes('.mkv')) {
+          setVideoError(
+            'This 4K Blu-ray Remux uses an MKV / Dolby TrueHD container. Launch it in VLC / Just Player for uncompressed 4K HDR & surround sound!'
+          );
+        }
       });
     }
 
     return () => {
+      video.removeEventListener('error', onNativeVideoError);
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
@@ -404,6 +433,62 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         onClick={togglePlay}
       />
 
+      {/* Codec / Playback Error Overlay */}
+      {videoError && (
+        <div className="absolute inset-0 z-40 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
+          <div className="max-w-md w-full bg-[#0e101a] border border-amber-500/40 rounded-3xl p-6 shadow-2xl text-center">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto mb-4">
+              <Tv className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-black text-white mb-2">Browser Codec Notice</h3>
+            <p className="text-xs text-gray-300 leading-relaxed mb-6">
+              {videoError}
+            </p>
+            <div className="space-y-2.5">
+              <button
+                onClick={() => openInExternalPlayer(stream.url, title)}
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20 active:scale-95 transition-all"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span>Launch in VLC / Just Player</span>
+              </button>
+
+              {onOpenStreamSelector && allStreams.length > 1 && (
+                <button
+                  onClick={onOpenStreamSelector}
+                  className="w-full py-2.5 px-4 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-bold text-xs border border-indigo-500/40 flex items-center justify-center gap-2 transition-all"
+                >
+                  <Sparkles className="w-4 h-4 text-indigo-400" />
+                  <span>Choose Another Stream ({allStreams.length} available)</span>
+                </button>
+              )}
+
+              {onSwitchToEmbed && (
+                <button
+                  onClick={onSwitchToEmbed}
+                  className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/15 flex items-center justify-center gap-2 transition-all"
+                >
+                  <Layers className="w-4 h-4 text-indigo-400" />
+                  <span>Switch to Free Mirrors (VidLink Pro)</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(stream.url);
+                  setCopiedLink(true);
+                  setTimeout(() => setCopiedLink(false), 2500);
+                }}
+                className="w-full py-2 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white text-[11px] font-medium transition-all flex items-center justify-center gap-1.5"
+              >
+                {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copiedLink ? 'Stream Link Copied!' : 'Copy Direct Debrid Link'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Central Play/Pause Animation Feedback */}
       {playStateFeedback && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
@@ -489,6 +574,18 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
             >
               <Layers className="w-3.5 h-3.5 text-indigo-400" />
               <span className="hidden sm:inline">Embed Mirrors</span>
+            </button>
+          )}
+
+          {/* Debrid Streams Switcher */}
+          {onOpenStreamSelector && allStreams.length > 0 && (
+            <button
+              onClick={onOpenStreamSelector}
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 text-xs font-bold border border-amber-500/30 flex items-center gap-1.5 transition-all"
+              title="Select Real-Debrid Stream / Quality"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Streams ({allStreams.length})</span>
             </button>
           )}
 

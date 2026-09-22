@@ -17,11 +17,14 @@ import {
   fetchMediaDetails,
   fetchSeasonDetails,
 } from '../services/tmdb';
+import { isRealDebridConfigured } from '../services/stremioResolver';
+import { resolveStreamSources, type DirectStream } from '../services/streamResolver';
+import { DebridStreamModal } from './DebridStreamModal';
 
 interface MediaDetailModalProps {
   media: MediaItem | null;
   onClose: () => void;
-  onPlay: (item: MediaItem, season?: number, episode?: number) => void;
+  onPlay: (item: MediaItem, season?: number, episode?: number, directStream?: DirectStream) => void;
   onOpenTrailer: (item: MediaItem) => void;
   isInWatchlist: (id: number) => boolean;
   onToggleWatchlist: (item: MediaItem) => void;
@@ -41,6 +44,9 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
   const [seasonData, setSeasonData] = useState<Season | null>(null);
   const [activeTab, setActiveTab] = useState<'episodes' | 'cast' | 'similar'>('episodes');
+  const [debridStreams, setDebridStreams] = useState<DirectStream[]>([]);
+  const [isFetchingDebrid, setIsFetchingDebrid] = useState(false);
+  const [isDebridModalOpen, setIsDebridModalOpen] = useState(false);
 
   const isTV = media?.media_type === 'tv' || (!media?.title && !!media?.name);
   const mediaType: MediaType = isTV ? 'tv' : 'movie';
@@ -165,6 +171,31 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
               <Play className="w-5 h-5 fill-white" />
               <span>Watch in 4K Now</span>
             </button>
+
+            {/* Real-Debrid 4K Streams Button */}
+            {isRealDebridConfigured() && (
+              <button
+                data-tv-focus="true"
+                onClick={async () => {
+                  setIsFetchingDebrid(true);
+                  try {
+                    const res = await resolveStreamSources(current.id, mediaType, selectedSeason, 1);
+                    setDebridStreams(res.directStreams);
+                    setIsDebridModalOpen(true);
+                  } catch (e) {
+                    console.error(e);
+                  } finally {
+                    setIsFetchingDebrid(false);
+                  }
+                }}
+                disabled={isFetchingDebrid}
+                className="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-indigo-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 font-bold text-sm flex items-center gap-2 border border-amber-500/40 shadow-lg shadow-amber-500/10 transition-all"
+                title="Browse uncompressed Real-Debrid 4K Blu-ray streams"
+              >
+                <Sparkles className={`w-4 h-4 text-amber-400 ${isFetchingDebrid ? 'animate-spin' : ''}`} />
+                <span>{isFetchingDebrid ? 'Finding 4K Streams...' : 'Real-Debrid 4K'}</span>
+              </button>
+            )}
 
             {/* Watch Trailer Button */}
             <button
@@ -415,6 +446,24 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
             </div>
           )}
         </div>
+
+        {/* Real-Debrid Stream Selector Modal */}
+        <DebridStreamModal
+          isOpen={isDebridModalOpen}
+          onClose={() => setIsDebridModalOpen(false)}
+          title={title}
+          streams={debridStreams}
+          onSelectStream={s => {
+            setIsDebridModalOpen(false);
+            onPlay(current, selectedSeason, 1, s);
+            onClose();
+          }}
+          onSwitchToEmbed={() => {
+            setIsDebridModalOpen(false);
+            onPlay(current, selectedSeason, 1);
+            onClose();
+          }}
+        />
       </div>
     </div>
   );

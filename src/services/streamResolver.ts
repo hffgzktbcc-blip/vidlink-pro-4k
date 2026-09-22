@@ -15,6 +15,14 @@ export interface DirectStream {
   provider: string;
   headers?: Record<string, string>;
   subtitles?: DirectSubtitle[];
+  resolution?: string;
+  fileSize?: string;
+  rawTitle?: string;
+  audioChannels?: string;
+  videoCodec?: string;
+  container?: 'mp4' | 'mkv' | 'webm' | 'm3u8';
+  isBrowserCompatible?: boolean;
+  isCached?: boolean;
 }
 
 export interface StreamResolutionResult {
@@ -50,28 +58,49 @@ export async function resolveStreamSources(
     }
   }
 
+  // Pick first browser-compatible stream as default if available, otherwise first stream
+  const defaultStream =
+    streams.find(s => s.isBrowserCompatible) || streams[0];
+
   return {
     directStreams: streams,
-    defaultStream: streams[0],
+    defaultStream,
     fallbackIframeUrl,
   };
 }
 
 /**
  * Helper to launch external Android TV player (Just Player / VLC / MX Player)
- * via native Android Intent using Capacitor
+ * or desktop VLC / IINA / Infuse
  */
-export function openInExternalPlayer(streamUrl: string, title: string) {
-  if (typeof window !== 'undefined' && (window as any).Capacitor) {
-    const cap = (window as any).Capacitor;
-    if (cap.isNativePlatform && cap.isNativePlatform()) {
+export function openInExternalPlayer(streamUrl: string, title: string): boolean {
+  if (typeof window === 'undefined') return false;
+
+  // 1. Android Native Platform via Capacitor
+  const cap = (window as any).Capacitor;
+  if (cap && cap.isNativePlatform && cap.isNativePlatform()) {
+    try {
       // In Android native, fire ACTION_VIEW intent with video/mp4 or application/x-mpegURL
       window.location.href = `intent:${streamUrl}#Intent;type=video/*;title=${encodeURIComponent(title)};end`;
       return true;
-    }
+    } catch {}
   }
 
-  // Web fallback: open direct stream URL in new tab
-  window.open(streamUrl, '_blank');
-  return false;
+  // 2. Try VLC deep-link protocol (vlc://...)
+  try {
+    const vlcProtocol = `vlc://${streamUrl}`;
+    window.location.href = vlcProtocol;
+    return true;
+  } catch {
+    // 3. Web fallback: open stream link in new tab
+    window.open(streamUrl, '_blank');
+    return false;
+  }
+}
+
+/**
+ * Helper to generate VLC deep-link URL
+ */
+export function getVlcStreamUrl(streamUrl: string): string {
+  return `vlc://${streamUrl}`;
 }

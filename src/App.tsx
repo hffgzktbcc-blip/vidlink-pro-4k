@@ -44,6 +44,7 @@ import { watchPartyManager } from './services/watchParty';
 import { airRemoteManager } from './services/airRemote';
 import { checkForAppUpdate, type AppReleaseInfo } from './services/updateChecker';
 import { ToastContainer, type ToastMessage } from './components/Toast';
+import type { DirectStream } from './services/streamResolver';
 import {
   getStoredStremioAddonUrl,
   setStoredStremioAddonUrl,
@@ -74,6 +75,7 @@ export const App: React.FC = () => {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [trailerMedia, setTrailerMedia] = useState<MediaItem | null>(null);
   const [playingMedia, setPlayingMedia] = useState<MediaItem | null>(null);
+  const [playerDirectStream, setPlayerDirectStream] = useState<DirectStream | null>(null);
   const [isPiP, setIsPiP] = useState(false);
   const [playerSeason, setPlayerSeason] = useState<number>(1);
   const [playerEpisode, setPlayerEpisode] = useState<number>(1);
@@ -442,10 +444,16 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleStartPlaying = (item: MediaItem, season = 1, episode = 1) => {
+  const handleStartPlaying = (
+    item: MediaItem,
+    season = 1,
+    episode = 1,
+    directStream: DirectStream | null = null
+  ) => {
     setPlayingMedia(item);
     setPlayerSeason(season);
     setPlayerEpisode(episode);
+    setPlayerDirectStream(directStream);
 
     // Push browser history state so mobile swipe-back or browser Back button closes the movie
     try {
@@ -918,8 +926,10 @@ export const App: React.FC = () => {
           media={playingMedia}
           initialSeason={playerSeason}
           initialEpisode={playerEpisode}
+          initialDirectStream={playerDirectStream}
           onClose={() => {
             setPlayingMedia(null);
+            setPlayerDirectStream(null);
             setIsPiP(false);
             try {
               if (window.location.search) {
