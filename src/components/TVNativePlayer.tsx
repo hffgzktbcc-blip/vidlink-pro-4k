@@ -18,11 +18,18 @@ import {
   Copy,
   Check,
   AlertTriangle,
+  Maximize,
+  Minimize,
 } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { openInExternalPlayer, type DirectStream } from '../services/streamResolver';
 import { watchPartyManager } from '../services/watchParty';
 import { WatchPartyReactions } from './WatchPartyReactions';
+import {
+  isFullscreenActive,
+  toggleFullscreen,
+  subscribeToFullscreenChange,
+} from '../utils/fullscreen';
 
 interface TVNativePlayerProps {
   media: MediaItem;
@@ -59,6 +66,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   onOpenStreamSelector,
   onSelectStream,
 }) => {
+  const playerContainerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const hlsRef = useRef<Hls | null>(null);
 
@@ -73,6 +81,19 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   const [playStateFeedback, setPlayStateFeedback] = useState<'play' | 'pause' | null>(null);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [isCopyrightNoticeOpen, setIsCopyrightNoticeOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(isFullscreenActive());
+
+  useEffect(() => {
+    setIsFullscreen(isFullscreenActive());
+    const unsub = subscribeToFullscreenChange(active => {
+      setIsFullscreen(active);
+    });
+    return unsub;
+  }, []);
+
+  const handleToggleFullscreen = useCallback(() => {
+    toggleFullscreen(playerContainerRef.current || videoRef.current);
+  }, []);
 
   const handleSwitchToNextStream = useCallback(() => {
     if (!onSelectStream || allStreams.length <= 1) return;
@@ -442,19 +463,29 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         setShowControls(false);
         return;
       }
+
+      // 'F' / 'f' -> Toggle Fullscreen Cinema Mode
+      if (key.toLowerCase() === 'f') {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        handleToggleFullscreen();
+        return;
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown, { capture: true });
     return () => {
       window.removeEventListener('keydown', handleKeyDown, { capture: true });
     };
-  }, [onClose, togglePlay, seekBy, triggerActivity]);
+  }, [onClose, togglePlay, seekBy, triggerActivity, handleToggleFullscreen]);
 
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
   const bufferedPercent = duration > 0 ? (buffered / duration) * 100 : 0;
 
   return (
     <div
+      ref={playerContainerRef}
       data-tv-modal="true"
       className="fixed inset-0 z-50 w-screen h-screen bg-black overflow-hidden select-none"
       onClick={triggerActivity}
@@ -466,6 +497,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         playsInline
         autoPlay
         onClick={togglePlay}
+        onDoubleClick={handleToggleFullscreen}
       />
 
       {/* Codec / Playback Error Overlay */}
@@ -728,6 +760,15 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
             <span className="hidden md:inline">Copyright Issue?</span>
           </button>
 
+          {/* Fullscreen Button */}
+          <button
+            onClick={handleToggleFullscreen}
+            className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all shadow-md"
+            title={isFullscreen ? 'Exit Fullscreen (F)' : 'Enter Fullscreen (F)'}
+          >
+            {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
+          </button>
+
           {/* Close button */}
           <button
             onClick={onClose}
@@ -824,6 +865,16 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
               title="Change Playback Speed (0.75x - 2.0x)"
             >
               {playbackSpeed}x
+            </button>
+
+            {/* Fullscreen Button */}
+            <button
+              onClick={handleToggleFullscreen}
+              className="px-2.5 py-1 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/15 transition-all flex items-center gap-1.5 ml-2"
+              title={isFullscreen ? 'Exit Fullscreen (F)' : 'Enter Fullscreen (F)'}
+            >
+              {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+              <span className="hidden sm:inline">{isFullscreen ? 'Exit Full' : 'Fullscreen'}</span>
             </button>
           </div>
 

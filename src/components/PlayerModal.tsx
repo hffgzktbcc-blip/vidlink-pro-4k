@@ -31,6 +31,12 @@ import { TVNativePlayer } from './TVNativePlayer';
 import { DebridStreamModal } from './DebridStreamModal';
 import { resolveStreamSources, openInExternalPlayer, type DirectStream } from '../services/streamResolver';
 import { WatchPartyReactions } from './WatchPartyReactions';
+import {
+  enterFullscreen,
+  exitFullscreen,
+  isFullscreenActive,
+  subscribeToFullscreenChange,
+} from '../utils/fullscreen';
 
 interface PlayerModalProps {
   media: MediaItem | null;
@@ -88,6 +94,30 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   const [isCursorActive, setIsCursorActive] = useState(isTvModeInitial);
   const [showControls, setShowControls] = useState(true);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleToggleTrueFullscreen = useCallback(async () => {
+    if (isTrueFullscreen || isFullscreenActive()) {
+      await exitFullscreen();
+      setIsTrueFullscreen(false);
+    } else {
+      await enterFullscreen();
+      setIsTrueFullscreen(true);
+    }
+  }, [isTrueFullscreen]);
+
+  const handleClose = useCallback(async () => {
+    if (isFullscreenActive()) {
+      await exitFullscreen();
+    }
+    onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    const unsub = subscribeToFullscreenChange(active => {
+      setIsTrueFullscreen(active);
+    });
+    return unsub;
+  }, []);
 
   // Resolve direct HLS stream for movie or TV show
   useEffect(() => {
@@ -255,12 +285,12 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
       if (e.key === 'Escape') {
         if (isTrueFullscreen) {
-          setIsTrueFullscreen(false);
+          handleToggleTrueFullscreen();
         } else {
-          onClose();
+          handleClose();
         }
       } else if (e.key.toLowerCase() === 'f') {
-        setIsTrueFullscreen(prev => !prev);
+        handleToggleTrueFullscreen();
       } else if (e.key.toLowerCase() === 'c') {
         setIsCursorActive(prev => !prev);
       } else if (e.key.toLowerCase() === 'l') {
@@ -441,7 +471,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
         {/* Dedicated Always-Accessible Mobile Back & Exit Button with iOS Safe Area */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="fixed top-[max(1rem,env(safe-area-inset-top,16px))] left-[max(1rem,env(safe-area-inset-left,16px))] z-50 p-3 sm:p-3.5 rounded-full bg-black/80 hover:bg-red-600 text-white border border-white/20 backdrop-blur-xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2"
           aria-label="Exit Player"
           title="Exit Player & Return to Catalog (Esc)"
@@ -466,7 +496,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           <div className="flex items-center gap-3">
             <button
               data-tv-focus="true"
-              onClick={() => setIsTrueFullscreen(false)}
+              onClick={handleToggleTrueFullscreen}
               className="p-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white border border-white/20 transition-all flex items-center gap-2 text-xs font-bold"
               title="Exit Fullscreen to Windowed Mode (F or Esc)"
             >
@@ -825,7 +855,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           {/* True Fullscreen Toggle */}
           <button
             data-tv-focus="true"
-            onClick={() => setIsTrueFullscreen(true)}
+            onClick={handleToggleTrueFullscreen}
             className="px-3 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-indigo-600/30 border border-indigo-400 transition-all"
             title="Expand to Fullscreen Cinema Mode (F)"
           >
@@ -949,7 +979,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           {/* Close modal */}
           <button
             data-tv-focus="true"
-            onClick={onClose}
+            onClick={handleClose}
             className="p-2.5 rounded-xl bg-white/10 hover:bg-red-500/20 hover:text-red-400 text-gray-300 border border-white/10 hover:border-red-500/30 transition-all"
             title="Close Cinema Mode (Esc)"
           >
