@@ -1,14 +1,16 @@
 import React from 'react';
-import { Flame, Film, Tv, Sparkles, Bookmark } from 'lucide-react';
+import { Flame, Film, Tv, Sparkles, Bookmark, Settings } from 'lucide-react';
 import type { ActiveTab } from '../types';
 import { triggerHaptic } from '../services/haptics';
 import { playSelectSound } from '../services/soundEffects';
+import { isRealDebridConfigured } from '../services/stremioResolver';
 
 interface MobileBottomNavProps {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
   watchlistCount: number;
   onClearSearch?: () => void;
+  onOpenSettings?: () => void;
 }
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
@@ -16,6 +18,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   setActiveTab,
   watchlistCount,
   onClearSearch,
+  onOpenSettings,
 }) => {
   const tabs = [
     { id: 'home' as ActiveTab, label: 'Home', icon: Flame },
@@ -69,6 +72,28 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             </button>
           );
         })}
+
+        {onOpenSettings && (
+          <button
+            onClick={() => {
+              triggerHaptic('light');
+              playSelectSound();
+              onOpenSettings();
+            }}
+            className="relative flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl transition-all duration-200 active:scale-90 select-none text-gray-400 hover:text-gray-200"
+            title="Settings & Real-Debrid Configuration"
+          >
+            <div className="relative">
+              <Settings className="w-5 h-5 stroke-[1.8]" />
+              {isRealDebridConfigured() && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 shadow-sm shadow-amber-400/80" />
+              )}
+            </div>
+            <span className="text-[10px] mt-1 font-semibold tracking-tight text-gray-400">
+              {isRealDebridConfigured() ? 'Debrid' : 'Settings'}
+            </span>
+          </button>
+        )}
       </div>
     </nav>
   );

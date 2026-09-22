@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import type { ActiveTab, MediaItem } from '../types';
 import { searchMedia, getImageUrl } from '../services/tmdb';
+import { isRealDebridConfigured } from '../services/stremioResolver';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -290,12 +291,29 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
+          {/* Real-Debrid Status / Setup Button */}
+          <button
+            data-tv-focus="true"
+            onClick={onOpenSettings}
+            className={`px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 shadow-md ${
+              isRealDebridConfigured()
+                ? 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30'
+                : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-black font-extrabold shadow-amber-500/20 active:scale-95'
+            }`}
+            title="Real-Debrid 4K Engine (Input API Token or Pair QR)"
+          >
+            <Sparkles className={`w-3.5 h-3.5 ${isRealDebridConfigured() ? 'text-amber-400' : 'text-black'}`} />
+            <span className="text-xs font-bold whitespace-nowrap">
+              {isRealDebridConfigured() ? 'Debrid 4K' : 'Connect Real-Debrid'}
+            </span>
+          </button>
+
           {/* Settings Trigger */}
           <button
             data-tv-focus="true"
             onClick={onOpenSettings}
             className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 transition-all"
-            title="Settings (Subtitles, Themes, API)"
+            title="Settings (Subtitles, Themes, Real-Debrid)"
           >
             <Settings className="w-4 h-4" />
           </button>

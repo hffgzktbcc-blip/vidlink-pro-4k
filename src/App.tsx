@@ -50,6 +50,7 @@ import {
   setStoredStremioAddonUrl,
   getStoredRealDebridKey,
   setStoredRealDebridKey,
+  isRealDebridConfigured,
 } from './services/stremioResolver';
 
 const ACCENT_STORAGE_KEY = 'vidlink_accent_color_v1';
@@ -698,6 +699,36 @@ export const App: React.FC = () => {
               onToggleWatchlist={handleToggleWatchlistWithToast}
             />
 
+            {/* Real-Debrid Callout Banner if not yet paired */}
+            {!isRealDebridConfigured() && (
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 mb-6">
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/10 to-[#0e101a]/80 border border-amber-500/40 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xl">
+                  <div className="flex items-center gap-3.5">
+                    <div className="p-3 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                        Unlock Real-Debrid 4K HDR & Blu-ray Remux
+                        <span className="text-[10px] bg-amber-500 text-black font-black px-1.5 py-0.5 rounded tracking-wide">
+                          NEW
+                        </span>
+                      </h3>
+                      <p className="text-xs text-gray-300 mt-0.5 leading-relaxed">
+                        Input your Real-Debrid token or scan QR to stream uncapped 80 Mbps 4K torrents with Dolby Atmos.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsSettingsOpen(true)}
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-black font-extrabold text-xs sm:text-sm whitespace-nowrap shadow-lg shadow-amber-500/25 active:scale-95 transition-all"
+                  >
+                    Connect Real-Debrid
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Mood / Vibe Filter Bar */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 mb-6">
               <div className="glass-panel p-3 rounded-2xl flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -1050,6 +1081,7 @@ export const App: React.FC = () => {
         setActiveTab={setActiveTab}
         watchlistCount={watchlist.length}
         onClearSearch={() => setSearchQuery('')}
+        onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
       {/* Global Toast Notifications */}
