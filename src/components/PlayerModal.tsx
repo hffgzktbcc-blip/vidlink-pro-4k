@@ -347,6 +347,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
           onOpenPartyModal={onOpenWatchParty}
           allStreams={availableDebridStreams}
           onOpenStreamSelector={() => setIsDebridModalOpen(true)}
+          onSelectStream={s => setDirectStream(s)}
         />
         <DebridStreamModal
           isOpen={isDebridModalOpen}

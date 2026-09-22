@@ -10,6 +10,7 @@ import {
   Tv,
   AlertTriangle,
   ArrowRight,
+  ShieldCheck,
 } from 'lucide-react';
 import type { DirectStream } from '../services/streamResolver';
 import { openInExternalPlayer } from '../services/streamResolver';
@@ -35,7 +36,7 @@ export const DebridStreamModal: React.FC<DebridStreamModalProps> = ({
   onSwitchToEmbed,
 }) => {
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
-  const [filter, setFilter] = useState<'all' | '4k' | '1080p' | 'web'>('all');
+  const [filter, setFilter] = useState<'all' | 'safe' | '4k' | '1080p' | 'web'>('all');
 
   if (!isOpen) return null;
 
@@ -47,6 +48,7 @@ export const DebridStreamModal: React.FC<DebridStreamModalProps> = ({
   };
 
   const filteredStreams = streams.filter(s => {
+    if (filter === 'safe') return !s.isHighDmcaRisk;
     if (filter === '4k') return s.quality === '4K Ultra HD';
     if (filter === '1080p') return s.quality === '1080p Ultra';
     if (filter === 'web') return s.isBrowserCompatible;
@@ -84,6 +86,15 @@ export const DebridStreamModal: React.FC<DebridStreamModalProps> = ({
           </button>
         </div>
 
+        {/* Anti-DMCA Notice Banner */}
+        <div className="mt-3 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2.5 text-xs shrink-0">
+          <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+          <div className="text-gray-300 leading-relaxed text-[11px]">
+            <span className="font-bold text-amber-300">Notice about Real-Debrid Copyright Notices: </span>
+            If a stream says "removed due to copyright", choose another release below (releases tagged <strong>TorrentGalaxy</strong>, <strong>1337x</strong>, or <strong>Remux</strong> are usually unaffected) or use <strong>Free Mirrors</strong>.
+          </div>
+        </div>
+
         {/* Filter Pills */}
         <div className="flex items-center gap-2 py-3 border-b border-white/5 overflow-x-auto shrink-0">
           <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mr-1">
@@ -91,6 +102,7 @@ export const DebridStreamModal: React.FC<DebridStreamModalProps> = ({
           </span>
           {[
             { id: 'all', label: `All (${streams.length})` },
+            { id: 'safe', label: `DMCA Safe (${streams.filter(s => !s.isHighDmcaRisk).length})` },
             { id: '4k', label: `4K UHD (${streams.filter(s => s.quality === '4K Ultra HD').length})` },
             { id: '1080p', label: `1080p (${streams.filter(s => s.quality === '1080p Ultra').length})` },
             { id: 'web', label: `Browser Ready (${streams.filter(s => s.isBrowserCompatible).length})` },
@@ -138,6 +150,21 @@ export const DebridStreamModal: React.FC<DebridStreamModalProps> = ({
                       >
                         {is4K ? '4K Ultra HD' : '1080p Full HD'}
                       </span>
+
+                      {/* Source Group Tag */}
+                      {s.sourceGroup && (
+                        <span
+                          className={`px-2 py-0.5 text-[10px] font-bold rounded border flex items-center gap-1 ${
+                            s.isHighDmcaRisk
+                              ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                              : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                          }`}
+                        >
+                          {!s.isHighDmcaRisk && <ShieldCheck className="w-3 h-3 text-emerald-400" />}
+                          <span>{s.sourceGroup}</span>
+                          {s.isHighDmcaRisk && <span className="text-[9px] text-amber-400 font-normal">(DMCA Risk)</span>}
+                        </span>
+                      )}
 
                       {/* File Size */}
                       {s.fileSize && (

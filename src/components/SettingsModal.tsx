@@ -13,6 +13,7 @@ import {
   Smartphone,
   RefreshCw,
   Trash2,
+  AlertTriangle,
 } from 'lucide-react';
 import { ACCENT_COLORS, SUBTITLE_LANGUAGES } from '../services/streaming';
 import {
@@ -181,6 +182,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <p className="text-[11px] text-gray-400 mb-3 leading-relaxed">
               Unlocks uncompressed <strong>50–80 Mbps 4K Blu-ray Remuxes</strong> and Dolby Atmos audio directly inside Lumia's player. Leave blank to use instant free mirrors.
             </p>
+
+            {/* Anti-Copyright Notice Explanation */}
+            <div className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-gray-300">
+              <div className="flex items-center gap-1.5 font-bold text-amber-300 mb-1">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>Notice on Real-Debrid "Removed for Copyright" Warnings</span>
+              </div>
+              <p className="leading-relaxed">
+                Real-Debrid enforces French court-ordered DMCA hash filtering, blocking certain popular releases (e.g. YTS/EZTV). Lumia now queries <strong>both Torrentio & Comet (DMCA-Safe)</strong> in parallel, purging uncached torrents and prioritizing clean releases (TorrentGalaxy, 1337x, Remuxes). If a stream shows copyright, select another release from the stream picker or click Free Mirrors!
+              </p>
+            </div>
 
             {/* Real-Debrid Authentication Section */}
             <div className="mb-4">

@@ -244,6 +244,7 @@ export async function exchangeDebridToken(
 interface RawStremioStream {
   name?: string;
   title?: string;
+  description?: string;
   url?: string;
   infoHash?: string;
   fileIdx?: number;
@@ -255,8 +256,37 @@ interface RawStremioStream {
 }
 
 /**
- * Resolves direct uncompressed 4K Blu-ray Remux streams using Stremio Addon protocol
- * (Torrentio + Real-Debrid auto-configured bridge)
+ * Builds a Comet manifest/stream URL with ElfHosted anti-copyright filtering
+ */
+export function buildCometStreamUrl(
+  rdKey: string,
+  type: MediaType,
+  streamId: string
+): string {
+  const cometConfig = {
+    maxResultsPerResolution: 0,
+    maxSize: 0,
+    cachedOnly: true,
+    removeTrash: true,
+    resultFormat: ['all'],
+    debridServices: [{ service: 'realdebrid', apiKey: rdKey.trim() }],
+    enableTorrent: false,
+    languages: { required: [], allowed: [], exclude: [], preferred: [] },
+    resolutions: {},
+    options: {
+      remove_ranks_under: 0,
+      allow_english_in_languages: true,
+      remove_unknown_languages: false,
+    },
+  };
+  const cometB64 = btoa(JSON.stringify(cometConfig));
+  const streamType = type === 'movie' ? 'movie' : 'series';
+  return `https://comet.elfhosted.com/${cometB64}/stream/${streamType}/${streamId}.json`;
+}
+
+/**
+ * Resolves direct uncompressed 4K Blu-ray Remux streams using dual Stremio engines
+ * (Torrentio with nodownloadlinks + Comet with ElfHosted DMCA/Infringing filter)
  */
 export async function resolveStremioStreams(
   tmdbId: number,
@@ -278,43 +308,86 @@ export async function resolveStremioStreams(
     return [];
   }
 
-  // 2. Build the addon base URL
-  let baseUrl = addonUrl;
-  if (!baseUrl && rdKey) {
-    // Auto-synthesize Torrentio + Real-Debrid manifest URL if user entered RD token
-    baseUrl = `https://torrentio.strem.fun/realdebrid=${rdKey.trim()}|qualityfilter=scr,cam|sort=quality`;
-  }
-
-  // Normalize by stripping /manifest.json if present
-  baseUrl = baseUrl.replace(/\/manifest\.json$/, '').replace(/\/$/, '');
-
-  // 3. Construct stream endpoint
   const streamType = type === 'movie' ? 'movie' : 'series';
   const streamId = type === 'movie' ? imdbId : `${imdbId}:${season}:${episode}`;
-  const streamEndpoint = `${baseUrl}/stream/${streamType}/${streamId}.json`;
 
-  try {
-    const res = await axios.get<{ streams?: RawStremioStream[] }>(streamEndpoint, {
-      timeout: 12000,
+  // 2. Construct endpoints for dual-engine querying
+  const endpoints: { name: string; url: string }[] = [];
+
+  if (addonUrl) {
+    const normAddon = addonUrl.replace(/\/manifest\.json$/, '').replace(/\/$/, '');
+    endpoints.push({
+      name: 'Custom Addon',
+      url: `${normAddon}/stream/${streamType}/${streamId}.json`,
+    });
+  }
+
+  if (rdKey) {
+    // Torrentio with strict cached-only (nodownloadlinks prevents non-cached DMCA failures)
+    endpoints.push({
+      name: 'Torrentio',
+      url: `https://torrentio.strem.fun/realdebrid=${rdKey.trim()}|qualityfilter=scr,cam|debridoptions=nodownloadlinks|sort=quality/stream/${streamType}/${streamId}.json`,
     });
 
-    const rawStreams = res.data?.streams || [];
+    // Comet with ElfHosted anti-copyright workaround filter
+    try {
+      endpoints.push({
+        name: 'Comet (DMCA-Safe)',
+        url: buildCometStreamUrl(rdKey, type, streamId),
+      });
+    } catch (err) {
+      console.warn('⚠️ Lumia Stremio Engine: Failed to construct Comet endpoint:', err);
+    }
+  }
+
+  try {
+    // Query all engines in parallel
+    const responses = await Promise.allSettled(
+      endpoints.map(ep =>
+        axios.get<{ streams?: RawStremioStream[] }>(ep.url, { timeout: 12000 })
+      )
+    );
+
+    const rawStreams: RawStremioStream[] = [];
+    const seenUrls = new Set<string>();
+
+    for (const r of responses) {
+      if (r.status === 'fulfilled' && r.value.data?.streams) {
+        for (const s of r.value.data.streams) {
+          if (s.url && !seenUrls.has(s.url)) {
+            seenUrls.add(s.url);
+            rawStreams.push(s);
+          }
+        }
+      }
+    }
+
     const directStreams: DirectStream[] = [];
 
     for (const s of rawStreams) {
       // Must have direct HTTP(S) URL (Real-Debrid / debrid-cached uncompressed stream)
       if (!s.url || !s.url.startsWith('http')) continue;
 
-      // Filter out Torrentio error videos (e.g. "RD error" or "Invalid RealDebrid ApiKey/Token!")
+      const rawCombined = `${s.name || ''} ${s.title || ''} ${s.description || ''} ${s.url}`.toLowerCase();
+
+      // Filter out Real-Debrid copyright error notices, placeholders, and uncached torrents
       if (
-        s.name?.includes('RD error') ||
-        s.title?.includes('Invalid') ||
-        s.url?.includes('failed_access')
+        rawCombined.includes('rd error') ||
+        rawCombined.includes('invalid') ||
+        rawCombined.includes('failed_access') ||
+        rawCombined.includes('infringing') ||
+        rawCombined.includes('copyright') ||
+        rawCombined.includes('takedown') ||
+        rawCombined.includes('unavailable for legal') ||
+        rawCombined.includes('file_unavailable') ||
+        rawCombined.includes('[rd download]') ||
+        rawCombined.includes('[❌]') ||
+        rawCombined.includes('[⛔️]')
       ) {
         continue;
       }
 
-      const rawText = `${s.name || ''} ${s.title || ''}`;
+      const rawText = `${s.name || ''} ${s.title || ''} ${s.description || ''}`;
 
       // Detect resolution & quality
       let quality: '4K Ultra HD' | '1080p Ultra' | '720p HD' | 'Auto HD' = '1080p Ultra';
@@ -332,12 +405,12 @@ export async function resolveStremioStreams(
       }
 
       // Extract file size (e.g. 💾 48.2 GB)
-      const sizeMatch = s.title?.match(/💾\s*([\d\.]+\s*[GM]B)/i);
+      const sizeMatch = (s.title || s.description || '').match(/💾\s*([\d\.]+\s*[GM]B)/i);
       const fileSize = sizeMatch ? sizeMatch[1] : undefined;
 
       // Extract audio codec tags
       let audioChannels: string | undefined;
-      const audioMatch = s.title?.match(/Atmos|TrueHD|DTS-HD|DTS|5\.1|7\.1|AAC/i);
+      const audioMatch = (s.title || s.description || '').match(/Atmos|TrueHD|DTS-HD|DTS|5\.1|7\.1|AAC/i);
       if (audioMatch) {
         audioChannels = audioMatch[0];
       }
@@ -355,7 +428,7 @@ export async function resolveStremioStreams(
       // Detect container
       let container: 'mp4' | 'mkv' | 'webm' | 'm3u8' = 'mkv';
       const cleanUrl = s.url.split('?')[0].toLowerCase();
-      if (cleanUrl.endsWith('.mp4') || s.title?.toLowerCase().includes('.mp4')) {
+      if (cleanUrl.endsWith('.mp4') || (s.title || '').toLowerCase().includes('.mp4')) {
         container = 'mp4';
       } else if (cleanUrl.endsWith('.m3u8')) {
         container = 'm3u8';
@@ -363,23 +436,42 @@ export async function resolveStremioStreams(
         container = 'webm';
       }
 
-      // Browser compatibility check:
-      // MKV with DTS/TrueHD is not native in Chrome/Safari/Firefox (needs VLC / Just Player)
-      // MP4, WebM, and HLS are browser ready
+      // Browser compatibility check
       const isBrowserCompatible = container === 'mp4' || container === 'm3u8' || container === 'webm';
 
-      // Format clean provider name for the UI
-      let provider = s.name || 'Real-Debrid 4K';
-      if (s.title) {
-        const details = [
-          fileSize,
-          audioChannels,
-          videoCodec,
-        ].filter(Boolean).join(' • ');
+      // Detect release tracker / source group
+      let sourceGroup = 'Real-Debrid';
+      let isHighDmcaRisk = false;
 
-        if (details) {
-          provider = `${provider} (${details})`;
-        }
+      if (/torrentgalaxy|\[tgx\]/i.test(rawCombined)) {
+        sourceGroup = 'TorrentGalaxy';
+      } else if (/1337x/i.test(rawCombined)) {
+        sourceGroup = '1337x';
+      } else if (/thepiratebay|tpb/i.test(rawCombined)) {
+        sourceGroup = 'ThePirateBay';
+      } else if (/framestor|flux|chdbits|remux|bdremux/i.test(rawCombined)) {
+        sourceGroup = 'Remux / Scene';
+      } else if (/yts|yify/i.test(rawCombined)) {
+        sourceGroup = 'YTS';
+        isHighDmcaRisk = true; // YTS public hashes are heavily targeted by studio DMCA on Real-Debrid
+      } else if (/eztv/i.test(rawCombined)) {
+        sourceGroup = 'EZTV';
+        isHighDmcaRisk = true;
+      } else if (/comet/i.test(s.name || '')) {
+        sourceGroup = 'Comet (DMCA-Safe)';
+      }
+
+      // Format clean provider name for the UI
+      let provider = s.name ? s.name.split('\n')[0] : 'Real-Debrid 4K';
+      const details = [
+        sourceGroup !== 'Real-Debrid' ? sourceGroup : undefined,
+        fileSize,
+        audioChannels,
+        videoCodec,
+      ].filter(Boolean).join(' • ');
+
+      if (details) {
+        provider = `${provider} (${details})`;
       }
 
       directStreams.push({
@@ -387,7 +479,7 @@ export async function resolveStremioStreams(
         quality,
         resolution,
         fileSize,
-        rawTitle: s.title || s.name || 'Untitled Stream',
+        rawTitle: s.title || s.description || s.name || 'Untitled Stream',
         audioChannels,
         videoCodec,
         container,
@@ -395,20 +487,29 @@ export async function resolveStremioStreams(
         isCached: true,
         isM3U8: container === 'm3u8' || s.url.includes('.m3u8'),
         provider,
+        sourceGroup,
+        isHighDmcaRisk,
         headers: s.behaviorHints?.proxyHeaders,
       });
     }
 
-    // Sort: 4K Ultra HD first, then 1080p; within same quality, sort by file size descending
+    // Sort:
+    // 1. High DMCA risk (YTS/EZTV) placed at the bottom so users don't hit copyright takedowns first!
+    // 2. 4K Ultra HD first, then 1080p
+    // 3. Within same quality, sort by file size descending (highest bitrate uncompressed remuxes first)
     return directStreams.sort((a, b) => {
+      if (a.isHighDmcaRisk !== b.isHighDmcaRisk) {
+        return a.isHighDmcaRisk ? 1 : -1;
+      }
+
       const qScore = (q: string) => (q === '4K Ultra HD' ? 3 : q === '1080p Ultra' ? 2 : 1);
       const scoreDiff = qScore(b.quality) - qScore(a.quality);
       if (scoreDiff !== 0) return scoreDiff;
 
-      const parseBytes = (s?: string) => {
-        if (!s) return 0;
-        const num = parseFloat(s);
-        if (s.includes('GB')) return num * 1024;
+      const parseBytes = (str?: string) => {
+        if (!str) return 0;
+        const num = parseFloat(str);
+        if (str.includes('GB')) return num * 1024;
         return num;
       };
       return parseBytes(b.fileSize) - parseBytes(a.fileSize);

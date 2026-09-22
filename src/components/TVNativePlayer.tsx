@@ -17,6 +17,7 @@ import {
   Sparkles,
   Copy,
   Check,
+  AlertTriangle,
 } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { openInExternalPlayer, type DirectStream } from '../services/streamResolver';
@@ -38,6 +39,7 @@ interface TVNativePlayerProps {
   onOpenPartyModal?: () => void;
   allStreams?: DirectStream[];
   onOpenStreamSelector?: () => void;
+  onSelectStream?: (s: DirectStream) => void;
 }
 
 export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
@@ -55,6 +57,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   onOpenPartyModal,
   allStreams = [],
   onOpenStreamSelector,
+  onSelectStream,
 }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const hlsRef = useRef<Hls | null>(null);
@@ -69,6 +72,23 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   const [seekFeedback, setSeekFeedback] = useState<'forward' | 'backward' | null>(null);
   const [playStateFeedback, setPlayStateFeedback] = useState<'play' | 'pause' | null>(null);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
+  const [isCopyrightNoticeOpen, setIsCopyrightNoticeOpen] = useState(false);
+
+  const handleSwitchToNextStream = useCallback(() => {
+    if (!onSelectStream || allStreams.length <= 1) return;
+    const currentIndex = allStreams.findIndex(s => s.url === stream.url);
+    let nextIndex = (currentIndex + 1) % allStreams.length;
+    for (let i = 1; i < allStreams.length; i++) {
+      const idx = (currentIndex + i) % allStreams.length;
+      if (!allStreams[idx].isHighDmcaRisk) {
+        nextIndex = idx;
+        break;
+      }
+    }
+    setIsCopyrightNoticeOpen(false);
+    setVideoError(null);
+    onSelectStream(allStreams[nextIndex]);
+  }, [allStreams, onSelectStream, stream.url]);
 
   const cycleSpeed = () => {
     const speeds = [1.0, 1.25, 1.5, 2.0, 0.75];
@@ -311,7 +331,20 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
     if (!video) return;
 
     const onTimeUpdate = () => setCurrentTime(video.currentTime);
-    const onDurationChange = () => setDuration(video.duration);
+    const onDurationChange = () => {
+      const d = video.duration;
+      setDuration(d);
+      // Real-Debrid copyright takedown placeholder videos are ~5 to 15 seconds long
+      if (d > 0 && d <= 25) {
+        setIsCopyrightNoticeOpen(true);
+      }
+    };
+    const onEnded = () => {
+      // If video completed within 25 seconds, it is almost certainly a copyright notice clip
+      if (video.currentTime > 0 && video.currentTime <= 25) {
+        setIsCopyrightNoticeOpen(true);
+      }
+    };
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
     const onProgress = () => {
@@ -322,6 +355,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
 
     video.addEventListener('timeupdate', onTimeUpdate);
     video.addEventListener('durationchange', onDurationChange);
+    video.addEventListener('ended', onEnded);
     video.addEventListener('play', onPlay);
     video.addEventListener('pause', onPause);
     video.addEventListener('progress', onProgress);
@@ -329,6 +363,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
     return () => {
       video.removeEventListener('timeupdate', onTimeUpdate);
       video.removeEventListener('durationchange', onDurationChange);
+      video.removeEventListener('ended', onEnded);
       video.removeEventListener('play', onPlay);
       video.removeEventListener('pause', onPause);
       video.removeEventListener('progress', onProgress);
@@ -445,9 +480,19 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
               {videoError}
             </p>
             <div className="space-y-2.5">
+              {onSelectStream && allStreams.length > 1 && (
+                <button
+                  onClick={handleSwitchToNextStream}
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 active:scale-95 transition-all"
+                >
+                  <Play className="w-4 h-4 fill-black" />
+                  <span>Try Next Stream (Auto-Skip DMCAd Release)</span>
+                </button>
+              )}
+
               <button
                 onClick={() => openInExternalPlayer(stream.url, title)}
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20 active:scale-95 transition-all"
+                className="w-full py-2.5 px-4 rounded-xl bg-orange-500/20 hover:bg-orange-500/30 text-orange-300 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-orange-500/30 transition-all"
               >
                 <ExternalLink className="w-4 h-4" />
                 <span>Launch in VLC / Just Player</span>
@@ -483,6 +528,68 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
               >
                 {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copiedLink ? 'Stream Link Copied!' : 'Copy Direct Debrid Link'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Real-Debrid Copyright Notice Detected Overlay */}
+      {isCopyrightNoticeOpen && (
+        <div className="absolute inset-0 z-50 bg-black/92 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
+          <div className="max-w-md w-full bg-[#0e101a] border border-amber-500/50 rounded-3xl p-6 sm:p-7 shadow-2xl text-center flex flex-col items-center">
+            <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mb-4 shadow-lg shadow-amber-500/20">
+              <AlertTriangle className="w-7 h-7" />
+            </div>
+            <h3 className="text-lg font-black text-white mb-1.5">
+              Real-Debrid Copyright Notice Detected
+            </h3>
+            <p className="text-xs text-gray-300 leading-relaxed mb-5">
+              Real-Debrid filtered this specific torrent release due to copyright compliance. Alternative releases for this title or our free 4K mirrors are ready to play!
+            </p>
+
+            <div className="w-full space-y-2.5">
+              {allStreams.length > 1 && onSelectStream && (
+                <button
+                  onClick={handleSwitchToNextStream}
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 active:scale-95 transition-all"
+                >
+                  <Play className="w-4 h-4 fill-black" />
+                  <span>Auto-Switch to Next Release ({allStreams.length} available)</span>
+                </button>
+              )}
+
+              {onSwitchToEmbed && (
+                <button
+                  onClick={() => {
+                    setIsCopyrightNoticeOpen(false);
+                    onSwitchToEmbed();
+                  }}
+                  className="w-full py-2.5 px-4 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 font-bold text-xs border border-indigo-500/40 flex items-center justify-center gap-2 transition-all"
+                >
+                  <Layers className="w-4 h-4 text-indigo-400" />
+                  <span>Switch to Free 4K Mirrors (VidLink Pro)</span>
+                </button>
+              )}
+
+              {onOpenStreamSelector && allStreams.length > 1 && (
+                <button
+                  onClick={() => {
+                    setIsCopyrightNoticeOpen(false);
+                    onOpenStreamSelector();
+                  }}
+                  className="w-full py-2 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/15 flex items-center justify-center gap-2 transition-all"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Browse All Releases</span>
+                </button>
+              )}
+
+              <button
+                onClick={() => setIsCopyrightNoticeOpen(false)}
+                className="w-full py-2 text-gray-400 hover:text-white text-xs font-medium transition-colors"
+              >
+                Dismiss & Keep Playing
               </button>
             </div>
           </div>
@@ -610,6 +717,16 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
               <span className="hidden sm:inline">Party</span>
             </button>
           )}
+
+          {/* Copyright notice quick action */}
+          <button
+            onClick={() => setIsCopyrightNoticeOpen(true)}
+            className="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1.5 transition-all"
+            title="Stream showing copyright warning? Switch release"
+          >
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden md:inline">Copyright Issue?</span>
+          </button>
 
           {/* Close button */}
           <button

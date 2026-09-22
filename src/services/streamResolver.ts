@@ -23,6 +23,8 @@ export interface DirectStream {
   container?: 'mp4' | 'mkv' | 'webm' | 'm3u8';
   isBrowserCompatible?: boolean;
   isCached?: boolean;
+  sourceGroup?: string;
+  isHighDmcaRisk?: boolean;
 }
 
 export interface StreamResolutionResult {
