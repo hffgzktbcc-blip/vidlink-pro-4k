@@ -20,6 +20,9 @@ import {
   AlertTriangle,
   Maximize,
   Minimize,
+  Volume2,
+  Volume1,
+  VolumeX,
 } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { openInExternalPlayer, type DirectStream } from '../services/streamResolver';
@@ -82,6 +85,10 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [isCopyrightNoticeOpen, setIsCopyrightNoticeOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(isFullscreenActive());
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const volumeHideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     setIsFullscreen(isFullscreenActive());
@@ -94,6 +101,36 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
   const handleToggleFullscreen = useCallback(() => {
     toggleFullscreen(playerContainerRef.current || videoRef.current);
   }, []);
+
+  const handleToggleMute = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const next = !isMuted;
+    video.muted = next;
+    setIsMuted(next);
+    if (!next && volume === 0) {
+      video.volume = 0.5;
+      setVolume(0.5);
+    }
+    showVolumePanel();
+  }, [isMuted, volume]);
+
+  const handleVolumeChange = useCallback((val: number) => {
+    const video = videoRef.current;
+    if (!video) return;
+    const clamped = Math.max(0, Math.min(1, val));
+    video.volume = clamped;
+    video.muted = clamped === 0;
+    setVolume(clamped);
+    setIsMuted(clamped === 0);
+    showVolumePanel();
+  }, []);
+
+  const showVolumePanel = () => {
+    setShowVolumeSlider(true);
+    if (volumeHideTimer.current) clearTimeout(volumeHideTimer.current);
+    volumeHideTimer.current = setTimeout(() => setShowVolumeSlider(false), 2500);
+  };
 
   const handleSwitchToNextStream = useCallback(() => {
     if (!onSelectStream || allStreams.length <= 1) return;
@@ -472,13 +509,22 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
         handleToggleFullscreen();
         return;
       }
+
+      // 'M' / 'm' -> Toggle Mute
+      if (key.toLowerCase() === 'm') {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        handleToggleMute();
+        return;
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown, { capture: true });
     return () => {
       window.removeEventListener('keydown', handleKeyDown, { capture: true });
     };
-  }, [onClose, togglePlay, seekBy, triggerActivity, handleToggleFullscreen]);
+  }, [onClose, togglePlay, seekBy, triggerActivity, handleToggleFullscreen, handleToggleMute]);
 
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
   const bufferedPercent = duration > 0 ? (buffered / duration) * 100 : 0;
@@ -867,6 +913,47 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
               {playbackSpeed}x
             </button>
 
+            {/* Volume Controls */}
+            <div className="flex items-center gap-1.5 ml-2 relative group">
+              {/* Mute / Unmute Button */}
+              <button
+                onClick={handleToggleMute}
+                onMouseEnter={showVolumePanel}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all"
+                title={isMuted ? 'Unmute (M)' : 'Mute (M)'}
+              >
+                {isMuted || volume === 0 ? (
+                  <VolumeX className="w-4 h-4" />
+                ) : volume < 0.5 ? (
+                  <Volume1 className="w-4 h-4" />
+                ) : (
+                  <Volume2 className="w-4 h-4" />
+                )}
+              </button>
+
+              {/* Expandable Volume Slider */}
+              <div
+                className={`flex items-center gap-2 overflow-hidden transition-all duration-300 ${
+                  showVolumeSlider ? 'w-24 opacity-100' : 'w-0 opacity-0'
+                }`}
+                onMouseEnter={showVolumePanel}
+              >
+                <input
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.02}
+                  value={isMuted ? 0 : volume}
+                  onChange={e => handleVolumeChange(parseFloat(e.target.value))}
+                  className="w-full h-1.5 accent-indigo-400 cursor-pointer rounded-full bg-white/20"
+                  title={`Volume: ${Math.round((isMuted ? 0 : volume) * 100)}%`}
+                />
+                <span className="text-[10px] font-mono text-gray-300 shrink-0 w-7 text-right">
+                  {Math.round((isMuted ? 0 : volume) * 100)}%
+                </span>
+              </div>
+            </div>
+
             {/* Fullscreen Button */}
             <button
               onClick={handleToggleFullscreen}
@@ -881,7 +968,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
           {/* Right Status & TV Remote Helper */}
           <div className="flex items-center gap-4 text-[11px] text-gray-300">
             <span className="hidden md:inline px-3 py-1 rounded-xl bg-white/10 border border-white/15">
-              🎮 <b>OK</b>: Play/Pause • <b>◀/▶</b>: Skip 10s • <b>▲/▼</b>: Controls • <b>Back</b>: Exit
+              🎮 <b>OK</b>: Play/Pause • <b>◀/▶</b>: Skip 10s • <b>▲/▼</b>: Controls • <b>M</b>: Mute • <b>F</b>: Fullscreen • <b>Back</b>: Exit
             </span>
           </div>
         </div>
