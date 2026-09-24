@@ -1,4 +1,5 @@
 import { callDebridApi } from './stremioResolver';
+import { addonEngine } from './addonEngine';
 
 export interface AudiobookStream {
   url: string;
@@ -8,36 +9,21 @@ export interface AudiobookStream {
 }
 
 /**
- * Step 1: Search APBay (ThePirateBay API) for the audiobook.
- * Category 102 is Audio > Audio books.
+ * Step 1: Search all enabled Download Sources via the Addon Engine.
  */
 async function searchAudiobookTorrent(title: string, author: string) {
-  // Strip out punctuation that might mess up torrent searches
-  const cleanTitle = title.replace(/[^\w\s]/g, ' ').trim();
-  const cleanAuthor = author.replace(/[^\w\s]/g, ' ').trim();
-  
-  const fetchWithQuery = async (q: string) => {
-    const targetUrl = `https://apibay.org/q.php?q=${encodeURIComponent(q)}&cat=102`;
-    const url = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
-    
-    const res = await fetch(url);
-    const data = await res.json();
-    if (!data || data.length === 0 || data[0].id === '0') return null;
-    // Sort by seeders descending
-    data.sort((a: any, b: any) => parseInt(b.seeders || '0') - parseInt(a.seeders || '0'));
-    return data[0];
-  };
-
   try {
-    // 1. Try Title + Author
-    let torrent = await fetchWithQuery(`${cleanTitle} ${cleanAuthor}`);
-    
-    // 2. Fallback to just Title
-    if (!torrent) {
-      torrent = await fetchWithQuery(cleanTitle);
+    let results = await addonEngine.searchDownloads(title, author);
+    if (results.length === 0) {
+      results = await addonEngine.searchDownloads(title, '');
     }
-    
-    return torrent;
+    if (results.length > 0) {
+      return {
+        info_hash: results[0].infoHash,
+        name: results[0].title
+      };
+    }
+    return null;
   } catch (error) {
     console.error('Failed to search audiobook torrents:', error);
     return null;
