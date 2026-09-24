@@ -54,6 +54,28 @@ export const BUILTIN_ADDONS: Addon[] = [
     }
   },
   {
+    id: 'torrents-csv',
+    name: 'Torrents-CSV (Global)',
+    version: '1.0.0',
+    type: 'download',
+    request: {
+      method: 'GET',
+      url: 'https://torrents-csv.com/service/search?q={TITLE} {AUTHOR}&size=50',
+      useCorsProxy: false
+    },
+    response: {
+      type: 'json',
+      resultsPath: 'torrents',
+      mapping: {
+        title: 'name',
+        infoHash: 'infohash',
+        seeders: 'seeders',
+        leechers: 'leechers',
+        size: 'size_bytes'
+      }
+    }
+  },
+  {
     id: 'apbay',
     name: 'APBay Audiobooks',
     version: '1.0.0',
@@ -176,6 +198,12 @@ export class AddonEngine {
             leechers: parseInt(getValueByPath(item, mapping.leechers) || '0'),
             size: getValueByPath(item, mapping.size)
           };
+        }).filter(item => {
+          if (!item.title) return false;
+          const t = item.title.toLowerCase();
+          // Reject obvious ebooks
+          if (t.includes('epub') || t.includes('mobi') || t.includes('pdf') || t.includes(' azw3')) return false;
+          return true;
         });
         
         allResults = [...allResults, ...mappedResults];
