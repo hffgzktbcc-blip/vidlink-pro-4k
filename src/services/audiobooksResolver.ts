@@ -17,7 +17,9 @@ async function searchAudiobookTorrent(title: string, author: string) {
   const cleanAuthor = author.replace(/[^\w\s]/g, ' ').trim();
   
   const fetchWithQuery = async (q: string) => {
-    const url = `https://apibay.org/q.php?q=${encodeURIComponent(q)}&cat=102`;
+    const targetUrl = `https://apibay.org/q.php?q=${encodeURIComponent(q)}&cat=102`;
+    const url = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+    
     const res = await fetch(url);
     const data = await res.json();
     if (!data || data.length === 0 || data[0].id === '0') return null;
