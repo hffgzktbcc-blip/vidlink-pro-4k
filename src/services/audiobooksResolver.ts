@@ -13,10 +13,30 @@ export interface AudiobookStream {
  */
 async function searchAudiobookTorrent(title: string, author: string) {
   try {
+    // 1. Full Title + Author
     let results = await addonEngine.searchDownloads(title, author);
+    
+    // 2. Full Title only
     if (results.length === 0) {
       results = await addonEngine.searchDownloads(title, '');
     }
+
+    // 3. Smart Fallbacks (Strip subtitles, parentheses, "A Novel", etc)
+    if (results.length === 0) {
+      const shortTitle = title.split(':')[0].split('(')[0].replace(/A Novel/i, '').trim();
+      const shortAuthor = author.split(' ')[author.split(' ').length - 1]; // Last name
+      
+      // Short Title + Last Name
+      if (shortTitle.length > 2) {
+         results = await addonEngine.searchDownloads(shortTitle, shortAuthor);
+         
+         // 4. Short Title only
+         if (results.length === 0) {
+            results = await addonEngine.searchDownloads(shortTitle, '');
+         }
+      }
+    }
+
     if (results.length > 0) {
       return {
         info_hash: results[0].infoHash,
