@@ -1,6 +1,7 @@
 export interface AddonRequest {
   method?: string;
   url: string;
+  useCorsProxy?: boolean;
   headers?: Record<string, string>;
   body?: Record<string, any>;
 }

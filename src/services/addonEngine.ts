@@ -11,7 +11,8 @@ export const BUILTIN_ADDONS: Addon[] = [
     search: {
       request: {
         method: 'GET',
-        url: 'https://openlibrary.org/search.json?q={QUERY}&limit=20'
+        url: 'https://openlibrary.org/search.json?q={QUERY}&limit=20',
+        useCorsProxy: false
       },
       response: {
         type: 'json',
@@ -20,7 +21,7 @@ export const BUILTIN_ADDONS: Addon[] = [
           id: 'key',
           title: 'title',
           author: 'author_name.0',
-          description: 'first_sentence.0', // fallback array handling in engine
+          description: 'first_sentence.0',
           cover: 'cover_i',
           publishedYear: 'first_publish_year'
         }
@@ -34,7 +35,8 @@ export const BUILTIN_ADDONS: Addon[] = [
     type: 'download',
     request: {
       method: 'GET',
-      url: 'https://apibay.org/q.php?q={TITLE} {AUTHOR}&cat=102'
+      url: 'https://apibay.org/q.php?q={TITLE} {AUTHOR}&cat=102',
+      useCorsProxy: true
     },
     response: {
       type: 'json',
@@ -62,12 +64,12 @@ function getValueByPath(obj: any, path: string): any {
 }
 
 // Helper to inject variables into URLs
-function buildUrl(urlTemplate: string, variables: Record<string, string>): string {
+function buildUrl(urlTemplate: string, variables: Record<string, string>, useProxy: boolean = false): string {
   let url = urlTemplate;
   for (const [key, value] of Object.entries(variables)) {
     url = url.replace(new RegExp(`{${key}}`, 'g'), encodeURIComponent(value || ''));
   }
-  return `https://corsproxy.io/?${encodeURIComponent(url)}`;
+  return useProxy ? `https://corsproxy.io/?${encodeURIComponent(url)}` : url;
 }
 
 export class AddonEngine {
@@ -85,7 +87,7 @@ export class AddonEngine {
     const provider = this.getProviders().find(p => p.id === providerId) || this.getProviders()[0];
     if (!provider) throw new Error('No metadata provider found');
 
-    const url = buildUrl(provider.search.request.url, { QUERY: query });
+    const url = buildUrl(provider.search.request.url, { QUERY: query }, provider.search.request.useCorsProxy);
     const res = await fetch(url);
     const data = await res.json();
 
@@ -127,7 +129,7 @@ export class AddonEngine {
 
     for (const source of sources) {
       try {
-        const url = buildUrl(source.request.url, { TITLE: cleanTitle, AUTHOR: cleanAuthor });
+        const url = buildUrl(source.request.url, { TITLE: cleanTitle, AUTHOR: cleanAuthor }, source.request.useCorsProxy);
         const res = await fetch(url);
         const data = await res.json();
         
