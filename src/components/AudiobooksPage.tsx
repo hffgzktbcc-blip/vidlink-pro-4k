@@ -19,7 +19,7 @@ export const AudiobooksPage: React.FC = () => {
 
   // Initial load
   useEffect(() => {
-    handleSearch('bestseller fiction');
+    handleSearch('Stephen King');
   }, []);
 
   const handleSearch = async (searchQuery: string) => {
