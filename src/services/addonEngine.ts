@@ -94,7 +94,7 @@ function buildUrl(urlTemplate: string, variables: Record<string, string>, usePro
   for (const [key, value] of Object.entries(variables)) {
     url = url.replace(new RegExp(`{${key}}`, 'g'), encodeURIComponent(value || ''));
   }
-  return useProxy ? `https://corsproxy.io/?${encodeURIComponent(url)}` : url;
+  return useProxy ? `https://lumia-4k.pages.dev/api/proxy?url=${encodeURIComponent(url)}` : url;
 }
 
 export class AddonEngine {
