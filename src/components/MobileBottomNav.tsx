@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flame, Film, Tv, Sparkles, Bookmark, Settings } from 'lucide-react';
+import { Flame, Film, Tv, Bookmark, Settings, Headphones } from 'lucide-react';
 import type { ActiveTab } from '../types';
 import { triggerHaptic } from '../services/haptics';
 import { playSelectSound } from '../services/soundEffects';
@@ -24,7 +24,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     { id: 'home' as ActiveTab, label: 'Home', icon: Flame },
     { id: 'movies' as ActiveTab, label: 'Movies', icon: Film },
     { id: 'tv' as ActiveTab, label: 'TV Shows', icon: Tv },
-    { id: '4k' as ActiveTab, label: '4K UHD', icon: Sparkles },
+    { id: 'audiobooks' as ActiveTab, label: 'Books', icon: Headphones },
     { id: 'watchlist' as ActiveTab, label: 'My List', icon: Bookmark, count: watchlistCount },
   ];
 

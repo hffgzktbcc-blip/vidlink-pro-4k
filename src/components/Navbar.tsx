@@ -14,6 +14,7 @@ import {
   QrCode,
   Users,
   Smartphone,
+  Headphones,
 } from 'lucide-react';
 import type { ActiveTab, MediaItem } from '../types';
 import { searchMedia, getImageUrl } from '../services/tmdb';
@@ -102,6 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'tv', label: 'TV Shows', icon: Tv },
     { id: '4k', label: '4K Ultra HD', icon: Sparkles, badge: '4K' },
     { id: 'universes', label: 'Universes', icon: Compass },
+    { id: 'audiobooks', label: 'Audiobooks', icon: Headphones },
     { id: 'watchlist', label: 'My Watchlist', icon: Bookmark, count: watchlistCount },
   ];
 

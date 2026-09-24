@@ -40,6 +40,7 @@ import { WatchPartyModal } from './components/WatchPartyModal';
 import { AirRemoteModal } from './components/AirRemoteModal';
 import { AirRemoteView } from './components/AirRemoteView';
 import { VibeSearchModal } from './components/VibeSearchModal';
+import { AudiobooksPage } from './components/AudiobooksPage';
 import { watchPartyManager } from './services/watchParty';
 import { airRemoteManager } from './services/airRemote';
 import { checkForAppUpdate, type AppReleaseInfo } from './services/updateChecker';
@@ -578,6 +579,10 @@ export const App: React.FC = () => {
             isInWatchlist={isInWatchlist}
             onToggleWatchlist={handleToggleWatchlistWithToast}
           />
+        ) : activeTab === 'audiobooks' ? (
+          <div className="pt-16 pb-20 md:pb-0 h-screen">
+            <AudiobooksPage />
+          </div>
         ) : activeTab === 'watchlist' ? (
           /* Watchlist Tab */
           <WatchlistView
@@ -919,6 +924,9 @@ export const App: React.FC = () => {
             </button>
             <button onClick={() => setActiveTab('universes')} className="hover:text-white transition-colors">
               Universes
+            </button>
+            <button onClick={() => setActiveTab('audiobooks')} className="hover:text-white transition-colors">
+              Audiobooks
             </button>
             <button onClick={() => setActiveTab('watchlist')} className="hover:text-white transition-colors">
               Watchlist

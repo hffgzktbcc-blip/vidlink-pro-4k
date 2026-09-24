@@ -72,7 +72,7 @@ const RD_CLIENT_ID = 'X245A4XAIBGVM';
  * Tier 2: Public CORS proxy fallback (corsproxy.io)
  * Tier 3: Direct API call
  */
-async function callDebridApi<T = any>(
+export async function callDebridApi<T = any>(
   endpoint: string,
   token?: string,
   method: 'GET' | 'POST' = 'GET',

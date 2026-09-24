@@ -131,4 +131,4 @@ export interface UniverseCollection {
   chronologicalItems?: UniverseItem[];
 }
 
-export type ActiveTab = 'home' | 'movies' | 'tv' | '4k' | 'universes' | 'trending' | 'watchlist';
+export type ActiveTab = 'home' | 'movies' | 'tv' | '4k' | 'universes' | 'trending' | 'watchlist' | 'audiobooks';
