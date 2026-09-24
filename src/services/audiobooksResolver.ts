@@ -9,25 +9,33 @@ export interface AudiobookStream {
 
 /**
  * Step 1: Search APBay (ThePirateBay API) for the audiobook.
- * Category 116 is Audio > Audio books.
+ * Category 102 is Audio > Audio books.
  */
 async function searchAudiobookTorrent(title: string, author: string) {
-  const query = encodeURIComponent(`${title} ${author}`.trim());
-  const url = `https://apibay.org/q.php?q=${query}&cat=116`;
+  // Strip out punctuation that might mess up torrent searches
+  const cleanTitle = title.replace(/[^\w\s]/g, ' ').trim();
+  const cleanAuthor = author.replace(/[^\w\s]/g, ' ').trim();
   
-  try {
+  const fetchWithQuery = async (q: string) => {
+    const url = `https://apibay.org/q.php?q=${encodeURIComponent(q)}&cat=102`;
     const res = await fetch(url);
     const data = await res.json();
+    if (!data || data.length === 0 || data[0].id === '0') return null;
+    // Sort by seeders descending
+    data.sort((a: any, b: any) => parseInt(b.seeders || '0') - parseInt(a.seeders || '0'));
+    return data[0];
+  };
+
+  try {
+    // 1. Try Title + Author
+    let torrent = await fetchWithQuery(`${cleanTitle} ${cleanAuthor}`);
     
-    // Filter out dummy response from apibay if no results
-    if (!data || data.length === 0 || data[0].id === '0') {
-      return null;
+    // 2. Fallback to just Title
+    if (!torrent) {
+      torrent = await fetchWithQuery(cleanTitle);
     }
     
-    // Sort by seeders descending
-    data.sort((a: any, b: any) => parseInt(b.seeders) - parseInt(a.seeders));
-    
-    return data[0]; // Return the top result
+    return torrent;
   } catch (error) {
     console.error('Failed to search audiobook torrents:', error);
     return null;
