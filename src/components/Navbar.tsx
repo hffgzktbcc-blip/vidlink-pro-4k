@@ -51,6 +51,21 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAirRemote,
   onOpenVibeSearch,
 }) => {
+  const [localSearch, setLocalSearch] = useState(searchQuery);
+
+  useEffect(() => {
+    setLocalSearch(searchQuery);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchQuery !== localSearch) {
+        setSearchQuery(localSearch);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [localSearch, setSearchQuery, searchQuery]);
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [suggestions, setSuggestions] = useState<MediaItem[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -200,15 +215,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             <input
               type="text"
               data-tv-focus="true"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
+              value={localSearch}
+              onChange={e => setLocalSearch(e.target.value)}
               placeholder="Search 4K movies, series..."
               className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-white/5 hover:bg-white/10 focus:bg-[#0e101a] border border-white/10 focus:border-indigo-500/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
             />
-            {searchQuery && (
+            {localSearch && (
               <button
                 data-tv-focus="true"
-                onClick={() => setSearchQuery('')}
+                onClick={() => setLocalSearch('')}
                 className="absolute right-2.5 text-gray-400 hover:text-white p-0.5 rounded-full hover:bg-white/10"
               >
                 <X className="w-3.5 h-3.5" />

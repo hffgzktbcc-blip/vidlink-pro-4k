@@ -11,7 +11,17 @@ interface SpatialNavOptions {
 export function useSpatialNav(options: SpatialNavOptions = {}) {
   const { onBack } = options;
   const [isTvMode, setIsTvMode] = useState<boolean>(() => {
-    return localStorage.getItem('vidlink_tv_mode') === 'true';
+    const saved = localStorage.getItem('vidlink_tv_mode');
+    if (saved !== null) return saved === 'true';
+    
+    // Auto-detect TV on first launch
+    if (typeof window !== 'undefined' && window.navigator) {
+      const ua = window.navigator.userAgent.toLowerCase();
+      if (ua.includes('tv') || ua.includes('android tv') || ua.includes('smart-tv') || ua.includes('leanback')) {
+        return true;
+      }
+    }
+    return false;
   });
 
   const activeElementRef = useRef<HTMLElement | null>(null);
