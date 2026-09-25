@@ -330,7 +330,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
 
       {/* Playback Error */}
       {videoError && (
-        <div className="absolute inset-0 z-40 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
+        <div className="absolute inset-0 z-40 bg-black/90  flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
           <div className="max-w-md w-full bg-[#0e101a] border border-amber-500/40 rounded-3xl p-6 shadow-2xl text-center">
             <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto mb-4">
               <Tv className="w-6 h-6" />
@@ -362,7 +362,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
 
       {/* Stream Unavailable */}
       {isCopyrightNoticeOpen && (
-        <div className="absolute inset-0 z-50 bg-black/92 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
+        <div className="absolute inset-0 z-50 bg-black/92  flex items-center justify-center p-4 sm:p-6 animate-in fade-in">
           <div className="max-w-md w-full bg-[#0e101a] border border-amber-500/50 rounded-3xl p-6 sm:p-7 shadow-2xl text-center flex flex-col items-center">
             <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mb-4">
               <AlertTriangle className="w-7 h-7" />
@@ -394,7 +394,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
       {/* Centre feedback */}
       {playStateFeedback && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
-          <div className="p-6 rounded-full bg-black/75 border border-white/20 text-white backdrop-blur-md shadow-2xl animate-ping opacity-75">
+          <div className="p-6 rounded-full bg-black/75 border border-white/20 text-white  shadow-2xl animate-ping opacity-75">
             {playStateFeedback === 'play' ? <Play className="w-12 h-12 fill-white" /> : <Pause className="w-12 h-12 fill-white" />}
           </div>
         </div>
@@ -403,7 +403,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
       {/* Skip feedback */}
       {seekFeedback && (
         <div className={`absolute top-1/2 -translate-y-1/2 z-40 pointer-events-none ${seekFeedback === 'forward' ? 'right-12' : 'left-12'}`}>
-          <div className="px-5 py-3 rounded-2xl bg-black/85 border border-white/20 text-white flex items-center gap-2 backdrop-blur-lg shadow-2xl">
+          <div className="px-5 py-3 rounded-2xl bg-black/85 border border-white/20 text-white flex items-center gap-2  shadow-2xl">
             {seekFeedback === 'forward'
               ? <><span className="text-base font-black">+10s</span><RotateCw className="w-5 h-5 text-white/60" /></>
               : <><RotateCcw className="w-5 h-5 text-white/60" /><span className="text-base font-black">-10s</span></>
@@ -415,7 +415,7 @@ export const TVNativePlayer: React.FC<TVNativePlayerProps> = ({
       {/* TOP BAR */}
       <div className={`absolute top-0 left-0 right-0 z-40 flex items-center justify-between gap-3 px-4 pt-4 pb-10 bg-gradient-to-b from-black/85 to-transparent transition-opacity duration-300 ${showControls ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
         <div className="flex items-center gap-3 min-w-0">
-          <button onClick={onClose} className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-md transition-all active:scale-95 shrink-0" aria-label="Back">
+          <button onClick={onClose} className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/15  transition-all active:scale-95 shrink-0" aria-label="Back">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="min-w-0">

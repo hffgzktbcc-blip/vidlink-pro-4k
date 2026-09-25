@@ -77,7 +77,7 @@ export const WatchPartyReactions: React.FC<WatchPartyReactionsProps> = ({
       {showBar && (
         <div className="fixed bottom-28 md:bottom-32 right-4 md:right-8 z-40 flex items-center gap-2 pointer-events-auto">
           {/* Reaction Emoji Pill */}
-          <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-xl border border-white/20 shadow-2xl transition-all duration-300 opacity-90 hover:opacity-100">
+          <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-black/80  border border-white/20 shadow-2xl transition-all duration-300 opacity-90 hover:opacity-100">
             {/* Quick Toggle / Party Member Pill */}
             <button
               data-tv-focus="true"

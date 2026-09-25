@@ -96,7 +96,7 @@ export const AudiobookPlayer: React.FC<AudiobookPlayerProps> = ({ book, streams,
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="fixed inset-0 z-[60] bg-[#0e101a]/95 backdrop-blur-3xl flex flex-col animate-in fade-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-[60] bg-[#0e101a]/95  flex flex-col animate-in fade-in zoom-in-95 duration-300">
       <audio ref={audioRef} />
 
       {/* Header */}
@@ -188,7 +188,7 @@ export const AudiobookPlayer: React.FC<AudiobookPlayerProps> = ({ book, streams,
 
         {/* Tracklist Sidebar (For multi-file audiobooks) */}
         {showTracklist && streams.length > 1 && (
-          <div className="absolute top-0 right-0 bottom-0 w-80 bg-black/50 border-l border-white/10 backdrop-blur-xl flex flex-col animate-in slide-in-from-right">
+          <div className="absolute top-0 right-0 bottom-0 w-80 bg-black/50 border-l border-white/10  flex flex-col animate-in slide-in-from-right">
             <div className="p-6 border-b border-white/10">
               <h3 className="text-lg font-bold text-white">Tracks</h3>
               <p className="text-xs text-gray-400 mt-1">{streams.length} parts available</p>

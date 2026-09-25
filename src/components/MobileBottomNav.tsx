@@ -30,7 +30,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-[#07080e]/92 backdrop-blur-2xl border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] pb-[max(0.75rem,env(safe-area-inset-bottom,12px))] pt-2 px-3 transition-transform duration-300"
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-[#07080e]/92  border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] pb-[max(0.75rem,env(safe-area-inset-bottom,12px))] pt-2 px-3 transition-transform duration-300"
       aria-label="Mobile Navigation"
     >
       <div className="flex items-center justify-around max-w-md mx-auto">

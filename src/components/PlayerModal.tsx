@@ -470,15 +470,17 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         />
 
         {/* Dedicated Always-Accessible Mobile Back & Exit Button with iOS Safe Area */}
+        {showControls && (
         <button
           onClick={handleClose}
-          className="fixed top-[max(1rem,env(safe-area-inset-top,16px))] left-[max(1rem,env(safe-area-inset-left,16px))] z-50 p-3 sm:p-3.5 rounded-full bg-black/80 hover:bg-red-600 text-white border border-white/20 backdrop-blur-xl shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2"
+          className="fixed top-[max(1rem,env(safe-area-inset-top,16px))] left-[max(1rem,env(safe-area-inset-left,16px))] z-50 p-3 sm:p-3.5 rounded-full bg-black/80 hover:bg-red-600 text-white border border-white/20  shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-2"
           aria-label="Exit Player"
           title="Exit Player & Return to Catalog (Esc)"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
           <span className="text-xs font-bold sm:hidden">Exit</span>
         </button>
+        )}
 
         {/* Virtual Remote Cursor Layer */}
         <VirtualCursor
@@ -487,10 +489,9 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         />
 
         {/* Auto-Hiding Top Control Bar */}
+        {showControls && (
         <div
-          className={`absolute top-0 left-0 right-0 z-40 p-4 sm:p-6 pl-20 sm:pl-24 bg-gradient-to-b from-black/95 via-black/60 to-transparent flex flex-wrap items-center justify-between gap-3 transition-opacity duration-300 ${
-            showControls ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}
+          className="absolute top-0 left-0 right-0 z-40 p-4 sm:p-6 pl-20 sm:pl-24 bg-gradient-to-b from-black/95 via-black/60 to-transparent flex flex-wrap items-center justify-between gap-3 pointer-events-auto"
         >
           {/* Title & Metadata */}
           <div className="flex items-center gap-3">
@@ -685,10 +686,11 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
             </button>
           </div>
         </div>
+        )}
 
         {/* Auto-Play Next Episode Countdown Card */}
         {nextCountdown !== null && (
-          <div className="absolute bottom-16 right-8 z-50 p-5 rounded-2xl bg-black/90 backdrop-blur-xl border border-indigo-500/50 shadow-2xl flex flex-col gap-3 animate-in slide-in-from-bottom-5 duration-300">
+          <div className="absolute bottom-16 right-8 z-50 p-5 rounded-2xl bg-black/90  border border-indigo-500/50 shadow-2xl flex flex-col gap-3 animate-in slide-in-from-bottom-5 duration-300">
             <div className="flex items-center justify-between gap-4">
               <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">Up Next in {nextCountdown}s</span>
               <button onClick={() => setNextCountdown(null)} className="text-gray-400 hover:text-white p-1">
@@ -721,7 +723,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
 
         {/* In-Player Season & Episode Drawer */}
         {isEpisodeDrawerOpen && isTV && (
-          <div className="absolute top-0 right-0 bottom-0 w-80 sm:w-96 z-50 bg-black/95 backdrop-blur-2xl border-l border-white/15 p-6 flex flex-col shadow-2xl animate-in slide-in-from-right duration-300">
+          <div className="absolute top-0 right-0 bottom-0 w-80 sm:w-96 z-50 bg-black/95  border-l border-white/15 p-6 flex flex-col shadow-2xl animate-in slide-in-from-right duration-300">
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <ListVideo className="w-5 h-5 text-indigo-400" />
@@ -795,15 +797,15 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
         )}
 
         {/* Bottom Helper Hint (Auto-fading) */}
+        {showControls && (
         <div
-          className={`absolute bottom-4 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-[11px] text-gray-300 transition-opacity duration-500 pointer-events-none flex items-center gap-4 ${
-            showControls ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-2xl bg-black/80 border border-white/15 text-[11px] text-gray-300 pointer-events-none flex items-center gap-4"
         >
           <span>🎯 <b>Remote D-Pad</b> moves cursor • <b>OK</b> clicks Play/Controls</span>
           <span>•</span>
           <span>Press <b>C</b> for Cursor • <b>F</b> for Windowed</span>
         </div>
+        )}
 
         {/* Floating Watch Party Emoji Reactions & Reaction Bar */}
         <WatchPartyReactions
@@ -817,7 +819,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({
   return (
     <div
       data-tv-modal="true"
-      className={`fixed inset-0 z-50 overflow-y-auto backdrop-blur-2xl flex flex-col items-center justify-start transition-all duration-500 ${
+      className={`fixed inset-0 z-50 overflow-y-auto  flex flex-col items-center justify-start transition-all duration-500 ${
         isLightsOff ? 'bg-black' : 'bg-black/95'
       }`}
     >

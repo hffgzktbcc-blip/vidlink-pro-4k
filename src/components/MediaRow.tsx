@@ -86,7 +86,7 @@ export const MediaRow: React.FC<MediaRowProps> = ({
         {showLeftArrow && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-red-600 border border-white/20 text-white flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 group-hover/row:opacity-100 transition-all duration-300 transform -translate-x-2 group-hover/row:translate-x-0"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-red-600 border border-white/20 text-white flex items-center justify-center shadow-2xl  opacity-0 group-hover/row:opacity-100 transition-all duration-300 transform -translate-x-2 group-hover/row:translate-x-0"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -97,7 +97,7 @@ export const MediaRow: React.FC<MediaRowProps> = ({
         {showRightArrow && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-red-600 border border-white/20 text-white flex items-center justify-center shadow-2xl backdrop-blur-md opacity-0 group-hover/row:opacity-100 transition-all duration-300 transform translate-x-2 group-hover/row:translate-x-0"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-black/80 hover:bg-red-600 border border-white/20 text-white flex items-center justify-center shadow-2xl  opacity-0 group-hover/row:opacity-100 transition-all duration-300 transform translate-x-2 group-hover/row:translate-x-0"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-6 h-6" />

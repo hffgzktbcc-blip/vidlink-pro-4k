@@ -54,7 +54,7 @@ export const DebridStreamModal: React.FC<DebridStreamModalProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85  flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
       <div className="relative w-full max-w-2xl bg-[#0e101a] border border-indigo-500/30 rounded-3xl overflow-hidden shadow-2xl p-5 sm:p-7 max-h-[90vh] flex flex-col">
 
         {/* Header */}

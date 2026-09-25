@@ -49,7 +49,7 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: () => void }> = ({
       : 'text-emerald-400';
 
   return (
-    <div className="pointer-events-auto p-4 rounded-2xl bg-[#0f1220]/95 border border-white/15 backdrop-blur-2xl shadow-2xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-5 duration-300">
+    <div className="pointer-events-auto p-4 rounded-2xl bg-[#0f1220]/95 border border-white/15  shadow-2xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-5 duration-300">
       <div className="flex items-center gap-3 min-w-0">
         <Icon className={`w-5 h-5 shrink-0 ${iconColor}`} />
         <div className="min-w-0">

@@ -91,7 +91,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
   const similarList = current.similar?.results?.slice(0, 8) || [];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-xl flex items-center justify-center p-2 sm:p-4 md:p-6 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90  flex items-center justify-center p-2 sm:p-4 md:p-6 animate-in fade-in duration-200">
       <div
         data-tv-modal="true"
         className="relative w-full max-w-5xl bg-[#0e101a] border border-white/15 rounded-3xl overflow-hidden shadow-2xl my-8"
@@ -100,7 +100,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({
         <button
           data-tv-focus="true"
           onClick={onClose}
-          className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-black/70 hover:bg-white/20 text-white backdrop-blur-md border border-white/15 transition-all focus:outline-none"
+          className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-black/70 hover:bg-white/20 text-white  border border-white/15 transition-all focus:outline-none"
           title="Close (Esc)"
         >
           <X className="w-5 h-5" />

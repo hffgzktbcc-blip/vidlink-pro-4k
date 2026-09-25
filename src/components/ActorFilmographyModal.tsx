@@ -63,7 +63,7 @@ export const ActorFilmographyModal: React.FC<ActorFilmographyModalProps> = ({
   if (!actor) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 select-none">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85  flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 select-none">
       <div className="relative w-full max-w-4xl bg-[#0e101a] border border-white/20 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
         {/* Header with Actor info */}
         <div className="p-6 sm:p-8 border-b border-white/10 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-transparent flex items-center justify-between gap-4">

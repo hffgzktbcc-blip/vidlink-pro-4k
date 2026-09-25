@@ -180,7 +180,7 @@ export const UniversesView: React.FC<UniversesViewProps> = ({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#07080d] via-[#07080d]/80 to-transparent" />
           <div
-            className="absolute inset-0 opacity-25 mix-blend-color-dodge"
+            className="absolute inset-0 opacity-25 -dodge"
             style={{ backgroundColor: selectedUniverse.accentColor }}
           />
         </div>
@@ -196,12 +196,12 @@ export const UniversesView: React.FC<UniversesViewProps> = ({
                 4K UHD Franchise
               </span>
 
-              <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 text-amber-300 text-xs font-bold">
+              <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60  border border-white/10 text-amber-300 text-xs font-bold">
                 <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 <span>{stats.avgScore} IMDb Avg</span>
               </span>
 
-              <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 text-gray-300 text-xs font-bold">
+              <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60  border border-white/10 text-gray-300 text-xs font-bold">
                 <Clock className="w-3.5 h-3.5 text-indigo-400" />
                 <span>~{stats.totalHours}h Marathon</span>
               </span>
@@ -240,7 +240,7 @@ export const UniversesView: React.FC<UniversesViewProps> = ({
                 <button
                   data-tv-focus="true"
                   onClick={() => setIsChronological(prev => !prev)}
-                  className={`px-4 py-3 rounded-2xl border text-xs font-bold flex items-center gap-2 transition-all backdrop-blur-md ${
+                  className={`px-4 py-3 rounded-2xl border text-xs font-bold flex items-center gap-2 transition-all  ${
                     isChronological
                       ? 'bg-amber-500 text-black border-amber-400 shadow-lg shadow-amber-500/30 font-black'
                       : 'bg-black/60 hover:bg-black/80 text-gray-200 border-white/20'
@@ -279,7 +279,7 @@ export const UniversesView: React.FC<UniversesViewProps> = ({
               <div key={`${item.media_type}-${item.id}`} className="relative group">
                 {/* Timeline Tag Badge */}
                 {item.timelineLabel && (
-                  <div className="absolute top-2 left-2 z-20 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md border border-white/20 text-[10px] font-black text-indigo-300 shadow-lg">
+                  <div className="absolute top-2 left-2 z-20 px-2 py-0.5 rounded-md bg-black/85  border border-white/20 text-[10px] font-black text-indigo-300 shadow-lg">
                     #{idx + 1} • {item.timelineLabel}
                   </div>
                 )}

@@ -126,7 +126,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#08090f]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl py-3'
+          ? 'bg-[#08090f]/95  border-b border-white/10 shadow-2xl py-3'
           : 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-5'
       }`}
     >
@@ -337,7 +337,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Autocomplete Dropdown */}
           {suggestions.length > 0 && searchQuery.trim().length > 0 && (
-            <div className="absolute top-12 right-0 w-80 sm:w-96 bg-[#0e101a]/95 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-200">
+            <div className="absolute top-12 right-0 w-80 sm:w-96 bg-[#0e101a]/95  border border-white/15 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in duration-200">
               <div className="px-4 py-2.5 text-xs font-bold text-gray-400 border-b border-white/10 flex items-center justify-between">
                 <span>Direct Search Results</span>
                 {isSearching && <span className="text-indigo-400 animate-pulse">Searching...</span>}

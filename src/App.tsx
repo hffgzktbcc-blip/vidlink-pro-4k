@@ -707,7 +707,7 @@ export const App: React.FC = () => {
             {/* Real-Debrid Callout Banner if not yet paired */}
             {!isRealDebridConfigured() && (
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 mb-6">
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/10 to-[#0e101a]/80 border border-amber-500/40 backdrop-blur-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xl">
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/10 to-[#0e101a]/80 border border-amber-500/40  flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xl">
                   <div className="flex items-center gap-3.5">
                     <div className="p-3 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
                       <Sparkles className="w-5 h-5" />
@@ -1067,7 +1067,7 @@ export const App: React.FC = () => {
           data-tv-focus="true"
           onClick={toggleTvMode}
           title={isTvMode ? 'TV Remote Mode Active (D-Pad enabled)' : 'Click to enable Android TV Remote Mode'}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl backdrop-blur-xl border text-xs font-bold transition-all shadow-xl ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl  border text-xs font-bold transition-all shadow-xl ${
             isTvMode
               ? 'bg-indigo-600/90 text-white border-indigo-400 shadow-indigo-600/40 ring-2 ring-indigo-400'
               : 'bg-black/60 hover:bg-black/80 text-gray-400 hover:text-gray-200 border-white/10'

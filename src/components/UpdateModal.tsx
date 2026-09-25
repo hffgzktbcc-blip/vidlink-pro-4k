@@ -46,7 +46,7 @@ export const UpdateModal: React.FC<UpdateModalProps> = ({ release, onClose }) =>
   return (
     <div
       data-tv-modal="true"
-      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fade-in select-none"
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/85  animate-fade-in select-none"
     >
       <div className="relative w-full max-w-lg rounded-3xl bg-[#0e101a] border border-indigo-500/40 p-6 sm:p-8 shadow-2xl shadow-indigo-600/30 flex flex-col gap-5">
         {/* Header with Version Badge */}

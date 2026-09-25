@@ -179,7 +179,7 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
           className={`relative w-8 h-8 rounded-full border-2 border-indigo-400 flex items-center justify-center shadow-lg transition-transform duration-100 ${
             isClicking
               ? 'scale-75 bg-indigo-500/80 shadow-indigo-500'
-              : 'scale-100 bg-black/40 shadow-indigo-500/50 backdrop-blur-sm'
+              : 'scale-100 bg-black/40 shadow-indigo-500/50 '
           }`}
         >
           {/* Target Center Dot */}
@@ -197,7 +197,7 @@ export const VirtualCursor: React.FC<VirtualCursorProps> = ({ isEnabled, onToggl
       <div className="pointer-events-auto absolute top-4 right-4 z-[9999]">
         <button
           onClick={onToggle}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/80 hover:bg-black border border-indigo-500/50 text-indigo-300 text-xs font-bold shadow-2xl backdrop-blur-md transition-all"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/80 hover:bg-black border border-indigo-500/50 text-indigo-300 text-xs font-bold shadow-2xl  transition-all"
         >
           <MousePointer2 className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
           <span>TV Cursor: ON (D-Pad Moves • OK Clicks)</span>

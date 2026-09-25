@@ -58,7 +58,7 @@ export const AudiobooksPage: React.FC = () => {
   return (
     <div className="flex-1 overflow-y-auto pb-24 relative min-h-screen">
       {/* Header & Search */}
-      <div className="sticky top-0 z-20 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 p-4 sm:p-6 sm:pt-10">
+      <div className="sticky top-0 z-20 bg-[#0a0a0f]/90  border-b border-white/5 p-4 sm:p-6 sm:pt-10">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400">
@@ -126,7 +126,7 @@ export const AudiobooksPage: React.FC = () => {
 
       {/* Resolving Modal */}
       {(isResolving || resolveError) && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80  flex items-center justify-center p-4">
           <div className="bg-[#0e101a] border border-white/10 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl animate-in zoom-in-95">
             {resolveError ? (
               <>

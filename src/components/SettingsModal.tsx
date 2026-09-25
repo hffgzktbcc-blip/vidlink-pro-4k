@@ -137,11 +137,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const isRemuxEngineActive = Boolean(stremioAddonUrl.trim() || realDebridKey.trim());
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80  flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="relative w-full max-w-lg bg-[#0e101a] border border-white/15 rounded-3xl overflow-hidden shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
         {/* Close Button */}
-        <button
-          onClick={onClose}
+        <button data-tv-focus="true"           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
         >
           <X className="w-5 h-5" />
@@ -201,8 +200,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <span>Real-Debrid Account</span>
                 </label>
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
+                  <button data-tv-focus="true"                     type="button"
                     onClick={handleStartDeviceAuth}
                     className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20"
                   >
@@ -236,8 +234,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         2. Enter code: <strong className="text-amber-300 text-sm font-mono tracking-wider ml-1">{deviceAuthData.user_code}</strong>
                       </p>
                     </div>
-                    <button
-                      type="button"
+                    <button data-tv-focus="true"                       type="button"
                       onClick={() => {
                         setIsDeviceAuthActive(false);
                         if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
@@ -270,15 +267,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Manual API Key Input */}
               <div className="flex gap-2">
-                <input
-                  type="password"
+                <input data-tv-focus="true"                   type="password"
                   value={realDebridKey}
                   onChange={e => onSaveRealDebridKey?.(e.target.value)}
                   placeholder="Paste Real-Debrid API token..."
                   className="flex-1 px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-xs font-mono text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
                 />
-                <button
-                  type="button"
+                <button data-tv-focus="true"                   type="button"
                   onClick={handleTestDebrid}
                   disabled={!realDebridKey.trim() || isValidatingRd}
                   className="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-xs font-bold text-white transition-all shrink-0"
@@ -286,8 +281,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {isValidatingRd ? 'Testing...' : 'Verify'}
                 </button>
                 {realDebridKey && (
-                  <button
-                    type="button"
+                  <button data-tv-focus="true"                     type="button"
                     onClick={handleClearDebrid}
                     className="p-2 rounded-xl bg-white/5 hover:bg-red-950/40 text-gray-400 hover:text-red-400 border border-white/10 transition-all shrink-0"
                     title="Clear Token"
@@ -337,8 +331,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <span>Custom Stremio Addon Manifest URL (Optional)</span>
                 <span className="text-[10px] text-gray-500">Torrentio / Comet / MediaFusion</span>
               </label>
-              <input
-                type="text"
+              <input data-tv-focus="true"                 type="text"
                 value={stremioAddonUrl}
                 onChange={e => onSaveStremioAddonUrl?.(e.target.value)}
                 placeholder="Auto-configured with Real-Debrid if left blank"
@@ -376,8 +369,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {ACCENT_COLORS.map(color => {
                 const isSelected = accentColor.replace('#', '') === color.hex;
                 return (
-                  <button
-                    key={color.hex}
+                  <button data-tv-focus="true"                     key={color.hex}
                     onClick={() => onSelectAccentColor(color.hex)}
                     className={`p-3 rounded-xl border flex items-center gap-2.5 text-xs font-semibold transition-all ${
                       isSelected
@@ -405,8 +397,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <p className="text-xs text-gray-500 mb-2">
               If TMDB is ever rate-limited, provide your personal v3 API read token here.
             </p>
-            <input
-              type="password"
+            <input data-tv-focus="true"               type="password"
               value={tmdbApiKey}
               onChange={e => onSaveTmdbApiKey(e.target.value)}
               placeholder="Leave empty to use built-in key..."
@@ -417,8 +408,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
         {/* Footer */}
         <div className="mt-8 pt-4 border-t border-white/10 flex justify-end">
-          <button
-            onClick={onClose}
+          <button data-tv-focus="true"             onClick={onClose}
             className="px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all"
           >
             Done

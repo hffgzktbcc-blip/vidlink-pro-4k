@@ -169,7 +169,7 @@ export const DeviceSyncModal: React.FC<DeviceSyncModalProps> = ({
   )}&bgcolor=0b0d17&color=ffffff&margin=1`;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 select-none">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85  flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 select-none">
       <div className="relative w-full max-w-lg bg-[#0e101a] border border-white/20 rounded-3xl overflow-hidden shadow-2xl p-6 sm:p-8 flex flex-col">
         {/* Close Button */}
         <button

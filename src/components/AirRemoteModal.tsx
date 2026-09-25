@@ -73,7 +73,7 @@ export const AirRemoteModal: React.FC<AirRemoteModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85  flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="relative w-full max-w-md bg-[#0e101a] border border-white/15 rounded-3xl overflow-hidden shadow-2xl p-6 sm:p-7">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/10">

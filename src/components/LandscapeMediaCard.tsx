@@ -90,12 +90,12 @@ export const LandscapeMediaCard: React.FC<LandscapeMediaCardProps> = ({
 
         {/* Top Badges */}
         <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none z-10">
-          <span className="px-2 py-0.5 text-[9px] font-black tracking-wider uppercase rounded-md bg-black/80 backdrop-blur-md text-amber-300 border border-amber-500/40 shadow-md">
+          <span className="px-2 py-0.5 text-[9px] font-black tracking-wider uppercase rounded-md bg-black/80  text-amber-300 border border-amber-500/40 shadow-md">
             4K UHD
           </span>
 
           {rating && (
-            <span className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold rounded-md bg-black/80 backdrop-blur-md text-white border border-white/15 shadow-md">
+            <span className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold rounded-md bg-black/80  text-white border border-white/15 shadow-md">
               <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
               <span>{rating}</span>
             </span>
@@ -134,7 +134,7 @@ export const LandscapeMediaCard: React.FC<LandscapeMediaCardProps> = ({
                 onToggleWatchlist(item);
               }}
               title={isInWatchlist ? 'Remove from List' : 'Add to List'}
-              className={`p-3 rounded-full backdrop-blur-md border transform hover:scale-110 active:scale-95 transition-all ${
+              className={`p-3 rounded-full  border transform hover:scale-110 active:scale-95 transition-all ${
                 isInWatchlist
                   ? 'bg-red-600 text-white border-red-400'
                   : 'bg-black/60 hover:bg-black/80 text-white border-white/20'
@@ -151,7 +151,7 @@ export const LandscapeMediaCard: React.FC<LandscapeMediaCardProps> = ({
               onSelect(item);
             }}
             title="Details & Episodes"
-            className="p-3 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md border border-white/20 text-white transform hover:scale-110 active:scale-95 transition-all"
+            className="p-3 rounded-full bg-black/60 hover:bg-black/80  border border-white/20 text-white transform hover:scale-110 active:scale-95 transition-all"
           >
             <Info className="w-4 h-4" />
           </button>

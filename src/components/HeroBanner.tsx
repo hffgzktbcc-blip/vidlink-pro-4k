@@ -170,7 +170,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 playSelectSound();
                 onSelectMedia(current);
               }}
-              className="px-6 py-3 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-xl text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all"
+              className="px-6 py-3 rounded-full bg-white/20 hover:bg-white/30  text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all"
             >
               <Info className="w-4 h-4" />
               <span>More Info</span>
@@ -184,7 +184,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                   playSelectSound();
                   onOpenTrailer(current);
                 }}
-                className="px-5 py-3 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-xl text-white font-bold text-sm flex items-center gap-2 transition-all"
+                className="px-5 py-3 rounded-full bg-white/15 hover:bg-white/25  text-white font-bold text-sm flex items-center gap-2 transition-all"
                 title="Watch 4K Trailer"
               >
                 <Video className="w-4 h-4 text-red-500" />

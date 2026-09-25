@@ -176,7 +176,7 @@ export const VibeSearchModal: React.FC<VibeSearchModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85  flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl bg-[#0e101a] border border-white/15 rounded-3xl overflow-hidden shadow-2xl p-6 sm:p-8">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/10">
@@ -298,13 +298,13 @@ export const VibeSearchModal: React.FC<VibeSearchModalProps> = ({
 
                       {/* Rationale Overlay Badge */}
                       <div className="absolute top-2 left-2 right-2">
-                        <span className="px-2 py-1 rounded-md bg-black/80 backdrop-blur-md border border-indigo-500/40 text-[9px] font-bold text-indigo-200 block truncate shadow-lg">
+                        <span className="px-2 py-1 rounded-md bg-black/80  border border-indigo-500/40 text-[9px] font-bold text-indigo-200 block truncate shadow-lg">
                           ✨ {rationale}
                         </span>
                       </div>
 
                       {/* Rating pill */}
-                      <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80 backdrop-blur-md border border-white/20 text-[10px] font-black text-amber-400 flex items-center gap-1">
+                      <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/80  border border-white/20 text-[10px] font-black text-amber-400 flex items-center gap-1">
                         <Star className="w-3 h-3 fill-current" />
                         <span>{item.vote_average ? item.vote_average.toFixed(1) : '7.8'}</span>
                       </div>

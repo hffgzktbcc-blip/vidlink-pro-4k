@@ -88,7 +88,7 @@ export const SurpriseMeModal: React.FC<SurpriseMeModalProps> = ({
   const rating = current?.vote_average ? current.vote_average.toFixed(1) : '8.5';
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 select-none">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85  flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200 select-none">
       <div className="relative w-full max-w-2xl bg-[#0b0d17] border border-white/20 rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(99,102,241,0.25)] flex flex-col">
         {/* Close Button */}
         <button
@@ -119,7 +119,7 @@ export const SurpriseMeModal: React.FC<SurpriseMeModalProps> = ({
               <Dices className="w-3.5 h-3.5" />
               Cinema Roulette
             </span>
-            <span className="px-2.5 py-1 rounded-xl bg-black/70 backdrop-blur-md text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1">
+            <span className="px-2.5 py-1 rounded-xl bg-black/70  text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
               {rating}
             </span>

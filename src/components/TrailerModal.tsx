@@ -27,7 +27,7 @@ export const TrailerModal: React.FC<TrailerModalProps> = ({ media, onClose }) =>
   const youtubeKey = trailerVideo?.key || 'Way9Dexny3w';
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90  flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl bg-[#10121d] border border-white/15 rounded-3xl overflow-hidden shadow-2xl">
         {/* Header */}
         <div className="p-4 flex items-center justify-between border-b border-white/10">
