@@ -66,7 +66,7 @@ jobs:
           ls -lh release-assets/
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: VidLink-4K-Pro-Binaries
           path: release-assets/*
