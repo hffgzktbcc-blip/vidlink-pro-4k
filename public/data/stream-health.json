@@ -1,51 +1,51 @@
 {
-  "updatedAt": "2026-10-15T16:07:51.091Z",
+  "updatedAt": "2026-10-15T20:49:42.673Z",
   "servers": [
     {
       "id": "vidlink-pro",
       "name": "VidLink Pro 4K (Ultra HD)",
       "online": true,
-      "latencyMs": 333,
+      "latencyMs": 442,
       "statusCode": 200,
-      "lastChecked": "2026-10-15T16:07:50.383Z"
+      "lastChecked": "2026-10-15T20:49:42.142Z"
     },
     {
       "id": "vidlink-v2",
       "name": "VidLink Direct Fast (1080p)",
       "online": true,
-      "latencyMs": 575,
+      "latencyMs": 400,
       "statusCode": 200,
-      "lastChecked": "2026-10-15T16:07:50.626Z"
+      "lastChecked": "2026-10-15T20:49:42.100Z"
     },
     {
       "id": "embed-su",
       "name": "Embed.su 4K Mirror",
       "online": false,
       "latencyMs": 9999,
-      "lastChecked": "2026-10-15T16:07:50.147Z"
+      "lastChecked": "2026-10-15T20:49:42.231Z"
     },
     {
       "id": "autoembed",
       "name": "AutoEmbed Ultra Server",
       "online": false,
       "latencyMs": 9999,
-      "lastChecked": "2026-10-15T16:07:50.149Z"
+      "lastChecked": "2026-10-15T20:49:41.849Z"
     },
     {
       "id": "superembed",
       "name": "SuperEmbed Multi-Server",
       "online": true,
-      "latencyMs": 1040,
+      "latencyMs": 973,
       "statusCode": 403,
-      "lastChecked": "2026-10-15T16:07:51.091Z"
+      "lastChecked": "2026-10-15T20:49:42.673Z"
     },
     {
       "id": "vidsrc-cc",
       "name": "VidSrc Direct Stream",
       "online": true,
-      "latencyMs": 215,
+      "latencyMs": 366,
       "statusCode": 403,
-      "lastChecked": "2026-10-15T16:07:50.266Z"
+      "lastChecked": "2026-10-15T20:49:42.066Z"
     }
   ],
   "fastestServerId": "vidsrc-cc"
