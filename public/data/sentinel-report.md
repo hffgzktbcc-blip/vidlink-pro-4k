@@ -1,13 +1,13 @@
 # 🛡️ Lumia 4K Sentinel Diagnostic Report
 
-*Generated automatically on Thu, 15 Oct 2026 07:49:42 GMT*
+*Generated automatically on Fri, 16 Oct 2026 07:39:00 GMT*
 
 | Category | Diagnostic Check | Status | Details |
 | :--- | :--- | :---: | :--- |
-| Streaming Mirrors | VidLink Pro 4K | ✅ PASS | HTTP 200, Latency: 435ms |
+| Streaming Mirrors | VidLink Pro 4K | ✅ PASS | HTTP 200, Latency: 448ms |
 | Streaming Mirrors | Embed.su Mirror | ⚠️ WARN | Connection timeout or network blocked: getaddrinfo ENOTFOUND embed.su |
 | Streaming Mirrors | AutoEmbed Mirror | ⚠️ WARN | Connection timeout or network blocked: getaddrinfo ENOTFOUND player.autoembed.cc |
-| Streaming Mirrors | VidSrc Direct | ✅ PASS | HTTP 403, Latency: 104ms |
+| Streaming Mirrors | VidSrc Direct | ✅ PASS | HTTP 403, Latency: 45ms |
 | Data & Caches | Trending Offline Cache | ✅ PASS | Cached titles: 40 items present in public/data/trending-cache.json |
 | PWA Integrity | Web App Manifest | ✅ PASS | Valid manifest.json exists |
 | PWA Integrity | Service Worker | ✅ PASS | Valid sw.js exists |
